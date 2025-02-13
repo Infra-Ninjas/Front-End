@@ -1,8 +1,8 @@
-// import React from 'react'
+import React from 'react'
 
 const MyProfile = () => {
   return (
-    <div>MyProfile</div>
+    <div style={{ backgroundColor: "#f7f7f7", minHeight: "100vh" }}>MyProfile</div>
   )
 }
 

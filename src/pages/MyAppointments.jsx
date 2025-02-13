@@ -2,7 +2,7 @@
 
 const MyAppointments = () => {
   return (
-    <div className="">MyAppointments</div>
+    <div  style={{ backgroundColor: "#f7f7f7", minHeight: "100vh" }}className="">MyAppointments</div>
   )
 }
 

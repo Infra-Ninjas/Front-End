@@ -1,7 +1,9 @@
-// import React from 'react'
+import React from 'react'
 
-export const Contact = () => {
+const Contact = () => {
   return (
-    <div>Contact</div>
+    <div style={{ backgroundColor: "#f7f7f7", minHeight: "100vh" }}>Contact</div>
   )
 }
+
+export default Contact

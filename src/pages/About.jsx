@@ -2,6 +2,6 @@
 
 export const About = () => {
   return (
-    <div>About</div>
+    <div style={{ backgroundColor: "#f7f7f7", minHeight: "100vh" }}>About</div>
   )
 }

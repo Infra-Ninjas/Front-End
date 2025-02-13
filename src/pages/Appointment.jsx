@@ -2,8 +2,8 @@
 
 const Appointment = () => {
   return (
-    <div>Appointment</div>
+    <div style={{ backgroundColor: "#f7f7f7", minHeight: "100vh" }}>Appointment</div>
   )
 }
 
-export default Appointment
+export default Appointment 
