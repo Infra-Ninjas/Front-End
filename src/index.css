@@ -1,0 +1,13 @@
+@import "tailwindcss";
+@import "tailwindcss/preflight";
+@import "tailwindcss/utilities";
+
+/* Hide the scrollbar */
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* Tailwind utility for .active hr */
+.active hr {
+    @apply block;
+}
