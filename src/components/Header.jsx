@@ -52,7 +52,7 @@ const Header = () => {
             <div
               style={{
                 ...buttonStyle,
-                background: 'linear-gradient(to right, #8E44AD, #9B59B6)',
+                background: 'linear-gradient(to right, #1abc9c, #16a085)',
               }}
               onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
               onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
