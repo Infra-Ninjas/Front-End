@@ -1,49 +1,72 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function Footer() {
+  const footerStyle = {
+    background: 'linear-gradient(to right, #e0f7fa, #f1f8e9)', // Soft gradient background
+    color: '#333',
+    padding: '20px 40px',
+    fontFamily: "'Roboto', sans-serif",
+    fontSize: '14px',
+  };
+
+  const sectionStyle = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    maxWidth: '1200px',
+    margin: '0 auto',
+  };
+
+  const linkStyle = {
+    color: '#00796b',
+    textDecoration: 'none',
+    margin: '0 10px',
+    fontWeight: '500',
+    transition: 'color 0.3s ease',
+  };
+
+  const handleMouseEnter = (e) => {
+    e.target.style.color = '#004d40';
+  };
+
+  const handleMouseLeave = (e) => {
+    e.target.style.color = '#00796b';
+  };
+
   return (
-    <div className="bg-white text-gray-900 py-16">
-      <div className="max-w-7xl mx-auto px-12 md:px-20">
-        <div className="flex items-start gap-16">
-
-          {/* -------- Left Section (with extra padding/margin for alignment) -------- */}
-          <div className="w-1/3 text-right">
-            <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-teal-500 to-cyan-500">
-              HealthSync
-            </h1>
-            <p className="text-gray-600 mb-4">
-              Your trusted healthcare partner, connecting you with top professionals for seamless health solutions.
-            </p>
-          </div>
-
-          {/* -------- Center Section -------- */}
-          <div className="w-1/3 text-center">
-            <h2 className="text-lg font-semibold text-teal-700 mb-4">Company</h2>
-            <ul className="space-y-2">
-              <li className="text-gray-700 hover:text-teal-600 transition-colors duration-300">Home</li>
-              <li className="text-gray-700 hover:text-teal-600 transition-colors duration-300">About Us</li>
-              <li className="text-gray-700 hover:text-teal-600 transition-colors duration-300">Contact Us</li>
-              <li className="text-gray-700 hover:text-teal-600 transition-colors duration-300">Privacy Policy</li>
-            </ul>
-          </div>
-
-          {/* -------- Right Section -------- */}
-          <div className="w-1/3 text-right">
-            <h2 className="text-lg font-semibold text-teal-700 mb-4">Get in Touch</h2>
-            <ul className="space-y-2">
-              <li className="text-gray-700">📞 437-327-2732</li>
-              <li className="text-gray-700">✉️ healthsync@gmail.com</li>
-            </ul>
-          </div>
-
+    <footer style={footerStyle}>
+      <div style={sectionStyle}>
+        <div style={{ flex: '1 1 100%', textAlign: 'center', marginBottom: '10px' }}>
+          <span style={{ color: '#00796b', fontWeight: 'bold' }}>© {new Date().getFullYear()} HealthSync</span> — Your trusted healthcare partner.
         </div>
-
-        {/* -------- Bottom Section -------- */}
-        <div className="mt-12 border-t border-gray-300 pt-8 text-center text-gray-500">
-          © {new Date().getFullYear()} HealthSync. All rights reserved.
+        <div style={{ textAlign: 'center', flex: '1 1 100%' }}>
+          <Link to="/" style={linkStyle} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+            Home
+          </Link>
+          <Link to="/about" style={linkStyle} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+            About
+          </Link>
+          <Link to="/contact" style={linkStyle} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+            Contact
+          </Link>
+          <a href="#privacy" style={linkStyle} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+            Privacy Policy
+          </a>
+          <a href="#terms" style={linkStyle} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+            Terms of Service
+          </a>
+        </div>
+        <div style={{ textAlign: 'center', flex: '1 1 100%', marginTop: '10px' }}>
+          <a href="tel:+14373272732" style={linkStyle} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+            📞 437-327-2732
+          </a>
+          <a href="mailto:healthsync@gmail.com" style={linkStyle} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+            ✉️ healthsync@gmail.com
+          </a>
         </div>
       </div>
-    </div>
+    </footer>
   );
 }
 

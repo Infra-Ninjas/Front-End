@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
-import { About } from "./pages/About";
+import About from "./pages/About";
 import Contact from "./pages/Contact";
 import MyProfile from "./pages/MyProfile";
 import MyAppointments from "./pages/MyAppointments";
@@ -9,7 +9,6 @@ import Doctors from "./pages/Doctors";
 import Login from "./pages/Login";
 import Appointment from "./pages/Appointment";
 import Navbar from "./components/Navbar";
-import Header from "./components/Header";
 import Footer from "./components/Footer";
 import AppProvider from "./contexts/AppContext"; // Import AppProvider for global context
 
@@ -17,8 +16,7 @@ const App = () => {
   return (
     <AppProvider> {/* Wrapping the entire app with AppProvider */}
       <div className="mx-4 sm:mx-[10%]">
-        <Header /> {/* Keep Header at the top */}
-        <Navbar />
+        <Navbar /> {/* Navbar at the top of every page */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/doctors" element={<Doctors />} />
@@ -30,7 +28,7 @@ const App = () => {
           <Route path="/myappointments" element={<MyAppointments />} />
           <Route path="/appointment/:docId" element={<Appointment />} />
         </Routes>
-        <Footer /> {/* Keep Footer at the bottom */}
+        <Footer /> {/* Footer rendered at the bottom of every page */}
       </div>
     </AppProvider>
   );

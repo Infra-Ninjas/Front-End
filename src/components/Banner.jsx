@@ -1,36 +1,44 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { assets } from '../assets/assets_frontend/assets';
 
 function Banner() {
+  const navigate = useNavigate();
+
+  const imageStyle = {
+    width: '350px',    // Increased width for better visibility
+    height: 'auto',    // Keep proportional height
+    borderRadius: '0', // No border radius
+    objectFit: 'cover',
+  };
+
   return (
-    <div className="flex flex-col items-center bg-white text-gray-900 rounded-xl overflow-hidden py-32 px-8 md:px-16 lg:px-32 shadow-lg mt-64">
-      
-      {/* Image Section */}
-      <div className="mt-24 mb-16">
-        <div className="w-56 h-56 bg-teal-100 rounded-full overflow-hidden shadow-md">
-          <img
-            className="w-full h-full object-cover"
-            src={assets.appointment_img}
-            alt="Doctor"
-          />
-        </div>
-      </div>
-
-      {/* Text Content Below the Image */}
-      <div className="text-center max-w-4xl mb-16">
-        <h1 className="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-teal-500 to-cyan-500 leading-snug">
-          Book Appointment <br /> With 100+ Trusted Doctors
-        </h1>
-        <p className="text-2xl text-gray-700 mt-6">
-          Easily connect with top doctors and schedule your appointment in just a few simple steps.
-        </p>
-      </div>
-
-      {/* Button Below Text */}
-      <div>
-        <button className="bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-16 py-5 rounded-full text-xl font-bold shadow-md hover:shadow-lg hover:scale-105 transition-transform duration-300">
-          Create Account
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '50px 20px', backgroundColor: '#ffffff', borderRadius: '10px', boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)', margin: '20px 0' }}>
+      <div style={{ flex: 1, paddingRight: '20px' }}>
+        <h1 style={{ fontSize: '36px', fontWeight: 'bold', color: '#008080' }}>Book Appointment With 100+ Trusted Doctors</h1>
+        <p style={{ fontSize: '16px', color: '#555', marginTop: '10px' }}>Easily connect with top doctors and schedule your appointment in just a few simple steps.</p>
+        <button
+          onClick={() => navigate('/login')}
+          style={{
+            marginTop: '20px',
+            padding: '12px 24px',
+            fontSize: '16px',
+            backgroundColor: '#008080',
+            color: 'white',
+            border: 'none',
+            borderRadius: '30px',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease',
+          }}
+          onMouseEnter={(e) => (e.target.style.backgroundColor = '#006666')}
+          onMouseLeave={(e) => (e.target.style.backgroundColor = '#008080')}
+        >
+          Book Appointment Now
         </button>
+      </div>
+
+      <div style={{ flex: 1, textAlign: 'right' }}>
+        <img src={assets.appointment_img} alt="Doctor" style={imageStyle} />
       </div>
     </div>
   );
