@@ -1,1 +1,27 @@
-node_modules
+# Node Modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build Output
+build/
+dist/
+
+# Temporary Files and Folders
+*.cache
+.cache/
+*.tmp
+*.log
+.DS_Store
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+coverage/
+.vscode/
+
+# MacOS and Windows System Files
+Thumbs.db
+Desktop.ini

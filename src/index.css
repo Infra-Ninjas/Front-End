@@ -1,0 +1,8 @@
+@import "tailwindcss";
+@import "tailwindcss/preflight";
+@import "tailwindcss/utilities";
+
+
+::-webkit-scrollbar {
+    display: none; /* This will hide the scrollbar */
+  }
