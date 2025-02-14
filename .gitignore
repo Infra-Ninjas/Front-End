@@ -1,35 +1,35 @@
-# Node.js dependencies
-/node_modules/
+# Node modules (npm packages)
+node_modules/
 
 # Build directories
-/build/
-/dist/
-/.next/
+dist/
+build/
+
+# Logs and debug files
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Dependency directories
+bower_components/
 
 # Environment variables
 .env
 .env.local
 .env.*.local
 
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Dependency directories
-bower_components/
+# macOS specific files
+.DS_Store
 
 # IDE or editor directories
 .idea/
 .vscode/
 
-# macOS specific files
-.DS_Store
-
 # Test coverage reports
-/coverage/
+coverage/
 
 # Temporary test files
 *.test.js*
@@ -41,6 +41,10 @@ yarn.lock
 # Debugging logs
 debug.log
 
+# Tailwind cache
+tailwind.config.js
+postcss.config.js
+
 # MongoDB local database files
 data/
 
@@ -48,13 +52,16 @@ data/
 Dockerfile
 .dockerignore
 
-# Next.js build directory
-.next/
-
-# Vercel build directory (if deployed on Vercel)
-.vercel/
-
 # Miscellaneous
 *.tgz
 *.swp
 *.swo
+
+# Public build artifacts
+/public/*.cache
+/public/*.map
+
+# React-specific build artifacts
+*.cache/
+*.env.development.local
+*.env.production.local
