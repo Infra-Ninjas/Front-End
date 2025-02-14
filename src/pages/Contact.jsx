@@ -1,3 +1,4 @@
+
 // import React from 'react'
 
 export const Contact = () => {
@@ -5,3 +6,4 @@ export const Contact = () => {
     <div>Contact</div>
   )
 }
+

@@ -1,3 +1,4 @@
+
 // import React from 'react'
 
 const Appointment = () => {
@@ -7,3 +8,4 @@ const Appointment = () => {
 }
 
 export default Appointment
+

@@ -1,5 +1,5 @@
 export const content = ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"];
 export const theme = {
-    extend: {},
+  extend: {},
 };
-export const plugins = [];
+export const plugins = []; // Ensure plugins are properly exported
