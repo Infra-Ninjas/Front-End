@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from 'react'
 import Header from '../components/Header'
 import SpecialityMenu from '../components/SpecialityMenu'
@@ -19,3 +20,14 @@ const Home = () => {
 }
 
 export default Home
+=======
+// import React from 'react'
+
+const Home = () => {
+  return (
+    <div className="text-green-500">Home</div>
+  )
+}
+
+export default Home
+>>>>>>> yinka

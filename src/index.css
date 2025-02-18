@@ -2,7 +2,13 @@
 @import "tailwindcss/preflight";
 @import "tailwindcss/utilities";
 
+<<<<<<< HEAD
 
 ::-webkit-scrollbar {
     display: none; /* This will hide the scrollbar */
   }
+=======
+.active hr{
+    @apply block
+}
+>>>>>>> yinka

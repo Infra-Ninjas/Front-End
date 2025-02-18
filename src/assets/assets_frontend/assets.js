@@ -1,7 +1,10 @@
 import appointment_img from './appointment_img.png'
 import header_img from './header_img.png'
 import group_profiles from './group_profiles.png'
+<<<<<<< HEAD
 import profile_pic from './profile_pic.png'
+=======
+>>>>>>> yinka
 import contact_image from './contact_image.png'
 import about_image from './about_image.png'
 import logo from './logo.svg'
@@ -36,7 +39,12 @@ import General_physician from './General_physician.svg'
 import Gynecologist from './Gynecologist.svg'
 import Neurologist from './Neurologist.svg'
 import Pediatricians from './Pediatricians.svg'
+<<<<<<< HEAD
 
+=======
+import OurLogo from './OurLogo.png'
+import Profile_picture from './Profile_picture.jpg'
+>>>>>>> yinka
 
 export const assets = {
     appointment_img,
@@ -46,7 +54,10 @@ export const assets = {
     chats_icon,
     verified_icon,
     info_icon,
+<<<<<<< HEAD
     profile_pic,
+=======
+>>>>>>> yinka
     arrow_icon,
     contact_image,
     about_image,
@@ -55,7 +66,13 @@ export const assets = {
     dropdown_icon,
     upload_icon,
     stripe_logo,
+<<<<<<< HEAD
     razorpay_logo
+=======
+    razorpay_logo,
+    OurLogo,
+    Profile_picture
+>>>>>>> yinka
 }
 
 export const specialityData = [

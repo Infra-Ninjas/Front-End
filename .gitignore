@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Node Modules
 node_modules/
 npm-debug.log*
@@ -40,3 +41,72 @@ src/assets/assets_frontend/__tests__/
 # MacOS and Windows System Files
 Thumbs.db
 Desktop.ini
+=======
+# Node modules (npm packages)
+node_modules/
+
+# Build directories
+dist/
+build/
+
+# Logs and debug files
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Dependency directories
+bower_components/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# macOS specific files
+.DS_Store
+
+# IDE or editor directories
+.idea/
+.vscode/
+
+# Test coverage reports
+coverage/
+
+# Temporary test files
+*.test.js*
+*.spec.js*
+
+# Yarn lock (if using npm instead of yarn)
+yarn.lock
+
+# Debugging logs
+debug.log
+
+# Tailwind cache
+tailwind.config.js
+postcss.config.js
+
+# MongoDB local database files
+data/
+
+# Docker (if using Docker)
+Dockerfile
+.dockerignore
+
+# Miscellaneous
+*.tgz
+*.swp
+*.swo
+
+# Public build artifacts
+/public/*.cache
+/public/*.map
+
+# React-specific build artifacts
+*.cache/
+*.env.development.local
+*.env.production.local
+>>>>>>> yinka
