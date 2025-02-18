@@ -12,7 +12,7 @@ const Header = () => {
         background: "linear-gradient(to bottom right, #E0F7FA, #B2EBF2)",
       }}
     >
-      <div className="container">
+      <div className="container px-0">
         <div className="row align-items-center">
           {/* Left Side (Text Section) */}
           <div className="col-md-6">

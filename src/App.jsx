@@ -16,7 +16,7 @@ import AppProvider from "./contexts/AppContext"; // Import AppProvider for globa
 const App = () => {
   return (
     <AppProvider> {/* Wrapping the entire app with AppProvider */}
-      <div className="mx-4 sm:mx-[10%]">
+      <div className="sm:mx-[10%]">
         <Navbar /> {/* Navbar at the top of every page */}
         <Routes>
           <Route path="/" element={<Home />} />

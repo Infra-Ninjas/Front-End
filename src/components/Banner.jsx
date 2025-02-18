@@ -6,7 +6,7 @@ function Banner() {
   const navigate = useNavigate();
 
   return (
-    <div className="container my-4">
+    <div className="container px-0 my-4">
       <div className="row align-items-center bg-white p-5 shadow-sm rounded">
         {/* Left Side - Text */}
         <div className="col-md-6">

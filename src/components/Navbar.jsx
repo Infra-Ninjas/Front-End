@@ -21,11 +21,11 @@ const Navbar = () => {
     <nav
       className="navbar navbar-expand-md navbar-light bg-white border-bottom shadow-sm"
       style={{
-        padding: "15px 0",
+        padding: "unset",
         fontFamily: "'Poppins', sans-serif",
       }}
     >
-      <div className="container d-flex justify-content-between align-items-center w-100">
+      <div className="container px-0 d-flex justify-content-between align-items-center w-100">
         {/* Logo */}
         <NavLink to="/" className="navbar-brand">
           <img
@@ -36,7 +36,9 @@ const Navbar = () => {
               width: "180px",
               transition: "transform 0.3s ease",
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.transform = "scale(1.05)")
+            }
             onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
           />
         </NavLink>
@@ -54,7 +56,9 @@ const Navbar = () => {
 
         {/* Navigation Menu - Centered */}
         <div
-          className={`collapse navbar-collapse ${showMenu ? "show" : ""} justify-content-center`}
+          className={`collapse navbar-collapse ${
+            showMenu ? "show" : ""
+          } justify-content-center`}
         >
           <ul className="navbar-nav text-center">
             {["/", "/contact", "/about", "/doctors"].map((path, index) => (
@@ -70,10 +74,19 @@ const Navbar = () => {
                     position: "relative",
                     paddingBottom: "5px",
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#17a2b8")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "#2c3e50")}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.color = "#17a2b8")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.color = "#2c3e50")
+                  }
                 >
-                  {path === "/" ? "Home" : path.replace("/", "").replace(/-/g, " ")}
+                  {path === "/"
+                    ? "Home"
+                    : path
+                        .replace("/", "")
+                        .replace(/-/g, " ")
+                        .replace(/\b\w/g, (char) => char.toUpperCase())}{" "}
                   <span
                     style={{
                       content: "''",
