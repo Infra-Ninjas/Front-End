@@ -1,68 +1,118 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { assets } from "../assets/assets_frontend/assets";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
-  const navigate = useNavigate();
+  const [showMenu, setShowMenu] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Function to check screen width and set visibility of the menu icon
+  const checkScreenSize = () => {
+    setIsMobile(window.innerWidth < 768);
+  };
+
+  useEffect(() => {
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+
   return (
-    <div className="flex items-center justify-between text-sm py-4 mb-5 border-b border-gray-400">
-      <img
-        src={assets.OurLogo}
-        className="w-44 cursor-pointer"
-        alt=""
-        style={{ transition: "transform 0.3s ease-in-out" }}
-        onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
-        onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-      />
-      <ul className="hidden md:flex items-start gap-5 font-medium">
-        {["/", "/contact", "/about", "/doctors"].map((path, index) => (
-          <NavLink key={index} to={path}>
-            <li
-              className="py-1"
-              style={{
-                transition: "color 0.3s ease-in-out",
-                fontFamily: "'Roboto', sans-serif",
-                fontWeight: "500",
-                color: "#2c3e50",
-                textShadow: "1px 1px 2px rgba(0,0,0,0.1)",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#007777")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "")}
-            >
-              {path.replace("/", "").toUpperCase() || "HOME"}
-            </li>
-          </NavLink>
-        ))}
-      </ul>
-      <div className="flex items-center gap-4">
+    <nav
+      className="navbar navbar-expand-md navbar-light bg-white border-bottom shadow-sm"
+      style={{
+        padding: "15px 0",
+        fontFamily: "'Poppins', sans-serif",
+      }}
+    >
+      <div className="container d-flex justify-content-between align-items-center w-100">
+        {/* Logo */}
+        <NavLink to="/" className="navbar-brand">
+          <img
+            src={assets.OurLogo}
+            alt="HealthSync Logo"
+            className="img-fluid"
+            style={{
+              width: "180px",
+              transition: "transform 0.3s ease",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          />
+        </NavLink>
+
+        {/* Mobile Menu Icon */}
+        {isMobile && (
+          <button
+            className="navbar-toggler"
+            type="button"
+            onClick={() => setShowMenu(!showMenu)}
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+        )}
+
+        {/* Navigation Menu - Centered */}
+        <div
+          className={`collapse navbar-collapse ${showMenu ? "show" : ""} justify-content-center`}
+        >
+          <ul className="navbar-nav text-center">
+            {["/", "/contact", "/about", "/doctors"].map((path, index) => (
+              <li className="nav-item mx-3" key={index}>
+                <NavLink
+                  to={path}
+                  className="nav-link fw-semibold position-relative"
+                  onClick={() => setShowMenu(false)}
+                  style={{
+                    fontSize: "17px",
+                    color: "#2c3e50",
+                    transition: "color 0.3s ease",
+                    position: "relative",
+                    paddingBottom: "5px",
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#17a2b8")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "#2c3e50")}
+                >
+                  {path === "/" ? "Home" : path.replace("/", "").replace(/-/g, " ")}
+                  <span
+                    style={{
+                      content: "''",
+                      position: "absolute",
+                      left: "50%",
+                      bottom: "-2px",
+                      width: "0%",
+                      height: "2px",
+                      backgroundColor: "#17a2b8",
+                      transition: "all 0.3s ease-in-out",
+                      transform: "translateX(-50%)",
+                    }}
+                    className="underline"
+                  ></span>
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Create Account Button */}
         <NavLink to="/login">
           <button
-            className="px-3 py-3 rounded-full font-semibold my-2 mx-4"
+            className="btn btn-info text-white px-4 py-2 rounded-pill shadow-sm"
             style={{
-              color: "#40E0D0",
-              padding: "12px 16px",
-              borderRadius: "50px",
-              fontWeight: "500",
-              fontFamily: "'Roboto', sans-serif",
-              backgroundColor: "#f0f0f0",
+              fontSize: "16px",
+              fontWeight: "600",
+              background: "linear-gradient(to right, #20c997, #17a2b8)",
               border: "none",
-              textShadow: "1px 1px 2px rgba(0,0,0,0.1)",
-              transition: "background-color 0.3s, color 0.3s",
+              transition: "0.3s ease-in-out",
             }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#008c8c";
-              e.currentTarget.style.color = "white";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "#f0f0f0";
-              e.currentTarget.style.color = "#40E0D0";
-            }}
+            onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
+            onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
           >
             Create Account
           </button>
         </NavLink>
       </div>
-    </div>
+    </nav>
   );
 };
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
+import './index.css'; // Import the global CSS file
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Contact from "./pages/Contact";

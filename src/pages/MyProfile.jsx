@@ -1,5 +1,3 @@
-// Desc: MyProfile page component
-
 import React, { useState } from "react";
 import { assets } from "../assets/assets_frontend/assets";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -30,43 +28,16 @@ const MyProfile = () => {
     });
   };
 
-  const renderField = (value, field, subField = null) => {
-    if (isEDIT) {
-      return (
-        <input
-          type="text"
-          value={value}
-          onChange={(e) => handleInputChange(e, field, subField)}
-          required
-          style={{
-            width: "100%",
-            padding: "8px",
-            border: "1px solid #ccc",
-            borderRadius: "4px",
-            backgroundColor: "#f9f9f9",
-            marginBottom: "15px",
-          }}
-        />
-      );
-    }
-    return <p style={{ color: "#2c7a7d", fontSize: "16px", fontWeight: "500", marginBottom: "10px" }}>{value}</p>;
-  };
-
   return (
-    <div style={{ backgroundColor: "#f7f7f7", minHeight: "100vh", padding: "20px", fontFamily: "Poppins, sans-serif" }}>
-      <div style={{ maxWidth: "700px", margin: "0 auto", backgroundColor: "white", padding: "20px", borderRadius: "8px", boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)" }}>
-        {/* Profile Picture and Name */}
-        <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
+    <div className="container py-5">
+      <div className="card shadow-lg p-4 mx-auto" style={{ maxWidth: "700px" }}>
+        {/* Profile Picture & Name */}
+        <div className="d-flex align-items-center mb-4">
           <img
             src={userData.image}
             alt="Profile"
-            style={{
-              width: "80px",
-              height: "80px",
-              borderRadius: "50%",
-              objectFit: "cover",
-              marginRight: "20px",
-            }}
+            className="rounded-circle shadow-sm me-3"
+            style={{ width: "100px", height: "100px", objectFit: "cover" }}
           />
           <div>
             {isEDIT ? (
@@ -75,88 +46,128 @@ const MyProfile = () => {
                 value={userData.name}
                 onChange={(e) => handleInputChange(e, "name")}
                 required
-                style={{
-                  fontSize: "20px",
-                  padding: "8px",
-                  border: "1px solid #ccc",
-                  borderRadius: "4px",
-                  width: "100%",
-                  maxWidth: "300px",
-                }}
+                className="form-control fs-5 fw-semibold"
               />
             ) : (
-              <h2 style={{ fontSize: "24px", color: "#2c7a7d", fontWeight: "600" }}>{userData.name}</h2>
+              <h2 className="fw-bold" style={{ color: "#00838F" }}>{userData.name}</h2>
             )}
           </div>
         </div>
 
         {/* Contact Information */}
-        <div style={{ marginBottom: "20px" }}>
-          <h3 style={{ color: "#2c7a7d", fontSize: "18px", fontWeight: "600", paddingBottom: "10px" }}>Contact Information</h3>
-          <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
-            <FontAwesomeIcon icon={faEnvelope} style={{ marginRight: "10px", color: "#2c7a7d" }} />
-            {renderField(userData.email, "email")}
-          </div>
-          <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
-            <FontAwesomeIcon icon={faPhone} style={{ marginRight: "10px", color: "#2c7a7d" }} />
-            {renderField(userData.phone, "phone")}
-          </div>
+        <h4 className="mb-3" style={{ color: "#00838F" }}>Contact Information</h4>
+        <div className="mb-3 d-flex align-items-center">
+          <FontAwesomeIcon icon={faEnvelope} className="me-2" style={{ color: "#00838F" }} />
+          {isEDIT ? (
+            <input
+              type="text"
+              value={userData.email}
+              onChange={(e) => handleInputChange(e, "email")}
+              required
+              className="form-control"
+            />
+          ) : (
+            <p className="text-secondary mb-0">{userData.email}</p>
+          )}
+        </div>
+        <div className="mb-3 d-flex align-items-center">
+          <FontAwesomeIcon icon={faPhone} className="me-2" style={{ color: "#00838F" }} />
+          {isEDIT ? (
+            <input
+              type="text"
+              value={userData.phone}
+              onChange={(e) => handleInputChange(e, "phone")}
+              required
+              className="form-control"
+            />
+          ) : (
+            <p className="text-secondary mb-0">{userData.phone}</p>
+          )}
         </div>
 
         {/* Address Section */}
-        <div style={{ marginBottom: "20px" }}>
-          <h3 style={{ color: "#2c7a7d", fontSize: "18px", fontWeight: "600", paddingBottom: "10px" }}>Address</h3>
-          <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
-            <FontAwesomeIcon icon={faMapMarkerAlt} style={{ marginRight: "10px", color: "#2c7a7d" }} />
+        <h4 className="mb-3" style={{ color: "#00838F" }}>Address</h4>
+        <div className="mb-3 d-flex align-items-start">
+          <FontAwesomeIcon icon={faMapMarkerAlt} className="me-2 mt-1" style={{ color: "#00838F" }} />
+          <div>
+            {isEDIT ? (
+              <input
+                type="text"
+                value={userData.address.line1}
+                onChange={(e) => handleInputChange(e, "address", "line1")}
+                required
+                className="form-control mb-2"
+              />
+            ) : (
+              <p className="text-secondary mb-1">{userData.address.line1}</p>
+            )}
+            {isEDIT ? (
+              <input
+                type="text"
+                value={userData.address.line2}
+                onChange={(e) => handleInputChange(e, "address", "line2")}
+                required
+                className="form-control"
+              />
+            ) : (
+              <p className="text-secondary">{userData.address.line2}</p>
+            )}
           </div>
-          {renderField(userData.address.line1, "address", "line1")}
-          {renderField(userData.address.line2, "address", "line2")}
         </div>
 
         {/* Basic Information */}
-        <div style={{ marginBottom: "20px" }}>
-          <h3 style={{ color: "#2c7a7d", fontSize: "18px", fontWeight: "600", paddingBottom: "10px" }}>Basic Information</h3>
-          <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
-            <FontAwesomeIcon icon={faUser} style={{ marginRight: "10px", color: "#2c7a7d" }} />
-            {isEDIT ? (
-              <select
-                value={userData.gender}
-                onChange={(e) => handleInputChange(e, "gender")}
-                required
-                style={{
-                  width: "100%",
-                  maxWidth: "200px",
-                  padding: "8px",
-                  border: "1px solid #ccc",
-                  borderRadius: "4px",
-                }}
-              >
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-              </select>
-            ) : (
-              <p style={{ color: "#2c7a7d", fontSize: "16px", fontWeight: "500", marginBottom: "10px" }}>{userData.gender}</p>
-            )}
-          </div>
-          <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
-            <FontAwesomeIcon icon={faCalendarAlt} style={{ marginRight: "10px", color: "#2c7a7d" }} />
-            {renderField(userData.dob, "dob")}
-          </div>
+        <h4 className="mb-3" style={{ color: "#00838F" }}>Basic Information</h4>
+        <div className="mb-3 d-flex align-items-center">
+          <FontAwesomeIcon icon={faUser} className="me-2" style={{ color: "#00838F" }} />
+          {isEDIT ? (
+            <select
+              value={userData.gender}
+              onChange={(e) => handleInputChange(e, "gender")}
+              required
+              className="form-select"
+              style={{ maxWidth: "200px" }}
+            >
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          ) : (
+            <p className="text-secondary mb-0">{userData.gender}</p>
+          )}
+        </div>
+        <div className="mb-3 d-flex align-items-center">
+          <FontAwesomeIcon icon={faCalendarAlt} className="me-2" style={{ color: "#00838F" }} />
+          {isEDIT ? (
+            <input
+              type="text"
+              value={userData.dob}
+              onChange={(e) => handleInputChange(e, "dob")}
+              required
+              className="form-control"
+            />
+          ) : (
+            <p className="text-secondary mb-0">{userData.dob}</p>
+          )}
         </div>
 
         {/* Edit / Save Button */}
-        <div style={{ textAlign: "right", marginTop: "20px" }}>
+        <div className="text-end mt-3">
           <button
-            onClick={() => setIsEDIT(!isEDIT)}
+            className="btn px-4 py-2 fw-semibold rounded-pill"
             style={{
-              backgroundColor: "#2c7a7d",
-              color: "white",
-              padding: "10px 20px",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-              transition: "background-color 0.3s ease",
+              border: "2px solid #00838F",
+              backgroundColor: "white",
+              color: "#00838F",
+              transition: "background-color 0.3s ease, color 0.3s ease",
             }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "#00838F";
+              e.currentTarget.style.color = "white";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "white";
+              e.currentTarget.style.color = "#00838F";
+            }}
+            onClick={() => setIsEDIT(!isEDIT)}
           >
             {isEDIT ? "Save" : "Edit"}
           </button>
@@ -167,4 +178,3 @@ const MyProfile = () => {
 };
 
 export default MyProfile;
-

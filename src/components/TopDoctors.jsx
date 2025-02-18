@@ -1,112 +1,83 @@
-import React from 'react';
-import { doctors } from '../assets/assets_frontend/assets';
+import React from "react";
+import { doctors } from "../assets/assets_frontend/assets";
 
 function TopDoctors() {
-  const containerStyle = {
-    backgroundColor: '#f9f9f9',
-    padding: '50px 20px',
-    borderRadius: '15px',
-    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.05)',
-    textAlign: 'center',
-  };
-
-  const titleStyle = {
-    fontSize: '40px',
-    fontWeight: '800',
-    color: '#2c3e50',
-    marginBottom: '20px',
-  };
-
-  const subtitleStyle = {
-    fontSize: '18px',
-    color: '#666',
-    marginBottom: '40px',
-  };
-
-  const gridStyle = {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-    gap: '20px',
-  };
-
-  const cardStyle = {
-    backgroundColor: '#ffffff',
-    borderRadius: '12px',
-    padding: '20px',
-    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
-    transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-  };
-
-  const imageStyle = {
-    width: '80px',
-    height: '80px',
-    borderRadius: '50%',
-    marginBottom: '10px',
-    border: '3px solid #ddd',
-  };
-
-  const availableBadgeStyle = {
-    display: 'inline-block',
-    padding: '6px 12px',
-    backgroundColor: '#1abc9c', // Turquoise for "Available"
-    color: '#ffffff',
-    borderRadius: '12px',
-    fontWeight: '600',
-    fontSize: '14px',
-  };
-
-  const buttonStyle = {
-    background: 'linear-gradient(to right, #16a085, #1abc9c)', // Another shade of turquoise for "View More"
-    color: '#ffffff',
-    padding: '10px 20px',
-    borderRadius: '25px',
-    fontSize: '16px',
-    fontWeight: '600',
-    marginTop: '30px',
-    cursor: 'pointer',
-    transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-  };
-
   return (
-    <div style={containerStyle}>
-      <h1 style={titleStyle}>Top Doctors to Book</h1>
-      <p style={subtitleStyle}>
+    <div className="text-center py-5" style={{ backgroundColor: "#f9f9f9" }}> 
+      {/* Title & Subtitle */}
+      <h1 className="fw-bold display-5 text-dark">Top Doctors to Book</h1>
+      <p className="fs-5 text-muted mb-4">
         Choose from our best-rated doctors and schedule your appointment today.
       </p>
-      <div style={gridStyle}>
-        {doctors.slice(0, 10).map((item, index) => (
-          <div
-            key={index}
-            style={cardStyle}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'scale(1.05)';
-              e.currentTarget.style.boxShadow = '0px 4px 12px rgba(0, 0, 0, 0.1)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.boxShadow = '0px 2px 8px rgba(0, 0, 0, 0.1)';
-            }}
-          >
-            <img src={item.image} alt={item.name} style={imageStyle} />
-            <div>
-              <p style={{ fontSize: '18px', fontWeight: '700', color: '#2c3e50' }}>{item.name}</p>
-              <p style={{ fontSize: '16px', color: '#888' }}>{item.speciality}</p>
-              <div style={{ marginTop: '10px' }}>
-                <span style={availableBadgeStyle}>Available</span>
+
+      {/* Doctors Grid */}
+      <div className="container">
+        <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+          {doctors.slice(0, 10).map((item, index) => (
+            <div className="col" key={index}>
+              <div
+                className="card border-0 shadow-sm text-center p-4"
+                style={{
+                  backgroundColor: "#ffffff", // Keep original card background
+                  transition: "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "scale(1.05)";
+                  e.currentTarget.style.boxShadow = "0px 8px 20px rgba(0, 0, 0, 0.15)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "scale(1)";
+                  e.currentTarget.style.boxShadow = "0px 4px 10px rgba(0, 0, 0, 0.1)";
+                }}
+              >
+                {/* Doctor Image */}
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="rounded-circle mx-auto border border-3 shadow-sm"
+                  style={{
+                    width: "90px",
+                    height: "90px",
+                    objectFit: "cover",
+                    transition: "border 0.3s ease",
+                    borderColor: "#00838F", // Dark turquoise border
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.border = "4px solid #00B3B3")}
+                  onMouseLeave={(e) => (e.currentTarget.style.border = "3px solid #00838F")}
+                />
+
+                {/* Doctor Name & Speciality */}
+                <h5 className="fw-bold mt-3 text-dark">{item.name}</h5>
+                <p className="text-muted">{item.speciality}</p>
+
+                {/* Availability Badge (Turquoise) */}
+                <span className="badge px-3 py-2 fs-6" style={{ backgroundColor: "#00ACC1", color: "white" }}>
+                  Available
+                </span>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
+
+      {/* View More Button */}
       <button
-        style={buttonStyle}
+        className="btn mt-4 px-4 py-3 fw-semibold rounded-pill"
+        style={{
+          fontSize: "18px",
+          backgroundColor: "#00838F", // Dark turquoise button
+          color: "white",
+          transition: "transform 0.3s ease, box-shadow 0.3s ease",
+        }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'scale(1.1)';
-          e.currentTarget.style.boxShadow = '0px 6px 14px rgba(0, 0, 0, 0.15)';
+          e.currentTarget.style.transform = "scale(1.1)";
+          e.currentTarget.style.boxShadow = "0px 8px 16px rgba(0, 0, 0, 0.2)";
+          e.currentTarget.style.backgroundColor = "#00ACC1"; // Lighter turquoise on hover
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'scale(1)';
-          e.currentTarget.style.boxShadow = '0px 2px 8px rgba(0, 0, 0, 0.1)';
+          e.currentTarget.style.transform = "scale(1)";
+          e.currentTarget.style.boxShadow = "0px 4px 10px rgba(0, 0, 0, 0.1)";
+          e.currentTarget.style.backgroundColor = "#00838F";
         }}
       >
         View More
