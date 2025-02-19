@@ -28,18 +28,18 @@ const About = () => {
             </div>
             {/* Text Section */}
             <div className="col-md-7">
-              <h2 className="fw-bold mb-3 text-dark">Welcome to <span style={{ color: "#008080" }}>HealthSync App</span></h2>
+              <h2 className="fw-bold mb-3 text-dark">Welcome to <span style={{ color: "#008080" }}>HealthSync Official Website</span></h2>
               <p className="text-muted">
-                The HealthSync App helps users track and manage their heart rate data effortlessly using Android Health Connect.
+                The HealthSync website helps users track and manage their heart rate data effortlessly using Android Health Connect.
                 It allows you to save, load, and view heart rate history in a secure and user-friendly interface.
               </p>
               <p className="text-muted">
-                With a focus on privacy and accuracy, this app ensures that your health data is stored safely and accessible only to you.
+                With a focus on privacy and accuracy, this website ensures that your health data is stored safely and accessible only to you.
                 Whether for fitness tracking or general well-being, it provides valuable insights to support a healthier lifestyle.
               </p>
               <h4 className="fw-bold mt-4" style={{ color: "#008080" }}>Our Vision</h4>
               <p className="text-muted">
-                The HealthSync App aims to provide users with a seamless way to track and manage their health data securely.
+                The HealthSync website aims to provide users with a seamless way to track and manage their health data securely.
                 It focuses on accuracy, privacy, and accessibility to empower individuals with real-time health insights.
               </p>
             </div>
