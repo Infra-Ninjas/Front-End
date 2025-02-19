@@ -44,7 +44,6 @@ const Login = () => {
     formGroup: {
       width: "100%",
       marginBottom: "20px",
-      paddingLeft: "10px",
       textAlign: "left",
     },
     formLabel: {
@@ -83,7 +82,7 @@ const Login = () => {
     formFooter: {
       fontSize: "14px",
       color: "#555",
-      marginTop: "20px",
+      marginTop: "30px",
     },
     formLink: {
       color: "white",
@@ -164,6 +163,7 @@ const Login = () => {
         <p style={styles.formFooter}>
           {state === "Sign Up" ? "Already have an account?" : "Don't have an account?"}{" "}
           <span
+          className="p-2"
             onClick={() => setState(state === "Sign Up" ? "Login" : "Sign Up")}
             style={styles.formLink}
             onMouseEnter={(e) => (e.currentTarget.style.color = styles.formLinkHover.color)}

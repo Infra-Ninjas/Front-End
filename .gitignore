@@ -67,10 +67,6 @@ postcss.config.js
 # MongoDB local database files
 data/
 
-# Docker (if using Docker)
-Dockerfile
-.dockerignore
-
 # Public build artifacts
 /public/*.cache
 /public/*.map
