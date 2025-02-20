@@ -1,4 +1,5 @@
-
+//app context provider for admin
+//file to store the admin context for the login and token
 import React, { createContext } from 'react';
 
 export const AppContext = createContext()

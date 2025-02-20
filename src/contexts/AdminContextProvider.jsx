@@ -1,40 +1,42 @@
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import React, { createContext, useState } from 'react';
+// ✅ Export AdminContext
+export const AdminContext = createContext();  // ✅ Export this line
 
-export const AdminContext = createContext()
+// ✅ Export hook
+export const useAdminContext = () => useContext(AdminContext);
 
-const AdminContextProvider = (props) => {
+const AdminContextProvider = ({ children }) => {
+    const [aToken, setAToken] = useState(null);
+    const navigate = useNavigate();
 
-    const[aToken,setAToken] = useState('')
+    useEffect(() => {
+        const token = localStorage.getItem('aToken');
+        if (token) {
+            setAToken(token);
+        }
+    }, []);
 
-    const backendUrl = import.meta.env.VITE_BACKEND_URL
+    const login = (token) => {
+        setAToken(token);
+        localStorage.setItem('aToken', token);
+        navigate('/admin/dashboard');
+    };
 
-    const value = {
-        aToken,setAToken,backendUrl,
+    const logout = () => {
+        setAToken(null);
+        localStorage.removeItem('aToken');
+        navigate('/');
+    };
 
-
-
-    }
-
+    const value = { aToken, login, logout };
 
     return (
         <AdminContext.Provider value={value}>
-            {props.children}
-            
+            {children}
         </AdminContext.Provider>
-    )
-}
+    );
+};
 
-/**
- * Provides the AdminContext to its children components.
- * This context can be used to manage and access admin-related state and actions.
- *
- * @component
- * @example
- * return (
- *   <AdminContextProvider>
- *     <YourComponent />
- *   </AdminContextProvider>
- * )
- */
 export default AdminContextProvider;

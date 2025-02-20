@@ -1,6 +1,6 @@
-
-
 import React, { useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [state, setState] = useState("Sign Up");
@@ -10,7 +10,25 @@ const Login = () => {
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
-    // Add form submission logic here
+
+    try {
+      const url = state === "Sign Up" ? "http://localhost:4000/signup" : "http://localhost:4000/login";
+
+      const payload = state === "Sign Up" 
+        ? { name, email, password } 
+        : { email, password };
+
+      const response = await axios.post(url, payload);
+
+      if (response.status === 201 || response.status === 200) {
+        toast.success(state === "Sign Up" ? "Account created successfully!" : "Login successful!");
+      } else {
+        toast.error("Something went wrong!");
+      }
+    } catch (error) {
+      console.error("API error:", error);
+      toast.error(error?.response?.data?.message || "API request failed!");
+    }
   };
 
   const styles = {
@@ -67,7 +85,7 @@ const Login = () => {
     formButton: {
       width: "100%",
       padding: "12px",
-      backgroundColor: "#40e0d0", // Turquoise background
+      backgroundColor: "#40e0d0",
       color: "white",
       fontSize: "16px",
       fontWeight: "bold",
@@ -89,7 +107,7 @@ const Login = () => {
       cursor: "pointer",
       textDecoration: "underline",
       transition: "color 0.3s ease",
-      backgroundColor: "turquoise", // Turquoise background
+      backgroundColor: "turquoise",
       padding: "5px",
       borderRadius: "5px",
       fontWeight: "bold",
@@ -102,14 +120,18 @@ const Login = () => {
   return (
     <form onSubmit={onSubmitHandler} style={styles.formContainer}>
       <div style={styles.formContent}>
-        <h2 style={styles.formHeading}>{state === "Sign Up" ? "Create Account" : "Login"}</h2>
+        <h2 style={styles.formHeading}>
+          {state === "Sign Up" ? "Create Account" : "Login"}
+        </h2>
         <p style={styles.formDescription}>
           Please {state === "Sign Up" ? "Sign up" : "Log in"} to book an appointment
         </p>
 
         {state === "Sign Up" && (
           <div style={styles.formGroup}>
-            <label htmlFor="name" style={styles.formLabel}>Full Name</label>
+            <label htmlFor="name" style={styles.formLabel}>
+              Full Name
+            </label>
             <input
               id="name"
               type="text"
@@ -117,14 +139,18 @@ const Login = () => {
               value={name}
               required
               style={styles.formInput}
-              onFocus={(e) => (e.currentTarget.style.borderColor = styles.formInputFocus.borderColor)}
+              onFocus={(e) =>
+                (e.currentTarget.style.borderColor = styles.formInputFocus.borderColor)
+              }
               onBlur={(e) => (e.currentTarget.style.borderColor = "#ccc")}
             />
           </div>
         )}
 
         <div style={styles.formGroup}>
-          <label htmlFor="email" style={styles.formLabel}>Email</label>
+          <label htmlFor="email" style={styles.formLabel}>
+            Email
+          </label>
           <input
             id="email"
             type="email"
@@ -132,13 +158,17 @@ const Login = () => {
             value={email}
             required
             style={styles.formInput}
-            onFocus={(e) => (e.currentTarget.style.borderColor = styles.formInputFocus.borderColor)}
+            onFocus={(e) =>
+              (e.currentTarget.style.borderColor = styles.formInputFocus.borderColor)
+            }
             onBlur={(e) => (e.currentTarget.style.borderColor = "#ccc")}
           />
         </div>
 
         <div style={styles.formGroup}>
-          <label htmlFor="password" style={styles.formLabel}>Password</label>
+          <label htmlFor="password" style={styles.formLabel}>
+            Password
+          </label>
           <input
             id="password"
             type="password"
@@ -146,7 +176,9 @@ const Login = () => {
             value={password}
             required
             style={styles.formInput}
-            onFocus={(e) => (e.currentTarget.style.borderColor = styles.formInputFocus.borderColor)}
+            onFocus={(e) =>
+              (e.currentTarget.style.borderColor = styles.formInputFocus.borderColor)
+            }
             onBlur={(e) => (e.currentTarget.style.borderColor = "#ccc")}
           />
         </div>
@@ -154,8 +186,12 @@ const Login = () => {
         <button
           type="submit"
           style={styles.formButton}
-          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = styles.formButtonHover.backgroundColor)}
-          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = styles.formButton.backgroundColor)}
+          onMouseEnter={(e) =>
+            (e.currentTarget.style.backgroundColor = styles.formButtonHover.backgroundColor)
+          }
+          onMouseLeave={(e) =>
+            (e.currentTarget.style.backgroundColor = styles.formButton.backgroundColor)
+          }
         >
           {state === "Sign Up" ? "Create Account" : "Login"}
         </button>
@@ -163,7 +199,7 @@ const Login = () => {
         <p style={styles.formFooter}>
           {state === "Sign Up" ? "Already have an account?" : "Don't have an account?"}{" "}
           <span
-          className="p-2"
+            className="p-2"
             onClick={() => setState(state === "Sign Up" ? "Login" : "Sign Up")}
             style={styles.formLink}
             onMouseEnter={(e) => (e.currentTarget.style.color = styles.formLinkHover.color)}
@@ -178,4 +214,3 @@ const Login = () => {
 };
 
 export default Login;
-
