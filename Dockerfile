@@ -1,12 +1,7 @@
-## Dockerfile
 ################################
-## BUILD ENVIRONMENT ###########
+#### BUILD ENVIRONMENT ####
 ################################
 
-# Use the official Node.js Alpine image (adjust based on your project's requirements)
-# You can find the appropriate image on Docker Hub: https://hub.docker.com/_/node
-# In this example, we're using node:20-alpine3.20
-# run in termilnal commande line "node --version to get the version of your app"
 FROM node:20-alpine3.20 As build
 
 # Set the working directory inside the container
