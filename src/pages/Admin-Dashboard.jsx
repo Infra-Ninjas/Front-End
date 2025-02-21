@@ -1,14 +1,21 @@
+// Updated Dashboard.jsx
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const Appointments = () => {
+const Dashboard = () => {
     // Dummy data
+    const stats = {
+        totalDoctors: 25,
+        totalPatients: 120,
+        appointmentsToday: 15,
+        revenue: '$4,500'
+    };
+
     const initialAppointments = [
         { id: 1, doctor: 'Dr. John Doe', patient: 'Alice', time: '10:30 AM' },
         { id: 2, doctor: 'Dr. Sarah Lee', patient: 'Bob', time: '11:00 AM' },
         { id: 3, doctor: 'Dr. Michael Smith', patient: 'Charlie', time: '11:30 AM' },
-        { id: 4, doctor: 'Dr. Emily Clark', patient: 'David', time: '12:00 PM' },
-        { id: 5, doctor: 'Dr. John Doe', patient: 'Emma', time: '12:30 PM' }
+        { id: 4, doctor: 'Dr. Emily Clark', patient: 'David', time: '12:00 PM' }
     ];
 
     const [appointments, setAppointments] = useState(initialAppointments);
@@ -45,15 +52,27 @@ const Appointments = () => {
     };
 
     return (
-        <div style={{ backgroundColor: "#f5f5f5", minHeight: "100vh", padding: "20px" }}>
+        <div style={{ backgroundColor: "#f5f5f5", minHeight: "100vh", padding: "10px" }}>  {/* ✅ Reduced padding */}
             <div className="d-flex">
                 {/* Main Content */}
-                <div className="container-fluid" style={{ maxWidth: "900px", marginLeft: "260px" }}>
-                    <h2 className="mb-4 fw-bold text-center">Appointments</h2>
+                <div className="container-fluid" style={{ maxWidth: "900px", marginLeft: "240px", marginTop: "0px" }}>  {/* ✅ Reduced marginTop */}
+                    <h2 className="mb-4 fw-bold text-center">Dashboard</h2>
+
+                    {/* Stats Section */}
+                    <div className="row g-3 mb-4">
+                        {Object.entries(stats).map(([key, value]) => (
+                            <div className="col-sm-6 col-md-3" key={key}>
+                                <div className="card border-0 shadow p-2 text-center interactive-card">
+                                    <h6 className="text-secondary">{key.replace(/([A-Z])/g, ' $1')}</h6>
+                                    <h4 className="fw-bold">{value}</h4>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
 
                     {/* Search Bar */}
                     <div className="mb-3 d-flex justify-content-between align-items-center">
-                        <h6 className="fw-bold mb-0">List of Appointments</h6>
+                        <h6 className="fw-bold mb-0">Recent Appointments</h6>
                         <input
                             type="text"
                             className="form-control w-50"
@@ -63,7 +82,7 @@ const Appointments = () => {
                         />
                     </div>
 
-                    {/* Appointments Table */}
+                    {/* Recent Appointments Section */}
                     <div className="card border-0 shadow p-3" style={{ fontSize: "14px" }}>
                         <table className="table table-hover table-bordered mb-0">
                             <thead>
@@ -76,7 +95,7 @@ const Appointments = () => {
                             </thead>
                             <tbody>
                                 {appointments.map((appointment) => (
-                                    <tr key={appointment.id} className="interactive-row">
+                                    <tr key={appointment.id}>
                                         <td>{appointment.id}</td>
                                         <td>{appointment.doctor}</td>
                                         <td>{appointment.patient}</td>
@@ -91,13 +110,14 @@ const Appointments = () => {
 
             {/* Styles */}
             <style>{`
-                .interactive-row {
+                .interactive-card {
                     cursor: pointer;
                     transition: all 0.3s ease;
                 }
-                .interactive-row:hover {
+                .interactive-card:hover {
                     background: #40E0D0;
                     color: white;
+                    transform: translateY(-5px);
                 }
                 th {
                     position: relative;
@@ -111,4 +131,4 @@ const Appointments = () => {
     );
 };
 
-export default Appointments;
+export default Dashboard;

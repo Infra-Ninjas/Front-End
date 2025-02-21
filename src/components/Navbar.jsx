@@ -94,7 +94,7 @@ const Navbar = () => {
                       left: "50%",
                       bottom: "-2px",
                       width: "0%",
-                      height: "2px",
+                      height: "4px",
                       backgroundColor: "#17a2b8",
                       transition: "all 0.3s ease-in-out",
                       transform: "translateX(-50%)",
@@ -114,7 +114,7 @@ const Navbar = () => {
             style={{
               fontSize: "16px",
               fontWeight: "600",
-              background: "linear-gradient(to right, #20c997, #17a2b8)",
+              background: "linear-gradient(to right, #20c997,rgb(17, 203, 231))",
               border: "none",
               transition: "0.3s ease-in-out",
             }}
