@@ -60,7 +60,7 @@ const App = () => {
                 <Route path="/myprofile" element={<MyProfile />} />
                 <Route path="/myappointments" element={<MyAppointments />} />
                 <Route path="/appointment/:docId" element={<Appointment />} />
-                <Route path="/AllAppointments" element={<AllAppointments />} />
+               
 
                 {/* ✅ Admin Routes With Protection */}
                 <Route path="/admin-login" element={<AdminLogin />} />
@@ -76,7 +76,9 @@ const App = () => {
                     path="/DoctorsList"
                     element={aToken ? <DoctorsList /> : <Navigate to="/admin-login" replace />}
                 />
-                
+                 <Route 
+                 path="/AllAppointments"
+                 element={aToken ? <AllAppointments /> : <Navigate to="/admin-login" replace />} />
             </Routes>
 
             <Footer />
