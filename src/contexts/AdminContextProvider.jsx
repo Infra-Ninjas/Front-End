@@ -39,7 +39,7 @@ const AdminContextProvider = ({ children }) => {
             setAToken(token);
             localStorage.setItem("aToken", token);
             toast.success("Login successful!", { style: { borderBottom: "3px solid #4CAF50" } });
-            navigate("/Admin-Dashboard");
+            navigate("/admin-dashboard");
             setNavbarRefresh((prev) => !prev);
         } else {
             toast.error(" Invalid credentials!", { style: { borderBottom: "3px solid red" } });

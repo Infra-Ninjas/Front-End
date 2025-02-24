@@ -13,10 +13,10 @@ import MyProfile from "./pages/MyProfile";
 import MyAppointments from "./pages/MyAppointments";
 import Doctors from "./pages/Doctors";
 import Login from "./pages/Login";
-import AdminLogin from "./pages/admin-Login";
+import AdminLogin from "./pages/AdminLogin";
 import Appointment from "./pages/Appointment";
 import AddDoctor from "./pages/AddDoctor";
-import AdminDashboard from "./pages/Admin-Dashboard";
+import AdminDashboard from "./pages/AdminDashboard";
 import AllAppointments from "./pages/AllAppointments";
 import DoctorsList from "./pages/DoctorsList";
 //import Dashboard from "./pages/Doctorspages/Dashboard";
@@ -69,7 +69,7 @@ const App = () => {
                 {/* ✅ Admin Routes With Protection */}
                 <Route path="/admin-login" element={<AdminLogin />} />
                 <Route
-                    path="/Admin-Dashboard"
+                    path="/admin-dashboard"
                     element={aToken ? <AdminDashboard /> : <Navigate to="/admin-login" replace />}
                 />
                 <Route
