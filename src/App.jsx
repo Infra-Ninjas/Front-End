@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import "./index.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 // Pages
 import Home from "./pages/Home";
@@ -38,6 +41,7 @@ const App = () => {
 
     return (
         <div className="sm:mx-[10%]">
+            <ToastContainer position="top-right" autoClose={3000} hideProgressBar closeOnClick pauseOnHover draggable theme="colored" />
             {/* ✅ Show Navbar and Sidebar */}
             {isLoggedIn ? (
                 <>
@@ -77,8 +81,8 @@ const App = () => {
                     element={aToken ? <DoctorsList /> : <Navigate to="/admin-login" replace />}
                 />
                  <Route 
-                 path="/AllAppointments"
-                 element={aToken ? <AllAppointments /> : <Navigate to="/admin-login" replace />} />
+                    path="/AllAppointments"
+                    element={aToken ? <AllAppointments /> : <Navigate to="/admin-login" replace />} />
             </Routes>
 
             <Footer />

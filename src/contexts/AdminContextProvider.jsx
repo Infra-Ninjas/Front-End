@@ -1,6 +1,8 @@
 // AdminContextProvider.jsx
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
+
 
 // ✅ Create context (NO EXPORT)
 const AdminContext = createContext();
@@ -33,21 +35,28 @@ const AdminContextProvider = ({ children }) => {
     }, [aToken]);
 
     const login = (token) => {
-        setAToken(token);
-        localStorage.setItem('aToken', token);
-        navigate('/Admin-Dashboard');
-        setNavbarRefresh((prev) => !prev);
+        if (token) {
+            setAToken(token);
+            localStorage.setItem("aToken", token);
+            toast.success("Login successful!", { style: { borderBottom: "3px solid #4CAF50" } });
+            navigate("/Admin-Dashboard");
+            setNavbarRefresh((prev) => !prev);
+        } else {
+            toast.error(" Invalid credentials!", { style: { borderBottom: "3px solid red" } });
+        }
     };
+    
 
     const logout = () => {
         setAToken(null);
         localStorage.removeItem('aToken');
+        toast.success("Logout successful!", { style: { borderBottom: "3px solid #4CAF50" } });
         navigate('/');
         setNavbarRefresh((prev) => !prev);
     };
 
     return (
-        <AdminContext.Provider value={{ aToken, navbarRefresh, login, logout }}>
+        <AdminContext.Provider value={{ aToken, navbarRefresh, toast, login, logout }}>
             {children}
         </AdminContext.Provider>
     );
