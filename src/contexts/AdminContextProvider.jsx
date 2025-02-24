@@ -1,42 +1,60 @@
+// AdminContextProvider.jsx
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-// ✅ Export AdminContext
-export const AdminContext = createContext();  // ✅ Export this line
-
-// ✅ Export hook
-export const useAdminContext = () => useContext(AdminContext);
+// ✅ Create context (NO EXPORT)
+const AdminContext = createContext();
 
 const AdminContextProvider = ({ children }) => {
-    const [aToken, setAToken] = useState(null);
+    const [aToken, setAToken] = useState(localStorage.getItem('aToken') || null);
+    const [navbarRefresh, setNavbarRefresh] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const token = localStorage.getItem('aToken');
-        if (token) {
-            setAToken(token);
-        }
-    }, []);
+        const handleStorageChange = (event) => {
+            if (event.key === 'aToken' && event.storageArea === localStorage) {
+                if (!event.newValue) {
+                    setAToken(null);
+                    navigate('/');
+                    setNavbarRefresh((prev) => !prev);
+                }
+            }
+        };
+
+        window.addEventListener('storage', handleStorageChange);
+
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+        };
+    }, [navigate]);
+
+    useEffect(() => {
+        setNavbarRefresh((prev) => !prev);
+    }, [aToken]);
 
     const login = (token) => {
         setAToken(token);
         localStorage.setItem('aToken', token);
-        navigate('/admin/dashboard');
+        navigate('/Admin-Dashboard');
+        setNavbarRefresh((prev) => !prev);
     };
 
     const logout = () => {
         setAToken(null);
         localStorage.removeItem('aToken');
         navigate('/');
+        setNavbarRefresh((prev) => !prev);
     };
 
-    const value = { aToken, login, logout };
-
     return (
-        <AdminContext.Provider value={value}>
+        <AdminContext.Provider value={{ aToken, navbarRefresh, login, logout }}>
             {children}
         </AdminContext.Provider>
     );
 };
 
+// ✅ Export the provider
 export default AdminContextProvider;
+
+// ✅ Export the hook correctly
+export const useAdminContext = () => useContext(AdminContext);

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { assets } from "../assets/assets_admin/assets";
 import { useState } from "react";
-import { AdminContext } from "../contexts/AdminContextProvider";
+import { useAdminContext } from "../contexts/AdminContextProvider";
 import { toast } from "react-toastify";
 import axios from "axios";
 
@@ -18,8 +18,8 @@ const AddDoctor = () => {
     const [address1, setAddress1] = useState("");
     const [address2, setAddress2] = useState("");
 
-    const { backendUrl, aToken } = useContext(AdminContext);
-    
+    const { backendUrl, aToken } = useAdminContext(); // ✅ Correct
+
 
     const onSubmitHandler = async (event) => {
         event.preventDefault();

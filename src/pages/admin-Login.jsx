@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { assets } from "../assets/assets_admin/assets";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { AdminContext } from "../contexts/AdminContextProvider"; // ✅ Correct import
+import { useAdminContext } from "../contexts/AdminContextProvider"; // ✅ Correct import
 import axios from "axios";
 import { toast } from "react-toastify";
 import { data } from "react-router-dom";
@@ -11,7 +11,8 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { login } = useContext(AdminContext); // ✅ Correct usage
+  const { login } = useAdminContext(); // ✅ This is correct
+
 
   // Correct backend URL
   const backendUrl =

@@ -1,11 +1,11 @@
 // Sidebar.js
 import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
-import { AdminContext } from '../contexts/AdminContextProvider';
+import { useAdminContext } from '../contexts/AdminContextProvider';
 import { assets } from '../assets/assets_admin/assets.js';
 
 const SideBar = () => {
-    const { aToken } = useContext(AdminContext);
+    const { aToken } = useAdminContext();
 
     return (
         <div className="d-flex">

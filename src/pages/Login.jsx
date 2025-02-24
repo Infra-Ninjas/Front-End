@@ -27,7 +27,7 @@ const Login = () => {
       }
     } catch (error) {
       console.error("API error:", error);
-      toast.error(error?.response?.data?.message || "API request failed!");
+      toast.error(error?.response?.data?.message || "Login Failed!");
     }
   };
 
