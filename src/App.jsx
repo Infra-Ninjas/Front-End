@@ -14,7 +14,7 @@ import MyAppointments from "./pages/MyAppointments";
 import Doctors from "./pages/Doctors";
 import Login from "./pages/Login";
 import AdminLogin from "./pages/AdminLogin";
-import Appointment from "./pages/Appointment";
+import Appointment from "./pages/Appointments";
 import AddDoctor from "./pages/AddDoctor";
 import AdminDashboard from "./pages/AdminDashboard";
 import AllAppointments from "./pages/AllAppointments";
