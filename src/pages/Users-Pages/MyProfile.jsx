@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { assets } from "../assets/assets_frontend/assets";
+import { assets } from "../../assets/assets_frontend/assets";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faPhone, faMapMarkerAlt, faUser, faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 

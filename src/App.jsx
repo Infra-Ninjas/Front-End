@@ -9,16 +9,16 @@ import "react-toastify/dist/ReactToastify.css";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
-import MyProfile from "./pages/MyProfile";
-import MyAppointments from "./pages/MyAppointments";
+import MyProfile from "./pages/Users-Page/MyProfile";
+import MyAppointments from "./pages/Users-Page/MyAppointments";
 import Doctors from "./pages/Doctors";
-import Login from "./pages/Login";
+import Login from "./pages/Users-Page/Login";
 import AdminLogin from "./pages/AdminLogin";
-import Appointment from "./pages/Appointments";
-import AddDoctor from "./pages/AddDoctor";
-import AdminDashboard from "./pages/AdminDashboard";
-import AllAppointments from "./pages/AllAppointments";
-import DoctorsList from "./pages/DoctorsList";
+//import Appointment from "./pages/Appointments";
+import AddDoctor from "./pages/Admins-Pages/AddDoctor";
+import AdminDashboard from "./pages/Admins-Pages/AdminDashboard";
+import AllAppointments from "./pages/Admins-Pages/AllAppointments";
+import DoctorsList from "./pages/Admins-Pages/DoctorsList";
 //import Dashboard from "./pages/Doctorspages/Dashboard";
 
 // Components
@@ -63,7 +63,7 @@ const App = () => {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/myprofile" element={<MyProfile />} />
                 <Route path="/myappointments" element={<MyAppointments />} />
-                <Route path="/appointment/:docId" element={<Appointment />} />
+                
                
 
                 {/* ✅ Admin Routes With Protection */}

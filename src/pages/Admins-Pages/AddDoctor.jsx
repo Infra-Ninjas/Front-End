@@ -356,8 +356,8 @@
 
 
 import React, { useState } from "react";
-import { assets } from "../assets/assets_admin/assets";
-import { useAdminContext } from "../contexts/AdminContextProvider";
+import { assets } from "../../assets/assets_admin/assets";
+import { useAdminContext } from "../../contexts/AdminContextProvider";
 import { toast } from "react-toastify";
 import axios from "axios";
 
