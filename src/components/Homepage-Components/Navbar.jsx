@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { assets } from "../assets/assets_frontend/assets";
+import { assets } from "../../assets/assets_frontend/assets";
 import { NavLink } from "react-router-dom";
 
 const Navbar = () => {

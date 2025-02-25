@@ -6,14 +6,14 @@ import "react-toastify/dist/ReactToastify.css";
 
 
 // Pages
-import Home from "./pages/Home";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import MyProfile from "./pages/Users-Page/MyProfile";
-import MyAppointments from "./pages/Users-Page/MyAppointments";
-import Doctors from "./pages/Doctors";
-import Login from "./pages/Users-Page/Login";
-import AdminLogin from "./pages/AdminLogin";
+import Home from "./pages/Homepage-Pages/Home";
+import About from "./pages/Homepage-Pages/About";
+import Contact from "./pages/Homepage-Pages/Contact";
+import MyProfile from "./pages/Users-Pages/MyProfile";
+import MyAppointments from "./pages/Users-Pages/MyAppointments";
+import Doctors from "./pages/Homepage-Pages/Doctors";
+import Login from "./pages/Users-Pages/Login";
+import AdminLogin from "./pages/Homepage-Pages/AdminLogin";
 //import Appointment from "./pages/Appointments";
 import AddDoctor from "./pages/Admins-Pages/AddDoctor";
 import AdminDashboard from "./pages/Admins-Pages/AdminDashboard";
@@ -22,13 +22,13 @@ import DoctorsList from "./pages/Admins-Pages/DoctorsList";
 //import Dashboard from "./pages/Doctorspages/Dashboard";
 
 // Components
-import Navbar from "./components/Navbar";
-import AdminNavbar from "./components/AdminNavbar";
-import SideBar from "./components/SideBar";
-import Footer from "./components/Footer";
+import Navbar from "./components/Homepage-Components/Navbar";
+import AdminNavbar from "./components/Admins-Components/AdminNavbar";
+import SideBar from "./components/Admins-Components/SideBar";
+import Footer from "./components/Homepage-Components/Footer";
 
 // ✅ Correctly Import useAdminContext
-import { useAdminContext } from "./contexts/AdminContextProvider";
+import { useAdminContext } from "./contexts/Admin-Context/AdminContextProvider";
 
 const App = () => {
     const { aToken, navbarRefresh } = useAdminContext(); // ✅ Use hook directly (no errors now)

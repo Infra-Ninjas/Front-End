@@ -1,5 +1,5 @@
 import React from "react";
-import { assets } from "../assets/assets_frontend/assets";
+import { assets } from "../../assets/assets_frontend/assets";
 import "bootstrap/dist/css/bootstrap.min.css"; // ✅ Import Bootstrap
 
 const About = () => {

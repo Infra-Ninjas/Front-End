@@ -7,8 +7,8 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 // Context Providers
 import AppContextProvider from './contexts/AppContext';   // ✅ Use AppContext correctly
-import AdminContextProvider from './contexts/AdminContextProvider';
-import DoctorContextProvider from './contexts/DoctorContext';
+import AdminContextProvider from './contexts/Admin-Context/AdminContextProvider.jsx';
+import DoctorContextProvider from './contexts/Doctors-Context/DoctorContext.jsx';
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>

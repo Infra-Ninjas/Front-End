@@ -70,8 +70,8 @@
 // Sidebar.js
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useAdminContext } from '../contexts/AdminContextProvider';
-import { assets } from '../assets/assets_admin/assets.js';
+import { useAdminContext } from '../../contexts/Admin-Context/AdminContextProvider.jsx';
+import { assets } from '../../assets/assets_admin/assets.js';
 
 const SideBar = () => {
   const { aToken } = useAdminContext();

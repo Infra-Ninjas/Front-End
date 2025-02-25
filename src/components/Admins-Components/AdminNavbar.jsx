@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useAdminContext } from "../contexts/AdminContextProvider";
-import { assets } from "../assets/assets_admin/assets.js";
+import { useAdminContext } from "../../contexts/Admin-Context/AdminContextProvider.jsx";
+import { assets } from "../../assets/assets_admin/assets.js";
 
 const AdminNavbar = () => {
     const { aToken, logout } = useAdminContext();
