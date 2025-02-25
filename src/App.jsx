@@ -1,3 +1,4 @@
+//Main App Component
 import React, { useEffect, useState } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import "./index.css";
@@ -5,27 +6,46 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 
-// Pages
+// Homepage Pages Imports
 import Home from "./pages/Homepage-Pages/Home";
 import About from "./pages/Homepage-Pages/About";
 import Contact from "./pages/Homepage-Pages/Contact";
-import MyProfile from "./pages/Users-Pages/MyProfile";
-import MyAppointments from "./pages/Users-Pages/MyAppointments";
-import Doctors from "./pages/Homepage-Pages/Doctors";
-import Login from "./pages/Users-Pages/Login";
 import AdminLogin from "./pages/Homepage-Pages/AdminLogin";
-//import Appointment from "./pages/Appointments";
+import Doctors from "./pages/Homepage-Pages/Doctors";
+
+//User Pages Imports
+import Dashboard from "./pages/Users-Pages/Dashboard";
+import MyAppointments from "./pages/Users-Pages/MyAppointments";
+import MyProfile from "./pages/Users-Pages/MyProfile";
+import Login from "./pages/Users-Pages/Login";
+
+//Admin Pages Imports
 import AddDoctor from "./pages/Admins-Pages/AddDoctor";
 import AdminDashboard from "./pages/Admins-Pages/AdminDashboard";
 import AllAppointments from "./pages/Admins-Pages/AllAppointments";
 import DoctorsList from "./pages/Admins-Pages/DoctorsList";
-//import Dashboard from "./pages/Doctorspages/Dashboard";
 
-// Components
+//Doctor Pages Imports
+import DoctorsDashboard from "./pages/Doctors-Pages/DoctorsDashboard";
+import Patientslist from "./pages/Doctors-Pages/Patientslist";
+
+
+// Homepage Components
 import Navbar from "./components/Homepage-Components/Navbar";
+import Footer from "./components/Homepage-Components/Footer";
+
+// Admin Components
 import AdminNavbar from "./components/Admins-Components/AdminNavbar";
 import SideBar from "./components/Admins-Components/SideBar";
-import Footer from "./components/Homepage-Components/Footer";
+
+//User Conponents
+//import UserNavbar from "./components/Users-Components/UserNavbar";
+//import UserSidebar from "./components/Users-Components/UserSidebar";
+
+//Doctor Components
+//import DoctorNavbar from "./components/Doctors-Components/DoctorNavbar";
+//import DoctorSidebar from "./components/Doctors-Components/DoctorSidebar";
+
 
 // ✅ Correctly Import useAdminContext
 import { useAdminContext } from "./contexts/Admin-Context/AdminContextProvider";
@@ -61,8 +81,7 @@ const App = () => {
                 <Route path="/login" element={<Login />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
-                <Route path="/myprofile" element={<MyProfile />} />
-                <Route path="/myappointments" element={<MyAppointments />} />
+               
                 
                
 
@@ -83,6 +102,31 @@ const App = () => {
                  <Route 
                     path="/AllAppointments"
                     element={aToken ? <AllAppointments /> : <Navigate to="/admin-login" replace />} />
+
+
+                
+
+                {/*User Routes*/}
+                <Route path="/myprofile" element={<MyProfile />} />
+                <Route path="/myappointments" element={<MyAppointments />} />
+                
+                
+                {/*Admin Routes*/}
+                <Route path="/admindashboard" element={<AdminDashboard />} />
+                <Route path="/doctorslist" element={<DoctorsList />} />
+                <Route path="/addDoctor" element={<AddDoctor />} />
+                <Route path="/allappointments" element={<AllAppointments />} />
+                
+                
+                {/*Doctor Routes*/}
+                <Route path="/doctorDashboard" element={<DoctorsDashboard />} />
+                <Route path="/patientslist" element={<Patientslist />} />
+
+
+                
+                
+               
+                
             </Routes>
 
             <Footer />
