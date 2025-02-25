@@ -354,11 +354,11 @@
 
 // export default AddDoctor;
 
-
 import React, { useState } from "react";
 import { assets } from "../../assets/assets_admin/assets";
 import { useAdminContext } from "../../contexts/Admin-Context/AdminContextProvider";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const AddDoctor = () => {
@@ -378,9 +378,11 @@ const AddDoctor = () => {
   const [zip, setZip] = useState("");
   // New state for image URL
   const [imageUrl, setImageUrl] = useState("");
+  const navigate = useNavigate();
 
   const { aToken } = useAdminContext();
-  const backendUrl = import.meta.env.VITE_ADMINSERVICE_URL || "http://localhost:4001";
+  const backendUrl =
+    import.meta.env.VITE_ADMINSERVICE_URL || "http://localhost:4001";
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
@@ -388,7 +390,9 @@ const AddDoctor = () => {
     try {
       // Ensure at least one image source is provided
       if (!docImg && !imageUrl) {
-        return toast.error("Please upload doctor picture or provide an image URL");
+        return toast.error(
+          "Please upload doctor picture or provide an image URL"
+        );
       }
       if (!aToken) {
         return toast.error("Admin not authenticated. Please log in.");
@@ -418,7 +422,7 @@ const AddDoctor = () => {
 
         headers = {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${aToken}`
+          Authorization: `Bearer ${aToken}`,
         };
       } else {
         payload = {
@@ -434,12 +438,12 @@ const AddDoctor = () => {
           available: true,
           address: { street, city, state, zip },
           date: currentTimestamp,
-          slots_booked: {}
+          slots_booked: {},
         };
 
         headers = {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${aToken}`
+          Authorization: `Bearer ${aToken}`,
         };
       }
 
@@ -459,26 +463,31 @@ const AddDoctor = () => {
 
       if (data.success) {
         toast.success(data.message || "Doctor added successfully!");
+        navigate("/DoctorsList");
       } else {
         toast.error(data.message || "Failed to add doctor. Please try again.");
       }
     } catch (error) {
       console.error("Add Doctor Error:", error);
       toast.error(
-        error.response?.data?.message || "Failed to add doctor. Please try again."
+        error.response?.data?.message ||
+          "Failed to add doctor. Please try again."
       );
     }
   };
 
   return (
-    <div className="d-flex flex-row" style={{ backgroundColor: "#f5f5f5", minHeight: "100vh" }}>
+    <div
+      className="d-flex flex-row"
+      style={{ backgroundColor: "#f5f5f5", minHeight: "100vh" }}
+    >
       <div
         className="container mt-0 mb-01 p-4"
         style={{
           maxWidth: "900px",
           borderRadius: "12px",
           backgroundColor: "#f8f9fa",
-          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)"
+          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
         }}
       >
         <form onSubmit={onSubmitHandler}>
@@ -488,10 +497,17 @@ const AddDoctor = () => {
             <div className="col-md-3 text-center">
               <label htmlFor="doc-img" className="d-block">
                 <img
-                  src={docImg ? URL.createObjectURL(docImg) : assets.upload_area}
+                  src={
+                    docImg ? URL.createObjectURL(docImg) : assets.upload_area
+                  }
                   alt="Upload"
                   className="img-fluid border rounded-circle p-2"
-                  style={{ width: "100px", height: "100px", cursor: "pointer", backgroundColor: "#f8f9fa" }}
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    cursor: "pointer",
+                    backgroundColor: "#f8f9fa",
+                  }}
                 />
               </label>
               <input
@@ -530,7 +546,9 @@ const AddDoctor = () => {
                     <option value="Dermatologist">Dermatologist</option>
                     <option value="Pediatricians">Pediatricians</option>
                     <option value="Neurologist">Neurologist</option>
-                    <option value="Gastroenterologist">Gastroenterologist</option>
+                    <option value="Gastroenterologist">
+                      Gastroenterologist
+                    </option>
                   </select>
                 </div>
 
@@ -685,9 +703,10 @@ const AddDoctor = () => {
               type="submit"
               className="btn text-white px-5 py-2 fw-bold"
               style={{
-                background: "linear-gradient(to right,rgb(83, 212, 245),rgb(67, 248, 230))",
+                background:
+                  "linear-gradient(to right,rgb(83, 212, 245),rgb(67, 248, 230))",
                 borderRadius: "8px",
-                border: "none"
+                border: "none",
               }}
             >
               Add doctor

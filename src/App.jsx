@@ -38,7 +38,7 @@ import Footer from "./components/Homepage-Components/Footer";
 import AdminNavbar from "./components/Admins-Components/AdminNavbar";
 import SideBar from "./components/Admins-Components/SideBar";
 
-//User Conponents
+//User Components
 //import UserNavbar from "./components/Users-Components/UserNavbar";
 //import UserSidebar from "./components/Users-Components/UserSidebar";
 
@@ -106,19 +106,19 @@ const App = () => {
 
                 
 
-                {/*User Routes*/}
+                {/*User's Routes*/}
                 <Route path="/myprofile" element={<MyProfile />} />
                 <Route path="/myappointments" element={<MyAppointments />} />
                 
                 
-                {/*Admin Routes*/}
+                {/*Admin's Routes*/}
                 <Route path="/admindashboard" element={<AdminDashboard />} />
                 <Route path="/doctorslist" element={<DoctorsList />} />
                 <Route path="/addDoctor" element={<AddDoctor />} />
                 <Route path="/allappointments" element={<AllAppointments />} />
                 
                 
-                {/*Doctor Routes*/}
+                {/*Doctor's Routes*/}
                 <Route path="/doctorDashboard" element={<DoctorsDashboard />} />
                 <Route path="/patientslist" element={<Patientslist />} />
 
