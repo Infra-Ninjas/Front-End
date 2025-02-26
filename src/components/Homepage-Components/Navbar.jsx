@@ -120,7 +120,11 @@ const Navbar = () => {
       background: "linear-gradient(to right, #20c997, rgb(17, 203, 231))",
       border: "none",
       transition: "0.3s ease-in-out",
-      paddingLeft: "50px",
+      borderRadius: "50px",
+      paddingBottom: "0.5rem",
+      paddingTop: "0.5rem",
+      paddingLeft: "1.5rem",
+      paddingRight: "1.5rem",
     }}
     type="button"
     data-bs-toggle="dropdown"
@@ -148,6 +152,10 @@ const Navbar = () => {
           backgroundColor: "#fff",
           transition: "all 0.3s",
           borderRadius: "0.9rem",
+          paddingBottom: "0.5rem",
+          paddingTop: "0.5rem",
+          paddingLeft: "1.5rem",
+          paddingRight: "1.5rem",
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.background =
@@ -172,6 +180,10 @@ const Navbar = () => {
           backgroundColor: "#fff",
           transition: "all 0.3s",
           borderRadius: "0.9rem",
+          paddingBottom: "0.5rem",
+          paddingTop: "0.5rem",
+          paddingLeft: "1.5rem",
+          paddingRight: "1.5rem",
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.background =
@@ -188,7 +200,7 @@ const Navbar = () => {
     </li>
     <li>
       <NavLink
-        to="/patient-login"
+        to="/login"
         className="dropdown-item"
         style={{
           color: "gray",
@@ -196,6 +208,11 @@ const Navbar = () => {
           backgroundColor: "#fff",
           transition: "all 0.3s",
           borderRadius: "0.9rem",
+          paddingBottom: "0.5rem",
+          paddingTop: "0.5rem",
+          paddingLeft: "1.5rem",
+          paddingRight: "1.5rem",
+
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.background =
