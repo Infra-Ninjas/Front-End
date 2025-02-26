@@ -107,16 +107,122 @@ const Navbar = () => {
           </ul>
         </div>
 
-        {/* Create Account Button */}
-        <NavLink to="/login">
+       
+
+       {/* Login Dropdown Button */}
+{/* Login Dropdown Button */}
+<div className="dropdown">
+  <button
+    className="btn btn-info text-white px-2 py-2 rounded-pill shadow-sm"
+    style={{
+      fontSize: "14px",
+      fontWeight: "600",
+      background: "linear-gradient(to right, #20c997, rgb(17, 203, 231))",
+      border: "none",
+      transition: "0.3s ease-in-out",
+      paddingLeft: "50px",
+    }}
+    type="button"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+    onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
+    onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+  >
+    Login <i className="bi bi-caret-down-fill"></i>
+  </button>
+
+  <ul
+    className="dropdown-menu border-2 shadow p-2"
+    style={{
+      backgroundColor: "#fff", // keep dropdown's overall bg white
+      borderRadius: "0.9rem",
+    }}
+  >
+    <li>
+      <NavLink
+        to="/admin-login"
+        className="dropdown-item"
+        style={{
+          color: "gray",
+          fontWeight: "600",
+          backgroundColor: "#fff",
+          transition: "all 0.3s",
+          borderRadius: "0.9rem",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.background =
+            "linear-gradient(to right, #20c997, rgb(17, 203, 231))";
+          e.currentTarget.style.color = "#fff";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.background = "#fff";
+          e.currentTarget.style.color = "gray";
+        }}
+      >
+        Admin Login
+      </NavLink>
+    </li>
+    <li>
+      <NavLink
+        to="/doctor-login"
+        className="dropdown-item"
+        style={{
+          color: "gray",
+          fontWeight: "600",
+          backgroundColor: "#fff",
+          transition: "all 0.3s",
+          borderRadius: "0.9rem",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.background =
+            "linear-gradient(to right, #20c997, rgb(17, 203, 231))";
+          e.currentTarget.style.color = "#fff";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.background = "#fff";
+          e.currentTarget.style.color = "gray";
+        }}
+      >
+        Doctors Login
+      </NavLink>
+    </li>
+    <li>
+      <NavLink
+        to="/patient-login"
+        className="dropdown-item"
+        style={{
+          color: "gray",
+          fontWeight: "600",
+          backgroundColor: "#fff",
+          transition: "all 0.3s",
+          borderRadius: "0.9rem",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.background =
+            "linear-gradient(to right, #20c997, rgb(17, 203, 231))";
+          e.currentTarget.style.color = "#fff";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.background = "#fff";
+          e.currentTarget.style.color = "gray";
+        }}
+      >
+        Patient Login
+      </NavLink>
+    </li>
+  </ul>
+   {/* Create Account Button */}
+   <NavLink to="/login" className="me-3">
           <button
-            className="btn btn-info text-white px-4 py-2 rounded-pill shadow-sm"
+            className="btn btn-info text-white px-2 py-2 rounded-pill shadow-sm"
             style={{
-              fontSize: "16px",
+              fontSize: "14px",
               fontWeight: "600",
               background: "linear-gradient(to right, #20c997,rgb(17, 203, 231))",
               border: "none",
-              transition: "0.3s ease-in-out",
+              transition: "0.6s ease-in-out",
+              paddingRight: "50px",
+              marginLeft: "20px",
             }}
             onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
             onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
@@ -124,7 +230,12 @@ const Navbar = () => {
             Create Account
           </button>
         </NavLink>
-      </div>
+</div>
+
+
+
+        </div>
+     
     </nav>
   );
 };
