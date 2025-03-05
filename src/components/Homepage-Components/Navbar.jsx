@@ -113,14 +113,14 @@ const Navbar = () => {
 {/* Login Dropdown Button */}
 <div className="dropdown">
   <button
-    className="btn btn-info text-white px-2 py-2 rounded-pill shadow-sm"
+    className="btn btn-info text-white px-2 py-2  shadow-md"
     style={{
       fontSize: "14px",
       fontWeight: "600",
       background: "linear-gradient(to right, #20c997, rgb(17, 203, 231))",
-      border: "none",
+      border: "10px",
       transition: "0.3s ease-in-out",
-      borderRadius: "50px",
+      borderRadius: "0.9rem",
       paddingBottom: "0.5rem",
       paddingTop: "0.5rem",
       paddingLeft: "1.5rem",
@@ -136,7 +136,7 @@ const Navbar = () => {
   </button>
 
   <ul
-    className="dropdown-menu border-2 shadow p-2"
+    className="dropdown-menu border-1 shadow p-2"
     style={{
       backgroundColor: "#fff", // keep dropdown's overall bg white
       borderRadius: "0.9rem",
