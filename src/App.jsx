@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import "./index.css";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer,} from 'react-toastify';
 
 
 // Homepage Pages Imports
@@ -28,6 +28,8 @@ import DoctorsList from "./pages/Admins-Pages/DoctorsList";
 //Doctor Pages Imports
 import DoctorsDashboard from "./pages/Doctors-Pages/DoctorsDashboard";
 import Patientslist from "./pages/Doctors-Pages/Patientslist";
+import DoctorAppointments from "./pages/Doctors-Pages/DoctorAppointment";
+import DoctorProfile from "./pages/Doctors-Pages/DoctorProfile";
 
 
 // Homepage Components
@@ -121,6 +123,8 @@ const App = () => {
                 {/*Doctor's Routes*/}
                 <Route path="/doctorDashboard" element={<DoctorsDashboard />} />
                 <Route path="/patientslist" element={<Patientslist />} />
+                 <Route path="/doctorprofile" element={<DoctorProfile />} /> 
+               <Route path="/doctorappointment" element={<DoctorAppointments />} />
 
 
                 

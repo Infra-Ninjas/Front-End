@@ -13,10 +13,8 @@ const Login = () => {
 
   const { login } = useAdminContext(); // ✅ This is correct
 
-
   // Correct backend URL
-  const backendUrl =
-    import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();

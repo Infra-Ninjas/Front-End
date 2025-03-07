@@ -1,17 +1,43 @@
-import React, { createContext, useState } from "react";   // Import tools for the toolbox
-import { doctors, specialityData } from "../assets/assets_frontend/assets";  // Import the data from your assets.js
+import React, { createContext, useEffect, useState } from "react";
+import { doctors, specialityData } from "../assets/assets_frontend/assets";  // Import doctors and specialties
+import axios from "axios";
+import { toast } from "react-toastify";
 
-export const AppContext = createContext();  // Create the toolbox
+export const AppContext = createContext();
 
 const AppProvider = ({ children }) => {
-  const [doctorList, setDoctorList] = useState(doctors);  // Store doctors in the toolbox
-  const [specialities, setSpecialities] = useState(specialityData);  // Store specialties too
+  // Use the imported doctors as the initial value
+  const [doctorList, setDoctorList] = useState(doctors);
+  const [specialities, setSpecialities] = useState(specialityData);
+
+  const adminserviceurl = import.meta.env.VITE_ADMINSERVICE_URL;
+
+  /* 
+  // When the backend API is ready, uncomment this code:
+  const getDoctorsData = async () => {
+    try {
+      const { data } = await axios.get(adminserviceurl + "/api/doctor/list"); // API for doctors list
+      if (data.success) {
+        setDoctorList(data.doctors);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    getDoctorsData();
+  }, []);
+  */
 
   return (
-    <AppContext.Provider value={{ doctorList, specialities }}>  {/* Make these tools available */}
-      {children}  {/* This represents the pages of your app */}
+    <AppContext.Provider value={{ doctorList, specialities }}>
+      {children}
     </AppContext.Provider>
   );
 };
 
-export default AppProvider;  // Export the toolbox so other files can use it
+export default AppProvider;

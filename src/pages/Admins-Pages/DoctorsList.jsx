@@ -1,118 +1,83 @@
-
-//dummy data
-
-import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useEffect } from 'react';
+import { useAdminContext } from '../../contexts/Admin-Context/AdminContextProvider';
 
 const DoctorsList = () => {
-    // Dummy data
-    const initialDoctors = [
-        { id: 1, name: 'Dr. John Doe', specialty: 'General Physician', email: 'john@example.com', experience: '5 Years' },
-        { id: 2, name: 'Dr. Sarah Lee', specialty: 'Dermatologist', email: 'sarah@example.com', experience: '8 Years' },
-        { id: 3, name: 'Dr. Michael Smith', specialty: 'Pediatrician', email: 'michael@example.com', experience: '6 Years' },
-        { id: 4, name: 'Dr. Emily Clark', specialty: 'Gynecologist', email: 'emily@example.com', experience: '7 Years' }
-    ];
+  const { doctors, aToken, getAllDoctors, changeAvailability } = useAdminContext();
 
-    const [doctors, setDoctors] = useState(initialDoctors);
-    const [search, setSearch] = useState('');
-    const [sortColumn, setSortColumn] = useState(null);
-    const [sortOrder, setSortOrder] = useState('asc');
+  useEffect(() => {
+    if (aToken) {
+      getAllDoctors();
+    }
+  }, [aToken, getAllDoctors]);
 
-    // Search filter function
-    const handleSearch = (e) => {
-        const value = e.target.value.toLowerCase();
-        setSearch(value);
-        const filtered = initialDoctors.filter(
-            (doctor) =>
-                doctor.name.toLowerCase().includes(value) ||
-                doctor.specialty.toLowerCase().includes(value) ||
-                doctor.email.toLowerCase().includes(value)
-        );
-        setDoctors(filtered);
-    };
+  return (
+    <div
+      className="container-fluid py-4"
+      style={{
+        marginLeft: '220px',           // Adjust if your sidebar is a different width
+        maxWidth: 'calc(100% - 220px)' // Prevents right-side cutoff
+      }}
+    >
+      <h1 className="fs-3 mb-4">All Doctors</h1>
 
-    // Sorting function
-    const handleSort = (column) => {
-        const order = sortColumn === column && sortOrder === 'asc' ? 'desc' : 'asc';
-        setSortColumn(column);
-        setSortOrder(order);
+      <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+        {doctors.map((item) => (
+          <div className="col" key={item._id}>
+            <div 
+              className="card h-100 shadow-sm" 
+              style={{ borderRadius: '8px' }}
+            >
+              {/* Image container to display the full image without cropping */}
+              <div
+                className="d-flex align-items-center justify-content-center rounded-top"
+                style={{
+                  width: '100%',
+                  height: '140px',
+                  overflow: 'hidden',
+                  backgroundColor: '#f8f9fa' // Light gray background (optional)
+                }}
+              >
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  style={{
+                    maxHeight: '100%',
+                    maxWidth: '100%',
+                    objectFit: 'contain',     // Ensures the full image is shown
+                    objectPosition: 'center'
+                  }}
+                />
+              </div>
 
-        const sorted = [...doctors].sort((a, b) => {
-            if (a[column] < b[column]) return order === 'asc' ? -1 : 1;
-            if (a[column] > b[column]) return order === 'asc' ? 1 : -1;
-            return 0;
-        });
+              <div className="card-body d-flex flex-column text-center">
+                <h5 className="card-title mb-1" style={{ fontSize: '1rem' }}>
+                  {item.name}
+                </h5>
+                <p className="card-subtitle text-muted mb-2" style={{ fontSize: '0.85rem' }}>
+                  {item.speciality}
+                </p>
 
-        setDoctors(sorted);
-    };
-
-    return (
-        <div style={{ backgroundColor: "#f5f5f5", minHeight: "100vh", padding: "20px" }}>
-            <div className="d-flex">
-                {/* Main Content */}
-                <div className="container-fluid" style={{ maxWidth: "900px", marginLeft: "260px" }}>
-                    <h2 className="mb-4 fw-bold text-center">Doctors List</h2>
-
-                    {/* Search Bar */}
-                    <div className="mb-3 d-flex justify-content-between align-items-center">
-                        <h6 className="fw-bold mb-0">List of Doctors</h6>
-                        <input
-                            type="text"
-                            className="form-control w-50"
-                            placeholder="Search by name, specialty, or email"
-                            value={search}
-                            onChange={handleSearch}
-                        />
-                    </div>
-
-                    {/* Doctors List Table */}
-                    <div className="card border-0 shadow p-3" style={{ fontSize: "14px" }}>
-                        <table className="table table-hover table-bordered mb-0">
-                            <thead>
-                                <tr>
-                                    <th onClick={() => handleSort('id')} style={{ cursor: "pointer" }}>ID</th>
-                                    <th onClick={() => handleSort('name')} style={{ cursor: "pointer" }}>Name</th>
-                                    <th onClick={() => handleSort('specialty')} style={{ cursor: "pointer" }}>Specialty</th>
-                                    <th onClick={() => handleSort('email')} style={{ cursor: "pointer" }}>Email</th>
-                                    <th onClick={() => handleSort('experience')} style={{ cursor: "pointer" }}>Experience</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {doctors.map((doctor) => (
-                                    <tr key={doctor.id} className="interactive-row">
-                                        <td>{doctor.id}</td>
-                                        <td>{doctor.name}</td>
-                                        <td>{doctor.specialty}</td>
-                                        <td>{doctor.email}</td>
-                                        <td>{doctor.experience}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                <div className="mt-auto">
+                  <div className="form-check d-inline-block">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      checked={item.available}
+                      onChange={() => changeAvailability(item.id)}
+                    />
+                    <label className="form-check-label ms-2" style={{ fontSize: '0.9rem' }}>
+                      Available
+                    </label>
+                  </div>
                 </div>
+              </div> 
             </div>
-
-            {/* Styles */}
-            <style>{`
-                .interactive-row {
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                }
-                .interactive-row:hover {
-                    background: #40E0D0;
-                    color: white;
-                }
-                th {
-                    position: relative;
-                }
-                th:hover {
-                    background-color: #40E0D0;
-                    color: white;
-                }
-            `}</style>
-        </div>
-    );
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default DoctorsList;

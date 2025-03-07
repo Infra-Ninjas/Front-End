@@ -1,4 +1,4 @@
-
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 /* Hide the scrollbar */
 ::-webkit-scrollbar {
     display: none;
@@ -7,6 +7,10 @@
 /* Tailwind utility for .active hr */
 .active hr {
     @apply block;
+}
+
+*{
+    font-family: Outfit;
 }
  
 
