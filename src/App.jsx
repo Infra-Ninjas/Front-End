@@ -51,6 +51,7 @@ import SideBar from "./components/Admins-Components/SideBar";
 
 // ✅ Correctly Import useAdminContext
 import { useAdminContext } from "./contexts/Admin-Context/AdminContextProvider";
+import DoctorLogin from "./pages/Doctors-Pages/DoctorLogin";
 
 const App = () => {
     const { aToken, navbarRefresh } = useAdminContext(); // ✅ Use hook directly (no errors now)
@@ -123,8 +124,10 @@ const App = () => {
                 {/*Doctor's Routes*/}
                 <Route path="/doctorDashboard" element={<DoctorsDashboard />} />
                 <Route path="/patientslist" element={<Patientslist />} />
-                 <Route path="/doctorprofile" element={<DoctorProfile />} /> 
+                <Route path="/doctorprofile" element={<DoctorProfile />} /> 
                <Route path="/doctorappointment" element={<DoctorAppointments />} />
+               <Route path="/doctor-login" element={<DoctorLogin />} />
+
 
 
                 

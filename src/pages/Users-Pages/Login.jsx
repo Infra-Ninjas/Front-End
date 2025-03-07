@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -7,28 +8,29 @@ const Login = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
+    navigate("/myappointments");
+    // try {
+    //   const url = state === "Sign Up" ? "http://localhost:4000/signup" : "http://localhost:4000/login";
 
-    try {
-      const url = state === "Sign Up" ? "http://localhost:4000/signup" : "http://localhost:4000/login";
+    //   const payload = state === "Sign Up"
+    //     ? { name, email, password }
+    //     : { email, password };
 
-      const payload = state === "Sign Up" 
-        ? { name, email, password } 
-        : { email, password };
+    //   const response = await axios.post(url, payload);
 
-      const response = await axios.post(url, payload);
-
-      if (response.status === 201 || response.status === 200) {
-        toast.success(state === "Sign Up" ? "Account created successfully!" : "Login successful!");
-      } else {
-        toast.error("Something went wrong!");
-      }
-    } catch (error) {
-      console.error("API error:", error);
-      toast.error(error?.response?.data?.message || "Login Failed!");
-    }
+    //   if (response.status === 201 || response.status === 200) {
+    //     toast.success(state === "Sign Up" ? "Account created successfully!" : "Login successful!");
+    //   } else {
+    //     toast.error("Something went wrong!");
+    //   }
+    // } catch (error) {
+    //   console.error("API error:", error);
+    //   toast.error(error?.response?.data?.message || "Login Failed!");
+    // }
   };
 
   const styles = {
@@ -124,7 +126,8 @@ const Login = () => {
           {state === "Sign Up" ? "Create Account" : "Login"}
         </h2>
         <p style={styles.formDescription}>
-          Please {state === "Sign Up" ? "Sign up" : "Log in"} to book an appointment
+          Please {state === "Sign Up" ? "Sign up" : "Log in"} to book an
+          appointment
         </p>
 
         {state === "Sign Up" && (
@@ -140,7 +143,8 @@ const Login = () => {
               required
               style={styles.formInput}
               onFocus={(e) =>
-                (e.currentTarget.style.borderColor = styles.formInputFocus.borderColor)
+                (e.currentTarget.style.borderColor =
+                  styles.formInputFocus.borderColor)
               }
               onBlur={(e) => (e.currentTarget.style.borderColor = "#ccc")}
             />
@@ -159,7 +163,8 @@ const Login = () => {
             required
             style={styles.formInput}
             onFocus={(e) =>
-              (e.currentTarget.style.borderColor = styles.formInputFocus.borderColor)
+              (e.currentTarget.style.borderColor =
+                styles.formInputFocus.borderColor)
             }
             onBlur={(e) => (e.currentTarget.style.borderColor = "#ccc")}
           />
@@ -177,7 +182,8 @@ const Login = () => {
             required
             style={styles.formInput}
             onFocus={(e) =>
-              (e.currentTarget.style.borderColor = styles.formInputFocus.borderColor)
+              (e.currentTarget.style.borderColor =
+                styles.formInputFocus.borderColor)
             }
             onBlur={(e) => (e.currentTarget.style.borderColor = "#ccc")}
           />
@@ -187,23 +193,31 @@ const Login = () => {
           type="submit"
           style={styles.formButton}
           onMouseEnter={(e) =>
-            (e.currentTarget.style.backgroundColor = styles.formButtonHover.backgroundColor)
+            (e.currentTarget.style.backgroundColor =
+              styles.formButtonHover.backgroundColor)
           }
           onMouseLeave={(e) =>
-            (e.currentTarget.style.backgroundColor = styles.formButton.backgroundColor)
+            (e.currentTarget.style.backgroundColor =
+              styles.formButton.backgroundColor)
           }
         >
           {state === "Sign Up" ? "Create Account" : "Login"}
         </button>
 
         <p style={styles.formFooter}>
-          {state === "Sign Up" ? "Already have an account?" : "Don't have an account?"}{" "}
+          {state === "Sign Up"
+            ? "Already have an account?"
+            : "Don't have an account?"}{" "}
           <span
             className="p-2"
             onClick={() => setState(state === "Sign Up" ? "Login" : "Sign Up")}
             style={styles.formLink}
-            onMouseEnter={(e) => (e.currentTarget.style.color = styles.formLinkHover.color)}
-            onMouseLeave={(e) => (e.currentTarget.style.color = styles.formLink.color)}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.color = styles.formLinkHover.color)
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.color = styles.formLink.color)
+            }
           >
             {state === "Sign Up" ? "Login here" : "Sign up here"}
           </span>

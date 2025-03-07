@@ -1,11 +1,11 @@
-
 import React, { useEffect, useState } from 'react';
-// import { DoctorContext } from '../../contexts/Doctors-Context/DoctorContext';
-// import { AppContext } from '../../contexts/AppContext';
+import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { assets } from '../../assets/assets_frontend/assets';
 
 const DoctorDashboard = () => {
+  const navigate = useNavigate();
+
   // Dummy data for demonstration
   const [stats, setStats] = useState({
     totalAppointments: 25,
@@ -14,21 +14,26 @@ const DoctorDashboard = () => {
     totalEarnings: 1200,
   });
 
-  // const { dToken, getDashboardStats } = useContext(DoctorContext);
-  // const { currency } = useContext(AppContext);
-
   // Mocked currency symbol
   const currency = '$';
 
-  // useEffect(() => {
-  //   if (dToken) {
-  //     getDashboardStats().then(res => setStats(res));
-  //   }
-  // }, [dToken]);
-
   return (
     <div className="container mt-4">
-      <h4>Doctor Dashboard</h4>
+      <div className="d-flex justify-content-between align-items-center">
+        <h4>Doctor Dashboard</h4>
+        <div>
+          <button className="btn btn-info me-2" onClick={() => navigate('/patientslist')}>
+            View Patients List
+          </button>
+          <button className="btn btn-primary me-2" onClick={() => navigate('/doctorprofile')}>
+            View Profile
+          </button>
+          <button className="btn btn-success" onClick={() => navigate('/doctorappointments')}>
+            Manage Appointments
+          </button>
+        </div>
+      </div>
+
       <div className="row mt-3">
         {/* Total Appointments */}
         <div className="col-md-3">
