@@ -1,71 +1,39 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-
-// 1) Import the user context hook (adjust the import path if needed)
-import { useUserContext } from "../../contexts/Users-Context/UserContextProvider.jsx";
-
-// 2) Use your environment variable for the backend URL
-const backendUrl = import.meta.env.VITE_BACKEND_URL;
+import { useAdminContext } from "../../contexts/Admin-Context/AdminContextProvider";
 
 const Login = () => {
-  const [state, setState] = useState("login"); // toggles between "login" and "Sign Up"
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-
-  // 3) Get the login function from your user context
-  const { login } = useUserContext();
+  const { login } = useAdminContext();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
-
-    if (state === "login") {
-      // LOGIN FLOW
-      try {
-        const response = await axios.post(`${backendUrl}/api/user/login`, {
-          email,
-          password,
-        });
-        // Assuming the response contains { token, role }
-        login(response.data);
-        navigate ("/myprofile")
-        // Clear input fields after successful login
-        setEmail("");
-        setPassword("");
-      } catch (error) {
-        toast.error(
-          error?.response?.data?.message || error.message || "Login failed"
-        );
+    try {
+      const { data } = await axios.post(backendUrl + "/api/admin/login", {
+        email,
+        password,
+      });
+      if (data.success) {
+        login(data.token);
+        // Further actions or redirection can be added here
+      } else {
+        toast.error(data.message);
       }
-    } else {
-      // SIGN-UP FLOW
-      try {
-        const response = await axios.post(`${backendUrl}/api/user/register`, {
-          name,
-          email,
-          password,
-        });
-        // Assuming the response contains { token, role }
-        login(response.data,  "Registered successfully!");
-        // Clear input fields after successful registration
-        setName("");
-        setEmail("");
-        setPassword("");
-        navigate("/login")
-      } catch (error) {
-        toast.error(
-          error?.response?.data?.message ||
-            error.message ||
-            "Registration failed"
-        );
-      }
+    } catch (error) {
+      console.error(
+        "Login failed:",
+        error.response ? error.response.data.message : error.message
+      );
+      toast.error("Login failed. Please try again.");
     }
   };
 
- 
+  // Styles identical to the other login pages
   const styles = {
     container: {
       display: "flex",
@@ -152,41 +120,14 @@ const Login = () => {
   return (
     <form onSubmit={onSubmitHandler} style={styles.container}>
       <div style={styles.card}>
-        <h2 style={styles.heading}>
-          {state === "Sign Up" ? "Create Account" : "Login"}
-        </h2>
+        <h2 style={styles.heading}>Admin Login</h2>
         <p style={styles.description}>
-          Please {state === "Sign Up" ? "sign up" : "log in"} to book an
-          appointment
+          Please log in to access the admin dashboard
         </p>
 
-        {state === "Sign Up" && (
-          <div style={styles.formGroup}>
-            <label htmlFor="name" style={styles.label}>
-              Full Name
-            </label>
-            <input
-              id="name"
-              type="text"
-              onChange={(e) => setName(e.target.value)}
-              value={name}
-              required
-              style={styles.input}
-              onFocus={(e) =>
-                (e.currentTarget.style.borderColor =
-                  styles.inputFocus.borderColor)
-              }
-              onBlur={(e) => (e.currentTarget.style.borderColor = "#ccc")}
-            />
-          </div>
-        )}
-
         <div style={styles.formGroup}>
-          <label htmlFor="email" style={styles.label}>
-            Email
-          </label>
+          <label style={styles.label}>Email</label>
           <input
-            id="email"
             type="email"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
@@ -201,11 +142,8 @@ const Login = () => {
         </div>
 
         <div style={styles.formGroup}>
-          <label htmlFor="password" style={styles.label}>
-            Password
-          </label>
+          <label style={styles.label}>Password</label>
           <input
-            id="password"
             type="password"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
@@ -231,16 +169,14 @@ const Login = () => {
               styles.button.backgroundColor)
           }
         >
-          {state === "Sign Up" ? "Create Account" : "Login"}
+          Login
         </button>
 
         <p style={styles.footer}>
-          {state === "Sign Up"
-            ? "Already have an account? "
-            : "Don't have an account? "}
+          Login as{" "}
           <span
             style={styles.link}
-            onClick={() => setState(state === "Sign Up" ? "login" : "Sign Up")}
+            onClick={() => navigate("/doctor-login")}
             onMouseEnter={(e) =>
               (e.currentTarget.style.color = styles.linkHover.color)
             }
@@ -248,7 +184,7 @@ const Login = () => {
               (e.currentTarget.style.color = styles.link.color)
             }
           >
-            {state === "Sign Up" ? "Login here" : "Sign up here"}
+            Doctor
           </span>
         </p>
       </div>

@@ -17,75 +17,112 @@ const DoctorDashboard = () => {
   // Mocked currency symbol
   const currency = '$';
 
+  // Reusable gradient button style
+  const gradientButtonBase = {
+    background: 'linear-gradient(to right, #22c1c3, #00b3b3)',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '50px',
+    padding: '0.5rem 1.25rem',
+    fontWeight: 'bold',
+    cursor: 'pointer',
+    transition: 'opacity 0.3s ease',
+  };
+
   return (
-    <div className="container mt-4">
-      <div className="d-flex justify-content-between align-items-center">
-        <h4>Doctor Dashboard</h4>
+    <div className="container my-4">
+      {/* Top Row: Title + Action Buttons */}
+      <div className="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <h2 className="fw-bold mb-3 mb-md-0">Doctor Dashboard</h2>
         <div>
-          <button className="btn btn-info me-2" onClick={() => navigate('/patientslist')}>
+          <button
+            // We keep Bootstrap's spacing classes but remove color classes
+            className="me-2 mb-2 mb-md-0"
+            style={gradientButtonBase}
+            onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.9')}
+            onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+            onClick={() => navigate('/patientslist')}
+          >
             View Patients List
           </button>
-          <button className="btn btn-primary me-2" onClick={() => navigate('/doctorprofile')}>
+          <button
+            className="me-2 mb-2 mb-md-0"
+            style={gradientButtonBase}
+            onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.9')}
+            onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+            onClick={() => navigate('/doctorprofile')}
+          >
             View Profile
           </button>
-          <button className="btn btn-success" onClick={() => navigate('/doctorappointments')}>
+          <button
+            className="mb-2 mb-md-0"
+            style={gradientButtonBase}
+            onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.9')}
+            onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+            onClick={() => navigate('/doctorappointment')}
+          >
             Manage Appointments
           </button>
         </div>
       </div>
 
-      <div className="row mt-3">
+      {/* Stats Row */}
+      <div className="row g-3">
         {/* Total Appointments */}
         <div className="col-md-3">
-          <div className="card text-center shadow-sm mb-3">
+          <div className="card border-0 shadow-sm text-center">
             <div className="card-body">
-              <h6 className="card-title">Total Appointments</h6>
-              <p className="card-text fs-4">{stats.totalAppointments}</p>
+              <h6 className="fw-semibold text-secondary">Total Appointments</h6>
+              <p className="fs-4 fw-bold mb-0">{stats.totalAppointments}</p>
             </div>
           </div>
         </div>
 
         {/* Completed Appointments */}
         <div className="col-md-3">
-          <div className="card text-center shadow-sm mb-3">
+          <div className="card border-0 shadow-sm text-center">
             <div className="card-body">
-              <h6 className="card-title">Completed Appointments</h6>
-              <p className="card-text fs-4 text-success">{stats.completedAppointments}</p>
+              <h6 className="fw-semibold text-secondary">Completed Appointments</h6>
+              <p className="fs-4 fw-bold text-success mb-0">
+                {stats.completedAppointments}
+              </p>
             </div>
           </div>
         </div>
 
         {/* Cancelled Appointments */}
         <div className="col-md-3">
-          <div className="card text-center shadow-sm mb-3">
+          <div className="card border-0 shadow-sm text-center">
             <div className="card-body">
-              <h6 className="card-title">Cancelled Appointments</h6>
-              <p className="card-text fs-4 text-danger">{stats.cancelledAppointments}</p>
+              <h6 className="fw-semibold text-secondary">Cancelled Appointments</h6>
+              <p className="fs-4 fw-bold text-danger mb-0">
+                {stats.cancelledAppointments}
+              </p>
             </div>
           </div>
         </div>
 
         {/* Total Earnings */}
         <div className="col-md-3">
-          <div className="card text-center shadow-sm mb-3">
+          <div className="card border-0 shadow-sm text-center">
             <div className="card-body">
-              <h6 className="card-title">Total Earnings</h6>
-              <p className="card-text fs-4 text-primary">
-                {currency} {stats.totalEarnings}
+              <h6 className="fw-semibold text-secondary">Total Earnings</h6>
+              <p className="fs-4 fw-bold text-primary mb-0">
+                {currency}
+                {stats.totalEarnings}
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Additional Dashboard Content (Example: Next Appointments) */}
-      <div className="mt-4">
-        <h5>Upcoming Appointments</h5>
-
-        {/* Dummy upcoming appointments list */}
+      {/* Upcoming Appointments */}
+      <div className="mt-5">
+        <h5 className="fw-bold mb-3">Upcoming Appointments</h5>
         <div className="list-group">
+          {/* Appointment Item 1 */}
           <div className="list-group-item d-flex align-items-center justify-content-between">
-            <div className="d-flex align-items-center gap-2">
+            <div className="d-flex align-items-center gap-3">
               <img
                 src={assets.profile_pic}
                 alt="Patient"
@@ -93,14 +130,15 @@ const DoctorDashboard = () => {
               />
               <div>
                 <p className="mb-1 fw-bold">Jane Doe</p>
-                <small>Tomorrow, 10:00 AM</small>
+                <small className="text-muted">Tomorrow, 10:00 AM</small>
               </div>
             </div>
             <span className="badge bg-info text-dark">Online</span>
           </div>
 
+          {/* Appointment Item 2 */}
           <div className="list-group-item d-flex align-items-center justify-content-between">
-            <div className="d-flex align-items-center gap-2">
+            <div className="d-flex align-items-center gap-3">
               <img
                 src={assets.profile_pic}
                 alt="Patient"
@@ -108,7 +146,7 @@ const DoctorDashboard = () => {
               />
               <div>
                 <p className="mb-1 fw-bold">Mark Smith</p>
-                <small>Tomorrow, 11:30 AM</small>
+                <small className="text-muted">Tomorrow, 11:30 AM</small>
               </div>
             </div>
             <span className="badge bg-primary">Cash</span>

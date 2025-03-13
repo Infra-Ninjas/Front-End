@@ -9,35 +9,33 @@ const DoctorLogin = () => {
   const onSubmitHandler = (event) => {
     event.preventDefault();
     console.log("Doctor login submitted", { email, password });
-
-    // Navigate to Doctor Dashboard on successful login
     navigate("/doctorDashboard");
   };
 
   const styles = {
-    formContainer: {
+    container: {
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
       minHeight: "100vh",
       backgroundColor: "#f7f7f7",
     },
-    formContent: {
-      backgroundColor: "white",
+    card: {
+      backgroundColor: "#fff",
       padding: "20px",
-      maxWidth: "400px",
       width: "100%",
+      maxWidth: "400px",
       borderRadius: "10px",
-      boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+      boxShadow: "0px 4px 6px rgba(0,0,0,0.1)",
       textAlign: "center",
       transition: "transform 0.3s ease, boxShadow 0.3s ease",
     },
-    formHeading: {
+    heading: {
       fontSize: "24px",
       fontWeight: "bold",
       marginBottom: "16px",
     },
-    formDescription: {
+    description: {
       fontSize: "14px",
       color: "#555",
       marginBottom: "24px",
@@ -47,13 +45,13 @@ const DoctorLogin = () => {
       marginBottom: "20px",
       textAlign: "left",
     },
-    formLabel: {
+    label: {
       display: "block",
       fontSize: "14px",
       color: "#333",
       marginBottom: "10px",
     },
-    formInput: {
+    input: {
       width: "100%",
       padding: "10px",
       fontSize: "14px",
@@ -62,14 +60,14 @@ const DoctorLogin = () => {
       outline: "none",
       transition: "border-color 0.3s ease",
     },
-    formInputFocus: {
+    inputFocus: {
       borderColor: "#008c8c",
     },
-    formButton: {
+    button: {
       width: "100%",
       padding: "12px",
       backgroundColor: "#40e0d0",
-      color: "white",
+      color: "#fff",
       fontSize: "16px",
       fontWeight: "bold",
       border: "none",
@@ -77,19 +75,33 @@ const DoctorLogin = () => {
       cursor: "pointer",
       transition: "background-color 0.3s ease",
     },
-    formButtonHover: {
+    buttonHover: {
       backgroundColor: "#008c8c",
+    },
+    footer: {
+      fontSize: "14px",
+      color: "#555",
+      marginTop: "30px",
+    },
+    link: {
+      color: "#40e0d0",
+      textDecoration: "underline",
+      fontWeight: "bold",
+      cursor: "pointer",
+      transition: "color 0.3s ease",
+    },
+    linkHover: {
+      color: "#008c8c",
     },
   };
 
   return (
-    <form onSubmit={onSubmitHandler} style={styles.formContainer}>
-      <div style={styles.formContent}>
-        <h2 style={styles.formHeading}>Doctor Login</h2>
-        <p style={styles.formDescription}>Please log in to manage appointments</p>
-
+    <form onSubmit={onSubmitHandler} style={styles.container}>
+      <div style={styles.card}>
+        <h2 style={styles.heading}>Doctor Login</h2>
+        <p style={styles.description}>Please log in to manage appointments</p>
         <div style={styles.formGroup}>
-          <label htmlFor="email" style={styles.formLabel}>
+          <label htmlFor="email" style={styles.label}>
             Email
           </label>
           <input
@@ -98,16 +110,15 @@ const DoctorLogin = () => {
             onChange={(e) => setEmail(e.target.value)}
             value={email}
             required
-            style={styles.formInput}
+            style={styles.input}
             onFocus={(e) =>
-              (e.currentTarget.style.borderColor = styles.formInputFocus.borderColor)
+              (e.currentTarget.style.borderColor = styles.inputFocus.borderColor)
             }
             onBlur={(e) => (e.currentTarget.style.borderColor = "#ccc")}
           />
         </div>
-
         <div style={styles.formGroup}>
-          <label htmlFor="password" style={styles.formLabel}>
+          <label htmlFor="password" style={styles.label}>
             Password
           </label>
           <input
@@ -116,27 +127,41 @@ const DoctorLogin = () => {
             onChange={(e) => setPassword(e.target.value)}
             value={password}
             required
-            style={styles.formInput}
+            style={styles.input}
             onFocus={(e) =>
-              (e.currentTarget.style.borderColor = styles.formInputFocus.borderColor)
+              (e.currentTarget.style.borderColor = styles.inputFocus.borderColor)
             }
             onBlur={(e) => (e.currentTarget.style.borderColor = "#ccc")}
           />
         </div>
-
         <button
           type="submit"
-          style={styles.formButton}
+          style={styles.button}
           onMouseEnter={(e) =>
-            (e.currentTarget.style.backgroundColor = styles.formButtonHover.backgroundColor)
+            (e.currentTarget.style.backgroundColor = styles.buttonHover.backgroundColor)
           }
           onMouseLeave={(e) =>
-            (e.currentTarget.style.backgroundColor = styles.formButton.backgroundColor)
+            (e.currentTarget.style.backgroundColor = styles.button.backgroundColor)
           }
-          onClick={() => navigate("/doctorDashboard")} // Ensure navigation when button is clicked
         >
           Login
         </button>
+
+        <p style={styles.footer}>
+          Login as{" "}
+          <span
+            style={styles.link}
+            onClick={() => navigate("/admin-login")}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.color = styles.linkHover.color)
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.color = styles.link.color)
+            }
+          >
+            Admin
+          </span>
+        </p>
       </div>
     </form>
   );

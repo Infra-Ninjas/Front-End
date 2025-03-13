@@ -110,6 +110,7 @@ const AdminContextProvider = ({ children }) => {
         toast,
         login,
         logout,
+       
       }}
     >
       {children}

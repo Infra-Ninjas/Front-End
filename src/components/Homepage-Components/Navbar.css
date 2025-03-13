@@ -1,0 +1,20 @@
+/* Navbar.css */
+
+/* On mobile (max-width: 767px), reduce button font-size and padding */
+@media (max-width: 767px) {
+    .btn {
+      font-size: 13px;
+      padding: 0.25rem 0.6rem;
+    }
+  
+    /* Maybe reduce .navbar-brand logo width more */
+    .navbar-brand img {
+      width: 100px !important;
+    }
+  
+    /* Center text more aggressively, reduce horizontal margins, etc. */
+    .nav-item {
+      margin: 0.5rem 0 !important;
+    }
+  }
+  
