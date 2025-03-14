@@ -9,7 +9,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import AppContextProvider from "./contexts/AppContext"; // Existing global context
 import AdminContextProvider from "./contexts/Admin-Context/AdminContextProvider.jsx";
 import UserContextProvider from "./contexts/Users-Context/UserContextProvider.jsx"; // New user context provider
-import DoctorContextProvider from "./contexts/Doctors-Context/DoctorContext.jsx";
+import DoctorContextProvider from "./contexts/Doctors-Context/DoctorContextProvider.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>

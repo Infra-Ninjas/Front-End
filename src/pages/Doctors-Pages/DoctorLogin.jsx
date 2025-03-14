@@ -1,15 +1,32 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useDoctorContext } from "../../contexts/Doctors-Context/DoctorContextProvider.jsx";
 
 const DoctorLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const onSubmitHandler = (event) => {
+  // Use the login function from your DoctorContext
+  const { login } = useDoctorContext();
+
+  const onSubmitHandler = async (event) => {
     event.preventDefault();
-    console.log("Doctor login submitted", { email, password });
-    navigate("/doctorDashboard");
+    try {
+      // Using VITE_BACKEND_URL for doctor authentication
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/doctor/login`,
+        { email, password }
+      );
+      // response.data should be { token, role }
+      login(response.data, "Welcome Doctor!");
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || error.message || "Doctor login failed"
+      );
+    }
   };
 
   const styles = {
@@ -138,15 +155,16 @@ const DoctorLogin = () => {
           type="submit"
           style={styles.button}
           onMouseEnter={(e) =>
-            (e.currentTarget.style.backgroundColor = styles.buttonHover.backgroundColor)
+            (e.currentTarget.style.backgroundColor =
+              styles.buttonHover.backgroundColor)
           }
           onMouseLeave={(e) =>
-            (e.currentTarget.style.backgroundColor = styles.button.backgroundColor)
+            (e.currentTarget.style.backgroundColor =
+              styles.button.backgroundColor)
           }
         >
           Login
         </button>
-
         <p style={styles.footer}>
           Login as{" "}
           <span

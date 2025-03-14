@@ -11,20 +11,20 @@ import About from "./pages/Homepage-Pages/About";
 import Contact from "./pages/Homepage-Pages/Contact";
 import Doctors from "./pages/Homepage-Pages/Doctors";
 
-//User Pages Imports
+// User Pages Imports
 import Dashboard from "./pages/Users-Pages/Dashboard";
 import MyAppointments from "./pages/Users-Pages/MyAppointments";
 import MyProfile from "./pages/Users-Pages/MyProfile";
 import Login from "./pages/Users-Pages/Login";
 
-//Admin Pages Imports
+// Admin Pages Imports
 import AddDoctor from "./pages/Admins-Pages/AddDoctor";
 import AdminDashboard from "./pages/Admins-Pages/AdminDashboard";
 import AllAppointments from "./pages/Admins-Pages/AllAppointments";
 import DoctorsList from "./pages/Admins-Pages/DoctorsList";
 import AdminLogin from "./pages/Admins-Pages/AdminLogin";
 
-//Doctor Pages Imports
+// Doctor Pages Imports
 import DoctorsDashboard from "./pages/Doctors-Pages/DoctorsDashboard";
 import Patientslist from "./pages/Doctors-Pages/Patientslist";
 import DoctorAppointments from "./pages/Doctors-Pages/DoctorAppointment";
@@ -39,28 +39,30 @@ import Footer from "./components/Homepage-Components/Footer";
 import AdminNavbar from "./components/Admins-Components/AdminNavbar";
 import SideBar from "./components/Admins-Components/SideBar";
 
-// (Optional) User Components – Uncomment or add your UserNavbar/UserSidebar if available
-// import UserNavbar from "./components/Users-Components/UserNavbar";
-// import UserSidebar from "./components/Users-Components/UserSidebar";
+// User Components
+import UserNavbar from "./components/Users-Components/UsersNavbar";
+import UserSidebar from "./components/Users-Components/UsersSidebar";
 
 // Doctor Components
-// import DoctorNavbar from "./components/Doctors-Components/DoctorNavbar";
-// import DoctorSidebar from "./components/Doctors-Components/DoctorSidebar";
+import DoctorNavbar from "./components/Doctors-Components/DoctorsNavbar";
+import DoctorSidebar from "./components/Doctors-Components/DoctorsSidebar";
 
-// Import Admin and User Context Hooks
+// Import Admin, User, and Doctor Context Hooks
 import { useAdminContext } from "./contexts/Admin-Context/AdminContextProvider";
 import { useUserContext } from "./contexts/Users-Context/UserContextProvider";
+import { useDoctorContext } from "./contexts/Doctors-Context/DoctorContextProvider";
 
 const App = () => {
   const { aToken, navbarRefresh } = useAdminContext();
   const { uToken } = useUserContext();
+  const { dToken } = useDoctorContext(); // NEW: doctor token
 
-  // Determine if someone is logged in (either admin or user)
-  const [isLoggedIn, setIsLoggedIn] = useState(!!(aToken || uToken));
+  // Check if any token is present
+  const [isLoggedIn, setIsLoggedIn] = useState(!!(aToken || uToken || dToken));
 
   useEffect(() => {
-    setIsLoggedIn(!!(aToken || uToken));
-  }, [navbarRefresh, aToken, uToken]);
+    setIsLoggedIn(!!(aToken || uToken || dToken));
+  }, [navbarRefresh, aToken, uToken, dToken]);
 
   return (
     <div className="sm:mx-[10%]">
@@ -73,19 +75,33 @@ const App = () => {
         draggable
         theme="colored"
       />
-      {/* Show Navbar and Sidebar based on login status */}
+
+      {/* Conditionally render navigation and sidebar */}
       {isLoggedIn ? (
         aToken ? (
+          // ADMIN
           <>
             <AdminNavbar />
             <SideBar />
           </>
+        ) : uToken ? (
+          // USER
+          <>
+            <UserNavbar />
+            <UserSidebar />
+          </>
+        ) : dToken ? (
+          // DOCTOR
+          <>
+            <DoctorNavbar />
+            <DoctorSidebar />
+          </>
         ) : (
-          // For now, users (uToken) see the Homepage Navbar
+          // Fallback if something's off
           <Navbar />
-          // Alternatively, if you build a UserNavbar/UserSidebar, you can swap here.
         )
       ) : (
+        // Not logged in at all
         <Navbar />
       )}
 
@@ -129,10 +145,10 @@ const App = () => {
         <Route path="/allappointments" element={<AllAppointments />} />
 
         {/* Doctor Routes */}
-        <Route path="/doctorDashboard" element={<DoctorsDashboard />} />
-        <Route path="/patientslist" element={<Patientslist />} />
-        <Route path="/doctorprofile" element={<DoctorProfile />} />
-        <Route path="/doctorappointment" element={<DoctorAppointments />} />
+        <Route path="/doctorDashboard" element={dToken ? <DoctorsDashboard /> : <Navigate to="/doctor-login" replace />} />
+        <Route path="/patientslist" element={dToken ? <Patientslist /> : <Navigate to="/doctor-login" replace />} />
+        <Route path="/doctorprofile" element={dToken ? <DoctorProfile /> : <Navigate to="/doctor-login" replace />} />
+        <Route path="/doctorappointment" element={dToken ? <DoctorAppointments /> : <Navigate to="/doctor-login" replace />} />
         <Route path="/doctor-login" element={<DoctorLogin />} />
       </Routes>
 
