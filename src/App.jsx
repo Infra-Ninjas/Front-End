@@ -76,6 +76,7 @@ const App = () => {
         theme="colored"
       />
 
+
       {/* Conditionally render navigation and sidebar */}
       {isLoggedIn ? (
         aToken ? (
