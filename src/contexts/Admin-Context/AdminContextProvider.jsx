@@ -6,7 +6,6 @@ import axios from 'axios';
 
 const adminserviceurl = import.meta.env.VITE_ADMINSERVICE_URL;
 
-// ✅ Create context (NO EXPORT)
 const AdminContext = createContext();
 
 const AdminContextProvider = ({ children }) => {
@@ -27,10 +26,8 @@ const AdminContextProvider = ({ children }) => {
         }
       );
       console.log("Doctors data:", data);
-
       // Directly set the doctors to whatever the backend sends (an array)
       setDoctors(data);
-
     } catch (error) {
       toast.error(error.message);
     }
@@ -79,6 +76,13 @@ const AdminContextProvider = ({ children }) => {
     setNavbarRefresh((prev) => !prev);
   }, [aToken]);
 
+  // Fetch the list of doctors only when aToken is available (on mount or when aToken changes)
+  useEffect(() => {
+    if (aToken) {
+      getAllDoctors();
+    }
+  }, [aToken]);
+
   const login = (token) => {
     if (token) {
       setAToken(token);
@@ -110,7 +114,6 @@ const AdminContextProvider = ({ children }) => {
         toast,
         login,
         logout,
-       
       }}
     >
       {children}
@@ -118,8 +121,5 @@ const AdminContextProvider = ({ children }) => {
   );
 };
 
-// ✅ Export the provider
 export default AdminContextProvider;
-
-// ✅ Export the hook correctly
 export const useAdminContext = () => useContext(AdminContext);
