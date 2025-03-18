@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import AdminNavbar from "../../components/Admins-Components/AdminNavbar";
 import SideBar from "../../components/Admins-Components/SideBar";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const Dashboard = () => {
   // Dummy stats data
@@ -54,18 +54,18 @@ const Dashboard = () => {
     <>
       <AdminNavbar />
       <SideBar />
-      {/* Main content container offset by fixed navbar and sidebar */}
       <div
+        className="admin-content"
         style={{
-          marginTop: "70px",      // Offset for navbar height
-          marginLeft: "200px",    // Offset for sidebar width
+          marginTop: "70px",      // offset for navbar
+          marginLeft: "200px",    // offset for sidebar on large screens
           padding: "20px",
           backgroundColor: "#f5f5f5",
           minHeight: "100vh"
         }}
       >
         <div className="container-fluid main-content" style={{ maxWidth: "900px", margin: "0 auto" }}>
-          <h2 className="mb-4 fw-bold text-center">Dashboard</h2>
+          <h2 className="mb-4 fw-bold text-center" style={{ marginTop: 0 }}>Dashboard</h2>
           {/* Stats Section */}
           <div className="row g-3 mb-4">
             {Object.entries(stats).map(([key, value]) => (
@@ -89,7 +89,7 @@ const Dashboard = () => {
             />
           </div>
           {/* Appointments Table */}
-          <div className="card border-0 shadow p-3 table-responsive">
+          <div className="card border-0 shadow p-3 table-responsive" style={{ fontSize: "14px" }}>
             <table className="table table-hover table-bordered mb-0">
               <thead>
                 <tr>
@@ -101,7 +101,7 @@ const Dashboard = () => {
               </thead>
               <tbody>
                 {appointments.map((appointment) => (
-                  <tr key={appointment.id}>
+                  <tr key={appointment.id} className="interactive-row">
                     <td>{appointment.id}</td>
                     <td>{appointment.doctor}</td>
                     <td>{appointment.patient}</td>
@@ -113,6 +113,32 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      <style>{`
+        .interactive-row {
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+        .interactive-row:hover {
+          background: #40E0D0;
+          color: white;
+        }
+        th {
+          position: relative;
+        }
+        th:hover {
+          background-color: #40E0D0;
+          color: white;
+        }
+        @media (max-width: 991px) {
+          .admin-content {
+            margin-left: 0 !important;
+          }
+          .main-content {
+            max-width: 100% !important;
+            padding: 0 15px;
+          }
+        }
+      `}</style>
     </>
   );
 };

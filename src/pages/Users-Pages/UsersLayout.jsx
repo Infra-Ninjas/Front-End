@@ -1,4 +1,3 @@
-// UserLayout.jsx
 import React from 'react';
 import UserNavbar from '../../components/Users-Components/UsersNavbar';
 import UserSidebar from '../../components/Users-Components/UsersSidebar';
@@ -8,18 +7,25 @@ const UserLayout = ({ children }) => {
     <>
       <UserNavbar />
       <UserSidebar />
-      {/* Main content offset by the fixed navbar (70px) and sidebar (200px) */}
-      <div
-        style={{
-          marginTop: "70px",
-          marginLeft: "200px",
-          padding: "20px",
-          minHeight: "100vh",
-          backgroundColor: "#f5f5f5",
-        }}
-      >
+      {/* Main content container with responsive offsets */}
+      <div className="user-content">
         {children}
       </div>
+      <style>{`
+        .user-content {
+          margin-top: 70px;    /* fixed navbar height */
+          margin-left: 200px;  /* fixed sidebar width on larger screens */
+          padding: 20px;
+          min-height: 100vh;
+          background-color: #f5f5f5;
+          transition: margin 0.3s ease;
+        }
+        @media (max-width: 991px) {
+          .user-content {
+            margin-left: 0;  /* remove left offset on small screens */
+          }
+        }
+      `}</style>
     </>
   );
 };

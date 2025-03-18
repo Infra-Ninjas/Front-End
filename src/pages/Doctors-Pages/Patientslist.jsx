@@ -29,7 +29,7 @@ const PatientList = () => {
     return today.getFullYear() - birthDate.getFullYear();
   };
 
-  // Same gradient style as the logout button
+  // Gradient style for buttons (if needed elsewhere)
   const gradientButtonStyle = {
     background: 'linear-gradient(to right, #22c1c3, #40e0d0)',
     color: '#fff',
@@ -45,8 +45,15 @@ const PatientList = () => {
       {/* Centered Title */}
       <h2 className="mb-4 fw-bold text-center">Patient List</h2>
 
-      {/* Centered container */}
-      <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+      {/* Responsive Container */}
+      <div
+        style={{
+          width: '100%',
+          maxWidth: '900px',
+          margin: '0 auto',
+          padding: '0 15px', // add some horizontal padding on small screens
+        }}
+      >
         <div className="table-responsive">
           <table className="table table-bordered">
             <thead className="table-light">
@@ -68,7 +75,11 @@ const PatientList = () => {
                       <img
                         src={patient.image}
                         alt="Patient"
-                        style={{ width: '40px', height: '40px', borderRadius: '50%' }}
+                        style={{
+                          width: '40px',
+                          height: '40px',
+                          borderRadius: '50%',
+                        }}
                       />
                       <span>{patient.name}</span>
                     </td>
@@ -84,7 +95,9 @@ const PatientList = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="6" className="text-center">No patients found</td>
+                  <td colSpan="6" className="text-center">
+                    No patients found
+                  </td>
                 </tr>
               )}
             </tbody>

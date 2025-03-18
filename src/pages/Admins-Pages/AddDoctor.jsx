@@ -32,9 +32,7 @@ const AddDoctor = () => {
 
     try {
       if (!docImg && !imageUrl) {
-        return toast.error(
-          "Please upload doctor picture or provide an image URL"
-        );
+        return toast.error("Please upload doctor picture or provide an image URL");
       }
       if (!aToken) {
         return toast.error("Admin not authenticated. Please log in.");
@@ -56,10 +54,7 @@ const AddDoctor = () => {
         payload.append("about", about);
         payload.append("fees", fees);
         payload.append("available", true);
-        payload.append(
-          "address",
-          JSON.stringify({ street, city, state: stateVal, zip })
-        );
+        payload.append("address", JSON.stringify({ street, city, state: stateVal, zip }));
         payload.append("date", currentTimestamp);
         payload.append("slots_booked", JSON.stringify({}));
 
@@ -90,52 +85,37 @@ const AddDoctor = () => {
         };
       }
 
-      const { data } = await axios.post(
-        `${backendUrl}/api/admin/add-doctor`,
-        payload,
-        { headers }
-      );
+      const { data } = await axios.post(`${backendUrl}/api/admin/add-doctor`, payload, { headers });
 
       if (data.success) {
         toast.success(data.message || "Doctor added successfully!");
         navigate("/DoctorsList");
       } else {
-        toast.error(
-          data.message || "Failed to add doctor. Please try again."
-        );
+        toast.error(data.message || "Failed to add doctor. Please try again.");
       }
     } catch (error) {
       console.error("Add Doctor Error:", error);
-      toast.error(
-        error.response?.data?.message ||
-          "Failed to add doctor. Please try again."
-      );
+      toast.error(error.response?.data?.message || "Failed to add doctor. Please try again.");
     }
   };
 
   return (
     <>
-      {/* Fixed Admin Navbar & Sidebar */}
       <AdminNavbar />
       <SideBar />
 
-      {/* Main content area offset by navbar & sidebar */}
+      {/* Main content container */}
       <div
+        className="admin-content"
         style={{
-          marginTop: "70px",   // Height of fixed AdminNavbar
-          marginLeft: "200px", // Width of fixed SideBar
+          marginTop: "70px",      // Offset for fixed AdminNavbar
+          marginLeft: "200px",    // Offset for fixed SideBar on large screens
           minHeight: "100vh",
           padding: "20px",
-          backgroundColor: "#fff", // Everything white for a unified look
+          backgroundColor: "#fff", // Unified white background
         }}
       >
-        {/* Centered container with no extra borders or shadows */}
-        <div
-          style={{
-            maxWidth: "900px",
-            margin: "0 auto",
-          }}
-        >
+        <div style={{ maxWidth: "900px", margin: "0 auto" }}>
           <h2 className="mb-4 text-dark fw-bold text-center">Add Doctor</h2>
 
           <form onSubmit={onSubmitHandler}>
@@ -154,12 +134,7 @@ const AddDoctor = () => {
                     }}
                   />
                 </label>
-                <input
-                  onChange={(e) => setDocImg(e.target.files[0])}
-                  type="file"
-                  id="doc-img"
-                  hidden
-                />
+                <input onChange={(e) => setDocImg(e.target.files[0])} type="file" id="doc-img" hidden />
                 <p className="mt-2 text-secondary">Upload doctor picture</p>
               </div>
 
@@ -176,7 +151,6 @@ const AddDoctor = () => {
                       required
                     />
                   </div>
-
                   <div className="col-md-6">
                     <label className="form-label">Speciality</label>
                     <select
@@ -193,7 +167,6 @@ const AddDoctor = () => {
                       <option value="Gastroenterologist">Gastroenterologist</option>
                     </select>
                   </div>
-
                   <div className="col-md-6">
                     <label className="form-label">Doctor Email</label>
                     <input
@@ -205,7 +178,6 @@ const AddDoctor = () => {
                       required
                     />
                   </div>
-
                   <div className="col-md-6">
                     <label className="form-label">Education</label>
                     <input
@@ -217,7 +189,6 @@ const AddDoctor = () => {
                       required
                     />
                   </div>
-
                   <div className="col-md-6">
                     <label className="form-label">Doctor Password</label>
                     <input
@@ -229,7 +200,6 @@ const AddDoctor = () => {
                       required
                     />
                   </div>
-
                   <div className="col-md-6">
                     <label className="form-label">Street</label>
                     <input
@@ -241,7 +211,6 @@ const AddDoctor = () => {
                       required
                     />
                   </div>
-
                   <div className="col-md-6">
                     <label className="form-label">City</label>
                     <input
@@ -253,7 +222,6 @@ const AddDoctor = () => {
                       required
                     />
                   </div>
-
                   <div className="col-md-6">
                     <label className="form-label">State</label>
                     <input
@@ -265,7 +233,6 @@ const AddDoctor = () => {
                       required
                     />
                   </div>
-
                   <div className="col-md-6">
                     <label className="form-label">Zip</label>
                     <input
@@ -277,7 +244,6 @@ const AddDoctor = () => {
                       required
                     />
                   </div>
-
                   <div className="col-md-6">
                     <label className="form-label">Experience</label>
                     <select
@@ -298,7 +264,6 @@ const AddDoctor = () => {
                       <option value="10 Year">10 Years</option>
                     </select>
                   </div>
-
                   <div className="col-md-6">
                     <label className="form-label">Fees</label>
                     <input
@@ -310,7 +275,6 @@ const AddDoctor = () => {
                       required
                     />
                   </div>
-
                   <div className="col-12">
                     <label className="form-label">About Doctor</label>
                     <textarea
@@ -345,7 +309,7 @@ const AddDoctor = () => {
                 type="submit"
                 className="btn text-white px-5 py-2 fw-bold"
                 style={{
-                  background: "linear-gradient(to right,rgb(83, 212, 245),rgb(67, 248, 230))",
+                  background: "linear-gradient(to right, rgb(83, 212, 245), rgb(67, 248, 230))",
                   borderRadius: "8px",
                   border: "none",
                 }}
@@ -356,6 +320,17 @@ const AddDoctor = () => {
           </form>
         </div>
       </div>
+      <style>{`
+        @media (max-width: 991px) {
+          .admin-content {
+            margin-left: 0 !important;
+          }
+          .main-content {
+            max-width: 100% !important;
+            padding: 0 15px;
+          }
+        }
+      `}</style>
     </>
   );
 };
