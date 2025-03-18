@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import AdminNavbar from "../../components/Admins-Components/AdminNavbar";
+import SideBar from "../../components/Admins-Components/SideBar";
 
 const Appointments = () => {
     // Dummy data
@@ -45,10 +47,22 @@ const Appointments = () => {
     };
 
     return (
-        <div style={{ backgroundColor: "#f5f5f5", minHeight: "100vh", padding: "20px" }}>
-            <div className="d-flex">
-                {/* Main Content */}
-                <div className="container-fluid" style={{ maxWidth: "900px", marginLeft: "260px" }}>
+        <>
+            {/* Fixed Admin Navbar & Sidebar */}
+            <AdminNavbar />
+            <SideBar />
+
+            {/* Main Content Container offset by navbar and sidebar */}
+            <div
+                style={{
+                    marginTop: "70px",     // Offset for fixed navbar
+                    marginLeft: "200px",   // Offset for fixed sidebar
+                    backgroundColor: "#f5f5f5",
+                    minHeight: "100vh",
+                    padding: "20px"
+                }}
+            >
+                <div className="container-fluid" style={{ maxWidth: "900px" }}>
                     <h2 className="mb-4 fw-bold text-center">Appointments</h2>
 
                     {/* Search Bar */}
@@ -87,27 +101,27 @@ const Appointments = () => {
                         </table>
                     </div>
                 </div>
-            </div>
 
-            {/* Styles */}
-            <style>{`
-                .interactive-row {
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                }
-                .interactive-row:hover {
-                    background: #40E0D0;
-                    color: white;
-                }
-                th {
-                    position: relative;
-                }
-                th:hover {
-                    background-color: #40E0D0;
-                    color: white;
-                }
-            `}</style>
-        </div>
+                {/* Inline styles for hover effects */}
+                <style>{`
+                    .interactive-row {
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                    }
+                    .interactive-row:hover {
+                        background: #40E0D0;
+                        color: white;
+                    }
+                    th {
+                        position: relative;
+                    }
+                    th:hover {
+                        background-color: #40E0D0;
+                        color: white;
+                    }
+                `}</style>
+            </div>
+        </>
     );
 };
 

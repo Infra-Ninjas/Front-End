@@ -1,12 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState } from 'react';
+import DoctorLayout from './DoctorsLayout'; // or your actual layout path
 import { assets } from '../../assets/assets_frontend/assets';
 
 const DoctorDashboard = () => {
-  const navigate = useNavigate();
-
-  // Dummy data for demonstration
   const [stats, setStats] = useState({
     totalAppointments: 25,
     completedAppointments: 15,
@@ -14,75 +10,36 @@ const DoctorDashboard = () => {
     totalEarnings: 1200,
   });
 
-  // Mocked currency symbol
   const currency = '$';
 
-  // Reusable gradient button style
-  const gradientButtonBase = {
-    background: 'linear-gradient(to right, #22c1c3, #00b3b3)',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '50px',
-    padding: '0.5rem 1.25rem',
-    fontWeight: 'bold',
-    cursor: 'pointer',
-    transition: 'opacity 0.3s ease',
-  };
-
   return (
-    <div className="container my-4">
-      {/* Top Row: Title + Action Buttons */}
-      <div className="d-flex flex-wrap justify-content-between align-items-center mb-4">
-        <h2 className="fw-bold mb-3 mb-md-0">Doctor Dashboard</h2>
-        <div>
-          <button
-            // We keep Bootstrap's spacing classes but remove color classes
-            className="me-2 mb-2 mb-md-0"
-            style={gradientButtonBase}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.9')}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
-            onClick={() => navigate('/patientslist')}
-          >
-            View Patients List
-          </button>
-          <button
-            className="me-2 mb-2 mb-md-0"
-            style={gradientButtonBase}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.9')}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
-            onClick={() => navigate('/doctorprofile')}
-          >
-            View Profile
-          </button>
-          <button
-            className="mb-2 mb-md-0"
-            style={gradientButtonBase}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.9')}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
-            onClick={() => navigate('/doctorappointment')}
-          >
-            Manage Appointments
-          </button>
-        </div>
-      </div>
+    <DoctorLayout>
+      {/* Centered Title */}
+      <h2 className="mb-4 fw-bold text-center">Doctor Dashboard</h2>
 
-      {/* Stats Row */}
-      <div className="row g-3">
-        {/* Total Appointments */}
+      {/* Stats Row (max-width = 900px, centered) */}
+      <div className="row g-3 mb-4" style={{ maxWidth: '900px', margin: '0 auto' }}>
+        {/* Card 1: Total Appointments */}
         <div className="col-md-3">
-          <div className="card border-0 shadow-sm text-center">
-            <div className="card-body">
-              <h6 className="fw-semibold text-secondary">Total Appointments</h6>
+          <div
+            className="card border-0 shadow-sm text-center"
+            style={{ minHeight: '130px' }}
+          >
+            <div className="card-body d-flex flex-column align-items-center justify-content-center">
+              <h6 className="fw-semibold text-secondary">Total Appts</h6>
               <p className="fs-4 fw-bold mb-0">{stats.totalAppointments}</p>
             </div>
           </div>
         </div>
 
-        {/* Completed Appointments */}
+        {/* Card 2: Completed Appointments */}
         <div className="col-md-3">
-          <div className="card border-0 shadow-sm text-center">
-            <div className="card-body">
-              <h6 className="fw-semibold text-secondary">Completed Appointments</h6>
+          <div
+            className="card border-0 shadow-sm text-center"
+            style={{ minHeight: '130px' }}
+          >
+            <div className="card-body d-flex flex-column align-items-center justify-content-center">
+              <h6 className="fw-semibold text-secondary">Completed Appts</h6>
               <p className="fs-4 fw-bold text-success mb-0">
                 {stats.completedAppointments}
               </p>
@@ -90,11 +47,14 @@ const DoctorDashboard = () => {
           </div>
         </div>
 
-        {/* Cancelled Appointments */}
+        {/* Card 3: Cancelled Appointments */}
         <div className="col-md-3">
-          <div className="card border-0 shadow-sm text-center">
-            <div className="card-body">
-              <h6 className="fw-semibold text-secondary">Cancelled Appointments</h6>
+          <div
+            className="card border-0 shadow-sm text-center"
+            style={{ minHeight: '130px' }}
+          >
+            <div className="card-body d-flex flex-column align-items-center justify-content-center">
+              <h6 className="fw-semibold text-secondary">Cancelled Appts</h6>
               <p className="fs-4 fw-bold text-danger mb-0">
                 {stats.cancelledAppointments}
               </p>
@@ -102,10 +62,13 @@ const DoctorDashboard = () => {
           </div>
         </div>
 
-        {/* Total Earnings */}
+        {/* Card 4: Total Earnings */}
         <div className="col-md-3">
-          <div className="card border-0 shadow-sm text-center">
-            <div className="card-body">
+          <div
+            className="card border-0 shadow-sm text-center"
+            style={{ minHeight: '130px' }}
+          >
+            <div className="card-body d-flex flex-column align-items-center justify-content-center">
               <h6 className="fw-semibold text-secondary">Total Earnings</h6>
               <p className="fs-4 fw-bold text-primary mb-0">
                 {currency}
@@ -116,8 +79,8 @@ const DoctorDashboard = () => {
         </div>
       </div>
 
-      {/* Upcoming Appointments */}
-      <div className="mt-5">
+      {/* Upcoming Appointments (max-width = 900px, centered) */}
+      <div style={{ maxWidth: '900px', margin: '0 auto' }}>
         <h5 className="fw-bold mb-3">Upcoming Appointments</h5>
         <div className="list-group">
           {/* Appointment Item 1 */}
@@ -133,7 +96,17 @@ const DoctorDashboard = () => {
                 <small className="text-muted">Tomorrow, 10:00 AM</small>
               </div>
             </div>
-            <span className="badge bg-info text-dark">Online</span>
+            <span
+              className="badge"
+              style={{
+                background: 'linear-gradient(to right, #22c1c3, #40e0d0)',
+                color: '#fff',
+                borderRadius: '12px',
+                padding: '6px 12px',
+              }}
+            >
+              Online
+            </span>
           </div>
 
           {/* Appointment Item 2 */}
@@ -149,11 +122,21 @@ const DoctorDashboard = () => {
                 <small className="text-muted">Tomorrow, 11:30 AM</small>
               </div>
             </div>
-            <span className="badge bg-primary">Cash</span>
+            <span
+              className="badge"
+              style={{
+                background: 'linear-gradient(to right, #22c1c3, #40e0d0)',
+                color: '#fff',
+                borderRadius: '12px',
+                padding: '6px 12px',
+              }}
+            >
+              Cash
+            </span>
           </div>
         </div>
       </div>
-    </div>
+    </DoctorLayout>
   );
 };
 

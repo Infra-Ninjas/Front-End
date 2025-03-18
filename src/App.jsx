@@ -1,6 +1,6 @@
 //Main App Component
 import React, { useEffect, useState } from "react";
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 import "./index.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
@@ -35,18 +35,6 @@ import DoctorLogin from "./pages/Doctors-Pages/DoctorLogin";
 import Navbar from "./components/Homepage-Components/Navbar";
 import Footer from "./components/Homepage-Components/Footer";
 
-// Admin Components
-import AdminNavbar from "./components/Admins-Components/AdminNavbar";
-import SideBar from "./components/Admins-Components/SideBar";
-
-// User Components
-import UserNavbar from "./components/Users-Components/UsersNavbar";
-import UserSidebar from "./components/Users-Components/UsersSidebar";
-
-// Doctor Components
-import DoctorNavbar from "./components/Doctors-Components/DoctorsNavbar";
-import DoctorSidebar from "./components/Doctors-Components/DoctorsSidebar";
-
 // Import Admin, User, and Doctor Context Hooks
 import { useAdminContext } from "./contexts/Admin-Context/AdminContextProvider";
 import { useUserContext } from "./contexts/Users-Context/UserContextProvider";
@@ -59,10 +47,34 @@ const App = () => {
 
   // Check if any token is present
   const [isLoggedIn, setIsLoggedIn] = useState(!!(aToken || uToken || dToken));
+  const location = useLocation();
 
   useEffect(() => {
     setIsLoggedIn(!!(aToken || uToken || dToken));
   }, [navbarRefresh, aToken, uToken, dToken]);
+
+  // Define protected paths where the normal Navbar should be hidden.
+  const protectedRoutes = [
+    "/admin-dashboard",
+    "/AddDoctor",
+    "/DoctorsList",
+    "/AllAppointments",
+    "/admindashboard",
+    "/doctorslist",
+    "/addDoctor",
+    "/allappointments",
+    "/myprofile",
+    "/myappointments",
+    "/doctorDashboard",
+    "/patientslist",
+    "/doctorprofile",
+    "/doctorappointment"
+  ];
+
+  // Check if the current pathname starts with one of the protected paths.
+  const shouldShowNavbar = !protectedRoutes.some((path) =>
+    location.pathname.startsWith(path)
+  );
 
   return (
     <div className="sm:mx-[10%]">
@@ -76,35 +88,8 @@ const App = () => {
         theme="colored"
       />
 
-
-      {/* Conditionally render navigation and sidebar */}
-      {isLoggedIn ? (
-        aToken ? (
-          // ADMIN
-          <>
-            <AdminNavbar />
-            <SideBar />
-          </>
-        ) : uToken ? (
-          // USER
-          <>
-            <UserNavbar />
-            <UserSidebar />
-          </>
-        ) : dToken ? (
-          // DOCTOR
-          <>
-            <DoctorNavbar />
-            <DoctorSidebar />
-          </>
-        ) : (
-          // Fallback if something's off
-          <Navbar />
-        )
-      ) : (
-        // Not logged in at all
-        <Navbar />
-      )}
+      {/* Render the public Navbar on public pages */}
+      {shouldShowNavbar && <Navbar />}
 
       {/* Routes */}
       <Routes>
@@ -146,10 +131,22 @@ const App = () => {
         <Route path="/allappointments" element={<AllAppointments />} />
 
         {/* Doctor Routes */}
-        <Route path="/doctorDashboard" element={dToken ? <DoctorsDashboard /> : <Navigate to="/doctor-login" replace />} />
-        <Route path="/patientslist" element={dToken ? <Patientslist /> : <Navigate to="/doctor-login" replace />} />
-        <Route path="/doctorprofile" element={dToken ? <DoctorProfile /> : <Navigate to="/doctor-login" replace />} />
-        <Route path="/doctorappointment" element={dToken ? <DoctorAppointments /> : <Navigate to="/doctor-login" replace />} />
+        <Route
+          path="/doctorDashboard"
+          element={dToken ? <DoctorsDashboard /> : <Navigate to="/doctor-login" replace />}
+        />
+        <Route
+          path="/patientslist"
+          element={dToken ? <Patientslist /> : <Navigate to="/doctor-login" replace />}
+        />
+        <Route
+          path="/doctorprofile"
+          element={dToken ? <DoctorProfile /> : <Navigate to="/doctor-login" replace />}
+        />
+        <Route
+          path="/doctorappointment"
+          element={dToken ? <DoctorAppointments /> : <Navigate to="/doctor-login" replace />}
+        />
         <Route path="/doctor-login" element={<DoctorLogin />} />
       </Routes>
 

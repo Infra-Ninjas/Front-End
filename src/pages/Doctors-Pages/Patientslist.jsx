@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-// import { DoctorContext } from '../../contexts/Doctors-Context/DoctorContext';
-// import { AppContext } from '../../contexts/AppContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import DoctorLayout from './DoctorsLayout';
 import { assets } from '../../assets/assets_frontend/assets';
 
 const PatientList = () => {
-  // Dummy data for patients
   const [patients, setPatients] = useState([
     {
       id: 1,
@@ -25,72 +23,75 @@ const PatientList = () => {
     },
   ]);
 
-  // const { dToken, getPatients } = useContext(DoctorContext);
-  // const { calculateAge } = useContext(AppContext);
-
-  // Example Age Calculation
   const calculateAge = (dob) => {
     const birthDate = new Date(dob);
     const today = new Date();
-    const age = today.getFullYear() - birthDate.getFullYear();
-    return age;
+    return today.getFullYear() - birthDate.getFullYear();
   };
 
-  // useEffect(() => {
-  //   if (dToken) {
-  //     getPatients().then(res => setPatients(res));
-  //   }
-  // }, [dToken]);
+  // Same gradient style as the logout button
+  const gradientButtonStyle = {
+    background: 'linear-gradient(to right, #22c1c3, #40e0d0)',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '20px',
+    padding: '6px 16px',
+    fontSize: '14px',
+    cursor: 'pointer',
+  };
 
   return (
-    <div className="container mt-4">
-      <h4>Patient List</h4>
+    <DoctorLayout>
+      {/* Centered Title */}
+      <h2 className="mb-4 fw-bold text-center">Patient List</h2>
 
-      <div className="table-responsive mt-3">
-        <table className="table table-bordered">
-          <thead className="table-light">
-            <tr>
-              <th>#</th>
-              <th>Patient Name</th>
-              <th>Age</th>
-              <th>Last Visit</th>
-              <th>Total Appointments</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {patients.length > 0 ? (
-              patients.map((patient, index) => (
-                <tr key={patient.id}>
-                  <td>{index + 1}</td>
-                  <td className="d-flex align-items-center gap-2">
-                    <img
-                      src={patient.image}
-                      alt="Patient"
-                      style={{ width: '40px', height: '40px', borderRadius: '50%' }}
-                    />
-                    <span>{patient.name}</span>
-                  </td>
-                  <td>{calculateAge(patient.dob)}</td>
-                  <td>{patient.lastVisit}</td>
-                  <td>{patient.totalAppointments}</td>
-                  <td>
-                    {/* Example button to view details or open a modal */}
-                    <button className="btn btn-sm btn-primary">View</button>
-                  </td>
-                </tr>
-              ))
-            ) : (
+      {/* Centered container */}
+      <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+        <div className="table-responsive">
+          <table className="table table-bordered">
+            <thead className="table-light">
               <tr>
-                <td colSpan="6" className="text-center">
-                  No patients found
-                </td>
+                <th>#</th>
+                <th>Patient Name</th>
+                <th>Age</th>
+                <th>Last Visit</th>
+                <th>Total Appointments</th>
+                <th>Actions</th>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {patients.length > 0 ? (
+                patients.map((patient, index) => (
+                  <tr key={patient.id}>
+                    <td>{index + 1}</td>
+                    <td className="d-flex align-items-center gap-2">
+                      <img
+                        src={patient.image}
+                        alt="Patient"
+                        style={{ width: '40px', height: '40px', borderRadius: '50%' }}
+                      />
+                      <span>{patient.name}</span>
+                    </td>
+                    <td>{calculateAge(patient.dob)}</td>
+                    <td>{patient.lastVisit}</td>
+                    <td>{patient.totalAppointments}</td>
+                    <td>
+                      <button className="btn btn-sm" style={gradientButtonStyle}>
+                        View
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="text-center">No patients found</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+    </DoctorLayout>
   );
 };
 
