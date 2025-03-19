@@ -47,3 +47,4 @@ EXPOSE 80
 
 # Run Nginx in the foreground
 ENTRYPOINT ["nginx", "-g", "daemon off;"] 
+
