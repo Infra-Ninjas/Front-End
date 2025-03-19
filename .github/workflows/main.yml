@@ -27,7 +27,7 @@ jobs:
             --build-arg VITE_BACKEND_URL=${{ secrets.VITE_BACKEND_URL }} \
             --build-arg VITE_ADMINSERVICE_URL=${{ secrets.VITE_ADMINSERVICE_URL }} \
             --build-arg VITE_DOCTORSERVICE_URL=${{ secrets.VITE_DOCTORSERVICE_URL }} \
-            -t ${{ secrets.AZURE_ACR_LOGIN_SERVER }}/frontend:latest .
+            -t ${{ secrets.ACR_LOGIN_SERVER }}/frontend:latest .
 
       - name: Push Docker image to ACR
         run: docker push ${{ secrets.ACR_LOGIN_SERVER }}/frontend:latest
