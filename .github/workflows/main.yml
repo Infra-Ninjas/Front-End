@@ -30,4 +30,5 @@ jobs:
             -t ${{ secrets.AZURE_ACR_LOGIN_SERVER }}/frontend:latest .
 
       - name: Push Docker image to ACR
-        run: docker push ${{ secrets.ACR_LOGIN_SERVER }}/frontend:latest
+        run: docker push ${{ secrets.AZURE_ACR_LOGIN_SERVER }}/frontend:latest
+
