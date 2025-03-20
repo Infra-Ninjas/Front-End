@@ -18,6 +18,7 @@ import MyAppointments from "./pages/Users-Pages/MyAppointments";
 import MyProfile from "./pages/Users-Pages/MyProfile";
 import Login from "./pages/Users-Pages/Login";
 import UsersDoctosList from "./pages/Users-Pages/UsersDoctorsList"
+import PatientsAppointments from "./pages/Users-Pages/PatientsAppointments"
 
 // Admin Pages Imports
 import AddDoctor from "./pages/Admins-Pages/AddDoctor";
@@ -128,6 +129,7 @@ const App = () => {
         <Route path="/myprofile" element={<MyProfile />} />
         <Route path="/myappointments" element={<MyAppointments />} />
         <Route path="/usersdoctorslist" element={<UsersDoctosList />} />
+        <Route path="/patientsbookappointments/:docId" element={<PatientsAppointments />} />
 
         {/* Admin's Duplicate Routes */}
         <Route path="/admindashboard" element={<AdminDashboard />} />
