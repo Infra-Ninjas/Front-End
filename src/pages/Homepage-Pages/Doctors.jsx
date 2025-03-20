@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { assets } from "../../assets/assets_frontend/assets";
+import { useNavigate } from "react-router-dom"; // 1) Import useNavigate
 
 const specialties = [
   "General Physician",
@@ -15,6 +16,7 @@ const Doctors = () => {
   const [selectedSpecialty, setSelectedSpecialty] = useState(null);
   const [showMore, setShowMore] = useState(false);
   const [doctors, setDoctors] = useState([]);
+  const navigate = useNavigate(); // 2) Initialize the hook
 
   const doctorserviceurl = import.meta.env.VITE_DOCTORSERVICE_URL;
 
@@ -22,7 +24,7 @@ const Doctors = () => {
     const getAllDoctors = async () => {
       try {
         const { data } = await axios.get(doctorserviceurl + "/api/doctor/list");
-        
+
         // Check if response has a "doctors" property
         if (data && Array.isArray(data.doctors)) {
           setDoctors(data.doctors);
@@ -67,7 +69,9 @@ const Doctors = () => {
               transition: "background-color 0.3s ease",
             }}
             onMouseEnter={(e) => (e.target.style.background = "#007991")}
-            onMouseLeave={(e) => (e.target.style.background = "linear-gradient(to right, #30cfd0, #007991)")}
+            onMouseLeave={(e) =>
+              (e.target.style.background = "linear-gradient(to right, #30cfd0, #007991)")
+            }
           >
             {specialty}
           </button>
@@ -109,6 +113,8 @@ const Doctors = () => {
                     }}
                     onMouseEnter={(e) => (e.target.style.transform = "scale(1.1)")}
                     onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
+                    // 3) onClick to navigate to the appointment page
+                    onClick={() => navigate(`/appointment/${doctor._id}`)}
                   >
                     {doctor.available ? "Available" : "Unavailable"}
                   </button>

@@ -1,23 +1,30 @@
+// DoctorContextProvider.jsx
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { toast } from "react-toastify";
 
-// We'll assume the doctor login endpoint is at VITE_DOCTORSERVICE_URL
-// But we won't make the actual request here—just store the token/role.
 const DoctorContext = createContext();
 
 const DoctorContextProvider = ({ children }) => {
+  // Authentication state
   const [dToken, setDToken] = useState(localStorage.getItem("dToken") || null);
   const [role, setRole] = useState(localStorage.getItem("doctorRole") || null);
+  
+  // Doctors list state
+  const [doctors, setDoctors] = useState([]);
+  const doctorserviceurl = import.meta.env.VITE_DOCTORSERVICE_URL;
+  
   const navigate = useNavigate();
 
+  // Listen to storage changes for auth info
   useEffect(() => {
     const handleStorageChange = (event) => {
       if (event.key === "dToken" && event.storageArea === localStorage) {
         if (!event.newValue) {
           setDToken(null);
           setRole(null);
-          navigate("/doctor-login"); // Send them to doctor login if token is removed
+          navigate("/doctor-login"); // Redirect to login if token is removed
         }
       }
       if (event.key === "doctorRole" && event.storageArea === localStorage) {
@@ -31,8 +38,7 @@ const DoctorContextProvider = ({ children }) => {
     return () => window.removeEventListener("storage", handleStorageChange);
   }, [navigate]);
 
-  // login function expects { token, role } from your DoctorLogin API call
-  // successMessage is optional if you want a custom toast
+  // Login function
   const login = (data, successMessage = "Doctor login successful!") => {
     if (data && data.token && data.role) {
       setDToken(data.token);
@@ -40,12 +46,13 @@ const DoctorContextProvider = ({ children }) => {
       localStorage.setItem("dToken", data.token);
       localStorage.setItem("doctorRole", data.role);
       toast.success(successMessage);
-      navigate("/doctorDashboard"); // Adjust to your doctor dashboard route
+      navigate("/doctorDashboard"); // Adjust as needed
     } else {
       toast.error("Invalid login response!");
     }
   };
 
+  // Logout function
   const logout = () => {
     setDToken(null);
     setRole(null);
@@ -55,13 +62,33 @@ const DoctorContextProvider = ({ children }) => {
     navigate("/doctor-login");
   };
 
+  // Fetch doctors data from API
+  useEffect(() => {
+    const getAllDoctors = async () => {
+      try {
+        const { data } = await axios.get(`${doctorserviceurl}/api/doctor/list`);
+        if (data && Array.isArray(data.doctors)) {
+          setDoctors(data.doctors);
+        } else {
+          console.error("Unexpected API response format", data);
+          setDoctors([]); // Fallback to an empty array
+        }
+      } catch (error) {
+        console.error("Error fetching doctors:", error);
+        setDoctors([]); // Ensure doctors is always an array
+      }
+    };
+    getAllDoctors();
+  }, [doctorserviceurl]);
+
   return (
     <DoctorContext.Provider
       value={{
         dToken,
         role,
         login,
-        logout
+        logout,
+        doctors,
       }}
     >
       {children}
@@ -71,7 +98,7 @@ const DoctorContextProvider = ({ children }) => {
 
 export default DoctorContextProvider;
 
-// Named hook export, just like we did for user context
+// Custom hook to consume the context
 export function useDoctorContext() {
   return useContext(DoctorContext);
 }

@@ -62,6 +62,7 @@ const UserSidebar = () => {
             { path: "/user-dashboard", icon: assets.home_icon, label: "Dashboard" },
             { path: "/myappointments", icon: assets.add_icon, label: "My Appointments" },
             { path: "/myprofile", icon: assets.people_icon, label: "My Profile" },
+            { path: "/usersdoctorslist", icon: assets.people_icon, label: "Doctors Lists" },
           ].map((item, index) => (
             <li className="nav-item mb-2" key={index}>
               <NavLink

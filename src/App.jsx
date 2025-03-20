@@ -10,12 +10,14 @@ import Home from "./pages/Homepage-Pages/Home";
 import About from "./pages/Homepage-Pages/About";
 import Contact from "./pages/Homepage-Pages/Contact";
 import Doctors from "./pages/Homepage-Pages/Doctors";
+import Appointment from "./pages/Homepage-Pages/appointments";
 
 // User Pages Imports
 import Dashboard from "./pages/Users-Pages/Dashboard";
 import MyAppointments from "./pages/Users-Pages/MyAppointments";
 import MyProfile from "./pages/Users-Pages/MyProfile";
 import Login from "./pages/Users-Pages/Login";
+import UsersDoctosList from "./pages/Users-Pages/UsersDoctorsList"
 
 // Admin Pages Imports
 import AddDoctor from "./pages/Admins-Pages/AddDoctor";
@@ -68,7 +70,8 @@ const App = () => {
     "/doctorDashboard",
     "/patientslist",
     "/doctorprofile",
-    "/doctorappointment"
+    "/doctorappointment",
+    "/UsersDoctorsList"
   ];
 
   // Check if the current pathname starts with one of the protected paths.
@@ -100,6 +103,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/appointment/:docId" element={<Appointment />} />
 
         {/* Admin Routes With Protection */}
         <Route path="/admin-login" element={<AdminLogin />} />
@@ -123,6 +127,7 @@ const App = () => {
         {/* User Routes */}
         <Route path="/myprofile" element={<MyProfile />} />
         <Route path="/myappointments" element={<MyAppointments />} />
+        <Route path="/usersdoctorslist" element={<UsersDoctosList />} />
 
         {/* Admin's Duplicate Routes */}
         <Route path="/admindashboard" element={<AdminDashboard />} />

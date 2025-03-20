@@ -27,7 +27,7 @@ const AdminContextProvider = ({ children }) => {
       );
       console.log("Doctors data:", data);
       // Directly set the doctors to whatever the backend sends (an array)
-      setDoctors(data);
+      setDoctors(data.data);
     } catch (error) {
       toast.error(error.message);
     }
@@ -78,7 +78,7 @@ const AdminContextProvider = ({ children }) => {
 
   // Fetch the list of doctors only when aToken is available (on mount or when aToken changes)
   useEffect(() => {
-    if (aToken) {
+    if (aToken && doctors.length === 0) {
       getAllDoctors();
     }
   }, [aToken]);

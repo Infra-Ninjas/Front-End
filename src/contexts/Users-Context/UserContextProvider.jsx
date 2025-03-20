@@ -1,12 +1,17 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { toast } from "react-toastify";
 
 const UserContext = createContext();
 
+// Use your USERSERVICE URL here:
+const userserviceurl = import.meta.env.VITE_USERSERVICE_URL;
+
 const UserContextProvider = ({ children }) => {
   const [uToken, setUToken] = useState(localStorage.getItem('uToken') || null);
   const [role, setRole] = useState(localStorage.getItem('role') || null);
+  const [doctors, setDoctors] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -54,6 +59,48 @@ const UserContextProvider = ({ children }) => {
     navigate('/');
   };
 
+  // API call to fetch all doctors using USERSERVICE URL
+  const getAllDoctors = async () => {
+    try {
+      const { data } = await axios.get(
+        userserviceurl + "/api/user/list-doctors",
+        {
+          headers: {
+            Authorization: `Bearer ${uToken}`
+          }
+        }
+      );
+      console.log("Doctors data:", data);
+      if (data.success) {
+        setDoctors(data.doctors);
+      } else {
+        toast.error("Failed to fetch doctors list");
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  // API call to toggle a doctor's availability (example implementation)
+  const changeAvailability = async (doctorId) => {
+    try {
+      await axios.put(
+        userserviceurl + `/api/doctors/${doctorId}/toggle-availability`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${uToken}`
+          }
+        }
+      );
+      toast.success("Availability updated!");
+      // Refresh the doctors list after updating availability
+      getAllDoctors();
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -61,6 +108,9 @@ const UserContextProvider = ({ children }) => {
         role,
         login,
         logout,
+        doctors,
+        getAllDoctors,
+        changeAvailability,
       }}
     >
       {children}

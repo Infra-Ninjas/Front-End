@@ -7,14 +7,14 @@ const UserLayout = ({ children }) => {
     <>
       <UserNavbar />
       <UserSidebar />
-      {/* Main content container with responsive offsets */}
       <div className="user-content">
         {children}
       </div>
       <style>{`
         .user-content {
-          margin-top: 70px;    /* fixed navbar height */
-          margin-left: 200px;  /* fixed sidebar width on larger screens */
+          /* Decrease or remove the top margin to reduce empty space */
+          margin-top: 70px;    /* was 70px */
+          margin-left: 200px; /* keep the sidebar offset */
           padding: 20px;
           min-height: 100vh;
           background-color: #f5f5f5;
@@ -22,7 +22,7 @@ const UserLayout = ({ children }) => {
         }
         @media (max-width: 991px) {
           .user-content {
-            margin-left: 0;  /* remove left offset on small screens */
+            margin-left: 50 !important;
           }
         }
       `}</style>
