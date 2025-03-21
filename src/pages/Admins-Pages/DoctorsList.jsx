@@ -1,17 +1,31 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useAdminContext } from '../../contexts/Admin-Context/AdminContextProvider';
 import AdminNavbar from "../../components/Admins-Components/AdminNavbar";
 import SideBar from "../../components/Admins-Components/SideBar";
+import axios from "axios";
 
 const DoctorsList = () => {
-  const { doctors, aToken, getAllDoctors, changeAvailability } = useAdminContext();
+  const { aToken, changeAvailability } = useAdminContext();
+  const [doctors, setDoctors] = useState([]);
+  const adminserviceurl = import.meta.env.VITE_ADMINSERVICE_URL;
+
+  const getAllDoctors = async () => {
+    try {
+      const { data } = await axios.get(`${adminserviceurl}/api/doctors/all-doctors`, {
+        headers: { Authorization: `Bearer ${aToken}` },
+      });
+      setDoctors(data.data || []);
+    } catch (error) {
+      console.error("Error fetching doctors:", error);
+    }
+  };
 
   useEffect(() => {
     if (aToken) {
       getAllDoctors();
     }
-  }, [aToken, getAllDoctors]);
+  }, [aToken]);
 
   return (
     <>
@@ -62,7 +76,7 @@ const DoctorsList = () => {
                           className="form-check-input"
                           type="checkbox"
                           checked={item.available}
-                          onChange={() => changeAvailability(item.id)}
+                          onChange={() => changeAvailability(item._id)}
                         />
                         <label className="form-check-label ms-2" style={{ fontSize: '0.9rem' }}>Available</label>
                       </div>

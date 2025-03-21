@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDoctorContext } from '../../contexts/Doctors-Context/DoctorContextProvider';
-// If you store user token in user context:
 import { useUserContext } from "../../contexts/Users-Context/UserContextProvider";
 import axios from 'axios';
 import UserLayout from "./UsersLayout";
 
 const PatientsAppointments = () => {
-  const { docId } = useParams(); // route param name is docId
+  const { docId } = useParams();
   const { doctors } = useDoctorContext();
-  const { uToken, userData } = useUserContext(); // userData might have user._id
+  const { uToken, userData } = useUserContext();
   const navigate = useNavigate();
 
   const [docInfo, setDocInfo] = useState(null);
@@ -20,7 +19,6 @@ const PatientsAppointments = () => {
 
   const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
-  // 1) Find the doctor by docId
   useEffect(() => {
     if (doctors && docId) {
       const foundDoc = doctors.find((doc) => doc._id === docId);
@@ -28,7 +26,6 @@ const PatientsAppointments = () => {
     }
   }, [doctors, docId]);
 
-  // 2) Generate booking slots once docInfo is found
   useEffect(() => {
     if (docInfo) {
       generateSlots();
@@ -42,16 +39,14 @@ const PatientsAppointments = () => {
     for (let i = 0; i < 7; i++) {
       let currentDate = new Date(today);
       currentDate.setDate(today.getDate() + i);
-
       let endTime = new Date(today);
       endTime.setDate(today.getDate() + i);
       endTime.setHours(21, 0, 0, 0);
 
       if (i === 0) {
         const currentHour = new Date().getHours();
-        const currentMinutes = new Date().getMinutes();
         currentDate.setHours(currentHour > 10 ? currentHour : 10);
-        currentDate.setMinutes(currentMinutes > 30 ? 30 : 0);
+        currentDate.setMinutes(0);
       } else {
         currentDate.setHours(10, 0, 0, 0);
       }
@@ -73,22 +68,16 @@ const PatientsAppointments = () => {
     setDocSlots(newSlots);
   };
 
-  // 3) Whenever slotIndex changes, update selectedDate in YYYY-MM-DD
   useEffect(() => {
     if (docSlots[slotIndex] && docSlots[slotIndex].length > 0) {
       const dateObj = docSlots[slotIndex][0].datetime;
-      const year = dateObj.getFullYear();
-      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-      const day = String(dateObj.getDate()).padStart(2, '0');
-      setSelectedDate(`${year}-${month}-${day}`);
+      setSelectedDate(dateObj.toISOString().split("T")[0]); 
     }
   }, [slotIndex, docSlots]);
 
-  // 4) Confirm Booking
   const handleConfirmBooking = async () => {
     try {
       if (!uToken) {
-        // If user is not logged in, redirect to login
         return navigate('/login');
       }
       if (!slotTime) {
@@ -98,19 +87,19 @@ const PatientsAppointments = () => {
         return alert('Date not determined. Please select a day slot first!');
       }
 
-      // We'll assume userData._id is the patient's userId
-      const userId = userData?._id || "67d99f28fc52e4a3bd0caf78";
-      const docID = docInfo._id; // doctor ID from docInfo
+      const userId = userData?._id || localStorage.getItem("uId");
 
-      // Prepare request body
+      if (!userId) {
+        return alert("User ID not found. Please log in again.");
+      }
+
       const requestBody = {
         userId,
-        docId: docID,
+        docId: docInfo._id,
         slotDate: selectedDate,
         slotTime,
       };
 
-      // Post to booking endpoint
       const response = await axios.post(
         'http://localhost:4002/api/user/book-appointment',
         requestBody,
@@ -123,8 +112,6 @@ const PatientsAppointments = () => {
 
       if (response.data && response.data.success) {
         alert('Appointment booked successfully!');
-        // Optionally navigate to MyAppointments
-        // navigate('/myAppointments');
       } else {
         alert('Failed to book appointment: ' + response.data?.message);
       }
@@ -134,34 +121,19 @@ const PatientsAppointments = () => {
     }
   };
 
-  if (!docInfo) {
-    return (
-      <UserLayout>
-        <div className="container my-5">
-          <h4 className="text-center">Loading doctor details...</h4>
-        </div>
-      </UserLayout>
-    );
-  }
-
   return (
     <UserLayout>
       <div className="container my-5">
-        {/* Title */}
-        <h2
-          className="text-center mb-5"
-          style={{ color: '#007991', fontWeight: 'bold' }}
-        >
+        <h2 className="text-center mb-5" style={{ color: '#007991', fontWeight: 'bold' }}>
           Book an Appointment
         </h2>
 
-        {/* Doctor Details Section */}
         <div className="row g-4">
           <div className="col-12 col-md-4">
             <div className="card shadow-sm border-0">
               <img
-                src={docInfo.image}
-                alt={docInfo.name}
+                src={docInfo?.image}
+                alt={docInfo?.name}
                 className="card-img-top"
                 style={{
                   objectFit: 'cover',
@@ -176,125 +148,56 @@ const PatientsAppointments = () => {
             <div className="card shadow-sm border-0 h-100">
               <div className="card-body p-4">
                 <h4 className="card-title mb-2" style={{ color: '#007991' }}>
-                  {docInfo.name}
+                  {docInfo?.name}
                 </h4>
                 <p className="mb-1 text-muted">
-                  {docInfo.degree} - {docInfo.speciality}
+                  {docInfo?.degree} - {docInfo?.speciality}
                 </p>
-                <button
-                  className="btn btn-sm text-white"
-                  style={{
-                    background: 'linear-gradient(to right, #00ACC1, #00838F)',
-                    border: 'none',
-                    fontWeight: '600',
-                  }}
-                >
-                  {docInfo.experience}
+                <button className="btn btn-sm text-white" style={{ background: '#00ACC1', border: 'none', fontWeight: '600' }}>
+                  {docInfo?.experience}
                 </button>
 
                 <div className="mt-3">
                   <h6 style={{ fontWeight: 'bold', color: '#007991' }}>About</h6>
-                  <p className="text-muted">{docInfo.about}</p>
+                  <p className="text-muted">{docInfo?.about}</p>
                 </div>
 
                 <p className="fw-semibold mt-4">
-                  Appointment fee:{' '}
-                  <span style={{ color: '#007991' }}>{docInfo.fees}</span>
+                  Appointment fee: <span style={{ color: '#007991' }}>{docInfo?.fees}</span>
                 </p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Booking Slots Section */}
-        <div className="mt-5">
-          <h5 style={{ color: '#007991', fontWeight: 'bold' }}>Booking Slots</h5>
+        <h5 className="text-center mt-5" style={{ color: '#007991', fontWeight: 'bold' }}>
+          Booking Slots
+        </h5>
 
-          {/* Day Slots */}
-          <div
-            className="d-flex align-items-center mt-3"
-            style={{ gap: '12px', overflowX: 'auto' }}
-          >
-            {docSlots.map((slotsForDay, index) => {
-              const firstSlot = slotsForDay[0];
-              const dayName = firstSlot
-                ? daysOfWeek[firstSlot.datetime.getDay()]
-                : '';
-              const dayDate = firstSlot ? firstSlot.datetime.getDate() : '';
-              const isActive = slotIndex === index;
-              return (
-                <div
-                  key={index}
-                  onClick={() => setSlotIndex(index)}
-                  style={{
-                    minWidth: '45px',
-                    padding: '10px 0',
-                    cursor: 'pointer',
-                    textAlign: 'center',
-                    borderRadius: '20px',
-                    border: isActive ? 'none' : '2px solid #007991',
-                    backgroundColor: isActive ? '#007991' : 'transparent',
-                    color: isActive ? '#fff' : '#007991',
-                    fontWeight: '500',
-                    transition: 'transform 0.3s ease-in-out',
-                    fontSize: '14px',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-                >
-                  <p className="m-0">{dayName}</p>
-                  <p className="m-0">{dayDate}</p>
-                </div>
-              );
-            })}
-          </div>
+        <div className="d-flex justify-content-center mt-3 flex-wrap gap-3">
+          {docSlots.map((slotsForDay, index) => {
+            const firstSlot = slotsForDay[0];
+            const dayName = firstSlot ? daysOfWeek[firstSlot.datetime.getDay()] : '';
+            const dayDate = firstSlot ? firstSlot.datetime.getDate() : '';
+            return (
+              <button key={index} className={`btn ${slotIndex === index ? 'btn-primary' : 'btn-outline-primary'}`} onClick={() => setSlotIndex(index)}>
+                {dayName} {dayDate}
+              </button>
+            );
+          })}
+        </div>
 
-          {/* Time Slots */}
-          <div
-            className="d-flex align-items-center mt-3"
-            style={{ gap: '12px', overflowX: 'auto' }}
-          >
-            {docSlots[slotIndex] &&
-              docSlots[slotIndex].map((timeObj, idx) => {
-                const isSelected = slotTime === timeObj.time;
-                return (
-                  <p
-                    key={idx}
-                    onClick={() => setSlotTime(timeObj.time)}
-                    style={{
-                      fontSize: '13px',
-                      padding: '6px 14px',
-                      cursor: 'pointer',
-                      borderRadius: '20px',
-                      border: isSelected ? 'none' : '2px solid #007991',
-                      backgroundColor: isSelected ? '#007991' : 'transparent',
-                      color: isSelected ? '#fff' : '#007991',
-                      transition: 'transform 0.3s ease-in-out',
-                      fontWeight: '500',
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
-                    onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-                  >
-                    {timeObj.time.toLowerCase()}
-                  </p>
-                );
-              })}
-          </div>
+        <div className="d-flex justify-content-center mt-3 flex-wrap gap-2">
+          {docSlots[slotIndex] &&
+            docSlots[slotIndex].map((timeObj, idx) => (
+              <button key={idx} className={`btn ${slotTime === timeObj.time ? 'btn-success' : 'btn-outline-success'}`} onClick={() => setSlotTime(timeObj.time)}>
+                {timeObj.time}
+              </button>
+            ))}
+        </div>
 
-          {/* Confirm Booking Button */}
-          <button
-            onClick={handleConfirmBooking}
-            className="btn mt-4 text-white shadow"
-            style={{
-              padding: '12px 56px',
-              borderRadius: '50px',
-              background: 'linear-gradient(to right, #30cfd0, #007991)',
-              fontWeight: '600',
-              transition: 'transform 0.3s ease-in-out',
-            }}
-            onMouseEnter={(e) => (e.target.style.transform = 'scale(1.05)')}
-            onMouseLeave={(e) => (e.target.style.transform = 'scale(1)')}
-          >
+        <div className="text-center mt-4">
+          <button onClick={handleConfirmBooking} className="btn btn-lg text-white" style={{ background: '#007991', borderRadius: '20px' }}>
             Confirm Booking
           </button>
         </div>
