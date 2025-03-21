@@ -11,11 +11,13 @@ WORKDIR /usr/src/app
 ARG VITE_BACKEND_URL
 ARG VITE_ADMINSERVICE_URL
 ARG VITE_DOCTORSERVICE_URL
+ARG VITE_USERSERVICE_URL
 
 # Make them available inside the container
 ENV VITE_BACKEND_URL=$VITE_BACKEND_URL
 ENV VITE_ADMINSERVICE_URL=$VITE_ADMINSERVICE_URL
 ENV VITE_DOCTORSERVICE_URL=$VITE_DOCTORSERVICE_URL
+ENV VITE_USERSERVICE_URL=$VITE_USERSERVICE_URL
 
 # Copy package.json and package-lock.json into the container
 COPY package*.json package-lock.json ./
@@ -47,4 +49,3 @@ EXPOSE 80
 
 # Run Nginx in the foreground
 ENTRYPOINT ["nginx", "-g", "daemon off;"] 
-
