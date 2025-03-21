@@ -12,6 +12,7 @@ jobs:
       VITE_BACKEND_URL: ${{ secrets.VITE_BACKEND_URL }}
       VITE_ADMINSERVICE_URL: ${{ secrets.VITE_ADMINSERVICE_URL }}
       VITE_DOCTORSERVICE_URL: ${{ secrets.VITE_DOCTORSERVICE_URL }}
+      VITE_USERSERVICE_URL: ${{ secrets.VITE_USERSERVICE_URL }}
 
     steps:
       - name: Checkout repository
@@ -27,6 +28,7 @@ jobs:
             --build-arg VITE_BACKEND_URL=${{ secrets.VITE_BACKEND_URL }} \
             --build-arg VITE_ADMINSERVICE_URL=${{ secrets.VITE_ADMINSERVICE_URL }} \
             --build-arg VITE_DOCTORSERVICE_URL=${{ secrets.VITE_DOCTORSERVICE_URL }} \
+            --build-arg VITE_USERSERVICE_URL=${{ secrets.VITE_USERSERVICE_URL }} \
             -t ${{ secrets.ACR_LOGIN_SERVER }}/frontend:latest .
 
       - name: Push Docker image to ACR
