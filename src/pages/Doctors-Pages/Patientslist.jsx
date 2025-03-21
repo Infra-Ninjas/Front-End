@@ -1,96 +1,88 @@
-import React, { useState } from 'react';
-// import { DoctorContext } from '../../contexts/Doctors-Context/DoctorContext';
-// import { AppContext } from '../../contexts/AppContext';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { assets } from '../../assets/assets_frontend/assets';
+import React, { useEffect, useState } from "react";
+import DoctorLayout from "./DoctorsLayout";
+import { useDoctorContext } from "../../contexts/Doctors-Context/DoctorContextProvider";
+import axios from "axios";
 
 const PatientList = () => {
-  // Dummy data for patients
-  const [patients, setPatients] = useState([
-    {
-      id: 1,
-      name: 'John Doe',
-      dob: '1992-01-15',
-      image: assets.profile_pic,
-      lastVisit: '2025-02-20',
-      totalAppointments: 5,
-    },
-    {
-      id: 2,
-      name: 'Jane Smith',
-      dob: '1988-06-10',
-      image: assets.profile_pic,
-      lastVisit: '2025-02-25',
-      totalAppointments: 2,
-    },
-  ]);
+  const { docId, dToken } = useDoctorContext();
+  const [doctorAppointments, setDoctorAppointments] = useState([]);
+  const doctorserviceurl = import.meta.env.VITE_DOCTORSERVICE_URL || "http://localhost:4003";
 
-  // const { dToken, getPatients } = useContext(DoctorContext);
-  // const { calculateAge } = useContext(AppContext);
+  // Fetch the doctor's booked appointments
+  const getDoctorAppointments = async () => {
+    try {
+      if (!dToken || !docId) {
+        console.log("🚨 No token or docId; cannot fetch appointments.");
+        return;
+      }
 
-  // Example Age Calculation
-  const calculateAge = (dob) => {
-    const birthDate = new Date(dob);
-    const today = new Date();
-    const age = today.getFullYear() - birthDate.getFullYear();
-    return age;
+      console.log("📡 Fetching appointments for doctor:", docId);
+
+      const url = `${doctorserviceurl}/api/doctor/appointments?docId=${docId}`;
+      const response = await axios.get(url, {
+        headers: { Authorization: `Bearer ${dToken}` },
+      });
+
+      if (response.data && response.data.success) {
+        setDoctorAppointments(response.data.appointments || []);
+        console.log("✅ Appointments loaded:", response.data.appointments);
+      } else {
+        console.error("⚠️ Failed to fetch doc appointments:", response.data?.message);
+        setDoctorAppointments([]);
+      }
+    } catch (error) {
+      console.error("❌ Error fetching doctor appointments:", error);
+      setDoctorAppointments([]);
+    }
   };
 
-  // useEffect(() => {
-  //   if (dToken) {
-  //     getPatients().then(res => setPatients(res));
-  //   }
-  // }, [dToken]);
+  // Fetch appointments when the component mounts
+  useEffect(() => {
+    if (docId && dToken) {
+      getDoctorAppointments();
+    }
+  }, [docId, dToken]);
 
   return (
-    <div className="container mt-4">
-      <h4>Patient List</h4>
-
-      <div className="table-responsive mt-3">
-        <table className="table table-bordered">
-          <thead className="table-light">
-            <tr>
-              <th>#</th>
-              <th>Patient Name</th>
-              <th>Age</th>
-              <th>Last Visit</th>
-              <th>Total Appointments</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {patients.length > 0 ? (
-              patients.map((patient, index) => (
-                <tr key={patient.id}>
-                  <td>{index + 1}</td>
-                  <td className="d-flex align-items-center gap-2">
-                    <img
-                      src={patient.image}
-                      alt="Patient"
-                      style={{ width: '40px', height: '40px', borderRadius: '50%' }}
-                    />
-                    <span>{patient.name}</span>
-                  </td>
-                  <td>{calculateAge(patient.dob)}</td>
-                  <td>{patient.lastVisit}</td>
-                  <td>{patient.totalAppointments}</td>
-                  <td>
-                    {/* Example button to view details or open a modal */}
-                    <button className="btn btn-sm btn-primary">View</button>
-                  </td>
-                </tr>
-              ))
-            ) : (
+    <DoctorLayout>
+      <h2 className="mb-4 fw-bold text-center">Booked Appointments</h2>
+      <div style={{ width: "100%", maxWidth: "900px", margin: "0 auto", padding: "0 15px" }}>
+        <div className="table-responsive">
+          <table className="table table-bordered">
+            <thead className="table-light">
               <tr>
-                <td colSpan="6" className="text-center">
-                  No patients found
-                </td>
+                <th>#</th>
+                <th>Patient Name</th>
+                <th>Age</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Actions</th>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {doctorAppointments.length > 0 ? (
+                doctorAppointments.map((apt, index) => (
+                  <tr key={apt._id}>
+                    <td>{index + 1}</td>
+                    <td>{apt.userData?.name || "Unknown Patient"}</td>
+                    <td>-Age-</td>
+                    <td>{apt.slotDate}</td>
+                    <td>{apt.slotTime}</td>
+                    <td>
+                      <button className="btn btn-sm btn-info">View</button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="text-center">No appointments found</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+    </DoctorLayout>
   );
 };
 

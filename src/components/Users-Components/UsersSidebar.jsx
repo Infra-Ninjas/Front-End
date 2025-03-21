@@ -1,3 +1,4 @@
+// UserSidebar.jsx
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useUserContext } from "../../contexts/Users-Context/UserContextProvider";
@@ -19,7 +20,7 @@ const UserSidebar = () => {
         className="d-lg-none"
         style={{
           position: "fixed",
-          top: "80px",   // just below navbar
+          top: "80px", // just below navbar
           left: "20px",
           zIndex: 10000,
           background: sidebarOpen
@@ -48,9 +49,9 @@ const UserSidebar = () => {
         }`}
         style={{
           position: "fixed",
-          top: "70px",           // below fixed navbar (70px tall)
+          top: "70px", // below fixed navbar (70px tall)
           left: 0,
-          width: "200px",        // sidebar width
+          width: "200px", // sidebar width
           height: "calc(100vh - 70px)",
           overflowY: "auto",
           zIndex: 999,
@@ -61,6 +62,7 @@ const UserSidebar = () => {
             { path: "/user-dashboard", icon: assets.home_icon, label: "Dashboard" },
             { path: "/myappointments", icon: assets.add_icon, label: "My Appointments" },
             { path: "/myprofile", icon: assets.people_icon, label: "My Profile" },
+            { path: "/usersdoctorslist", icon: assets.people_icon, label: "Doctors Lists" },
           ].map((item, index) => (
             <li className="nav-item mb-2" key={index}>
               <NavLink
@@ -85,18 +87,6 @@ const UserSidebar = () => {
             </li>
           ))}
         </ul>
-      </div>
-
-      {/* Content area: no minHeight, just margin to avoid overlap */}
-      <div
-        className="content-area"
-        style={{
-          marginTop: "70px",         // offset for navbar
-          marginLeft: "200px",       // offset for sidebar
-          padding: "20px",           // optional padding
-        }}
-      >
-        {/* This is where your user routes (e.g. MyAppointments) render */}
       </div>
     </>
   );

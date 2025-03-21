@@ -1,56 +1,81 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { toast } from "react-toastify";
 
-// We'll assume the doctor login endpoint is at VITE_DOCTORSERVICE_URL
-// But we won't make the actual request here—just store the token/role.
 const DoctorContext = createContext();
 
 const DoctorContextProvider = ({ children }) => {
+  // Authentication state
   const [dToken, setDToken] = useState(localStorage.getItem("dToken") || null);
   const [role, setRole] = useState(localStorage.getItem("doctorRole") || null);
+  const [docId, setDocId] = useState(localStorage.getItem("docId") || null);
+  const [doctors, setDoctors] = useState([]); // Store all doctors
+
+  const doctorserviceurl = import.meta.env.VITE_DOCTORSERVICE_URL;
   const navigate = useNavigate();
 
+  // Ensure docId is stored properly
   useEffect(() => {
-    const handleStorageChange = (event) => {
-      if (event.key === "dToken" && event.storageArea === localStorage) {
-        if (!event.newValue) {
-          setDToken(null);
-          setRole(null);
-          navigate("/doctor-login"); // Send them to doctor login if token is removed
-        }
-      }
-      if (event.key === "doctorRole" && event.storageArea === localStorage) {
-        if (!event.newValue) {
-          setRole(null);
-        }
-      }
-    };
+    const storedDocId = localStorage.getItem("docId");
+    if (storedDocId) {
+      setDocId(storedDocId);
+      console.log("Loaded docId from localStorage:", storedDocId);
+    }
+  }, []);
 
-    window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
-  }, [navigate]);
+  // Fetch all doctors from backend
+  const getAllDoctors = async () => {
+    try {
+      const { data } = await axios.get(`${doctorserviceurl}/api/doctor/list`);
+      if (data && Array.isArray(data.doctors)) {
+        setDoctors(data.doctors);
+      } else {
+        console.error("Unexpected doctors API response:", data);
+        setDoctors([]);
+      }
+    } catch (error) {
+      console.error("Error fetching doctors:", error);
+      setDoctors([]);
+    }
+  };
 
-  // login function expects { token, role } from your DoctorLogin API call
-  // successMessage is optional if you want a custom toast
+  // Fetch doctors on mount
+  useEffect(() => {
+    getAllDoctors();
+  }, []);
+
+  // Login function (stores docId properly)
   const login = (data, successMessage = "Doctor login successful!") => {
     if (data && data.token && data.role) {
       setDToken(data.token);
       setRole(data.role);
       localStorage.setItem("dToken", data.token);
       localStorage.setItem("doctorRole", data.role);
+
+      if (data.docId) {
+        setDocId(data.docId);
+        localStorage.setItem("docId", data.docId);
+        console.log("✅ Stored docId in localStorage:", data.docId);
+      } else {
+        console.error("🚨 No docId received in login response");
+      }
+
       toast.success(successMessage);
-      navigate("/doctorDashboard"); // Adjust to your doctor dashboard route
+      navigate("/doctorDashboard");
     } else {
       toast.error("Invalid login response!");
     }
   };
 
+  // Logout function
   const logout = () => {
     setDToken(null);
     setRole(null);
+    setDocId(null);
     localStorage.removeItem("dToken");
     localStorage.removeItem("doctorRole");
+    localStorage.removeItem("docId");
     toast.success("Logout successful!");
     navigate("/doctor-login");
   };
@@ -60,8 +85,11 @@ const DoctorContextProvider = ({ children }) => {
       value={{
         dToken,
         role,
+        docId,
+        doctors, // Provide the doctors list
         login,
-        logout
+        logout,
+        getAllDoctors,
       }}
     >
       {children}
@@ -71,7 +99,7 @@ const DoctorContextProvider = ({ children }) => {
 
 export default DoctorContextProvider;
 
-// Named hook export, just like we did for user context
+// Custom hook to use DoctorContext
 export function useDoctorContext() {
   return useContext(DoctorContext);
 }

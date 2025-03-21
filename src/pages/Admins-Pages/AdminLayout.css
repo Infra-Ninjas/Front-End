@@ -1,0 +1,41 @@
+/* Common Admin Layout Styles */
+
+/* Navbar */
+.admin-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;            /* Navbar height */
+    background-color: #fff;  /* or your desired color */
+    z-index: 1000;           /* Ensure it stays on top */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;         /* Optional padding */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  /* Sidebar */
+  .admin-sidebar {
+    position: fixed;
+    top: 60px;               /* Start right below navbar (60px) */
+    left: 0;
+    bottom: 0;
+    width: 220px;            /* Sidebar width */
+    background-color: #f5f5f5;
+    z-index: 999;
+    overflow-y: auto;        /* If you want scrolling for sidebar items */
+    padding-top: 1rem;       /* Optional top padding */
+    box-shadow: 2px 0 6px rgba(0,0,0,0.05);
+  }
+  
+  /* Main content area */
+  .admin-content {
+    margin-top: 60px;        /* Same height as navbar */
+    margin-left: 220px;      /* Same width as sidebar */
+    padding: 1rem;           /* Optional padding around main content */
+    min-height: 100vh;       /* Ensure content area stretches full height */
+    background-color: #f9f9f9;
+  }
+  
