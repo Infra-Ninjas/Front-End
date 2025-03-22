@@ -129,6 +129,7 @@ const App = () => {
         <Route path="/myprofile" element={<MyProfile />} />
         <Route path="/myappointments" element={<MyAppointments />} />
         <Route path="/usersdoctorslist" element={<UsersDoctosList />} />
+        <Route path="/Dashboard" element={<Dashboard />} />
         <Route path="/patientsbookappointments/:docId" element={<PatientsAppointments />} />
 
         {/* Admin's Duplicate Routes */}
