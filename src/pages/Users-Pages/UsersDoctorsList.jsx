@@ -42,12 +42,7 @@ const UsersDoctorsList = () => {
   return (
     <UserLayout>
       <div className="container" style={{ maxWidth: "1000px" }}>
-<<<<<<< HEAD
-        {/* Adjusted Title Position */}
-        <h2 className="fw-bold text-center page-title">All Doctors</h2>
-=======
         <h2 className="mb-4 fw-bold text-center">All Doctors</h2>
->>>>>>> a1dd7bf4bf98ac6aad52f5b15e3e079b437ef448
 
         <div className="row g-4">
           {doctors.map((item) => (
