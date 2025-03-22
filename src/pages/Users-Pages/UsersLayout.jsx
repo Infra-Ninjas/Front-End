@@ -7,22 +7,37 @@ const UserLayout = ({ children }) => {
     <>
       <UserNavbar />
       <UserSidebar />
-      <div className="user-content">
-        {children}
+      <div className="user-layout-wrapper">
+        <div className="user-content">
+          {children}
+        </div>
       </div>
+
       <style>{`
-        .user-content {
-          /* Decrease or remove the top margin to reduce empty space */
-          margin-top: 70px;    /* was 70px */
-          margin-left: 200px; /* keep the sidebar offset */
-          padding: 20px;
+        .user-layout-wrapper {
+          margin-top: 60px;          /* Matches navbar height */
+          margin-left: 220px;        /* Matches sidebar width */
+          padding: 40px 20px;        /* Top/bottom & side padding */
           min-height: 100vh;
-          background-color: #f5f5f5;
-          transition: margin 0.3s ease;
+          background-color: #f9f9f9;
+          display: flex;
+          justify-content: center;
         }
+
+        .user-content {
+          width: 100%;
+          max-width: 1200px;         /* Constrain the content */
+        }
+
         @media (max-width: 991px) {
+          .user-layout-wrapper {
+            margin-left: 0;
+            padding: 20px;
+            justify-content: flex-start;
+          }
+
           .user-content {
-            margin-left: 50 !important;
+            max-width: 100%;
           }
         }
       `}</style>
