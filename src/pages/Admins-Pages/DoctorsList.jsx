@@ -4,6 +4,7 @@ import { useAdminContext } from '../../contexts/Admin-Context/AdminContextProvid
 import AdminNavbar from "../../components/Admins-Components/AdminNavbar";
 import SideBar from "../../components/Admins-Components/SideBar";
 import axios from "axios";
+import AdminLayout from "./AdminLayout";
 
 const DoctorsList = () => {
   const { aToken, changeAvailability } = useAdminContext();
