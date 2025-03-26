@@ -56,10 +56,10 @@ const MyAppointments = () => {
                       <img
                         src={docImage}
                         alt={docName}
-                        className="rounded-3"
+                        className="rounded-circle"
                         style={{
-                          width: "160px",
-                          height: "160px",
+                          width: "140px",
+                          height: "140px",
                           objectFit: "cover",
                           boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
                         }}
@@ -80,7 +80,7 @@ const MyAppointments = () => {
                       </p>
                     </div>
 
-                    <div className="d-flex flex-column gap-3">
+                    <div className="d-flex flex-column gap-3 mt-3 mt-md-0">
                       <button
                         className="btn px-4 py-2 fw-semibold rounded-pill"
                         style={{

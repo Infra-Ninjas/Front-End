@@ -51,14 +51,13 @@ const Appointments = () => {
       <AdminNavbar />
       <SideBar />
 
-      {/* Main content container using a dedicated class for responsiveness */}
       <div className="admin-content">
-        <div className="container-fluid" style={{ maxWidth: "900px", margin: "0 auto" }}>
-          <h2 className="mb-4 fw-bold text-center" style={{ marginTop: 0 }}>Appointments</h2>
+        <div className="container-fluid" style={{ maxWidth: "1200px", margin: "0 auto" }}>
+          <h2 className="mb-4 fw-bold">All Appointments</h2>
 
           {/* Search Bar */}
           <div className="mb-3 d-flex flex-column flex-sm-row justify-content-between align-items-center">
-            <h6 className="fw-bold mb-0">List of Appointments</h6>
+            <h6 className="fw-bold mb-2 mb-sm-0">List of Appointments</h6>
             <input
               type="text"
               className="form-control w-50"
@@ -70,22 +69,42 @@ const Appointments = () => {
 
           {/* Appointments Table */}
           <div className="card border-0 shadow p-3" style={{ fontSize: "14px" }}>
-            <table className="table table-hover table-bordered mb-0">
-              <thead>
+            <table className="table table-hover mb-0">
+              <thead className="table-light">
                 <tr>
-                  <th onClick={() => handleSort("id")} style={{ cursor: "pointer" }}>ID</th>
-                  <th onClick={() => handleSort("doctor")} style={{ cursor: "pointer" }}>Doctor</th>
-                  <th onClick={() => handleSort("patient")} style={{ cursor: "pointer" }}>Patient</th>
-                  <th onClick={() => handleSort("time")} style={{ cursor: "pointer" }}>Time</th>
+                  <th onClick={() => handleSort("id")}>#</th>
+                  <th onClick={() => handleSort("patient")}>Patient</th>
+                  <th>Age</th>
+                  <th onClick={() => handleSort("time")}>Date & Time</th>
+                  <th onClick={() => handleSort("doctor")}>Doctor</th>
+                  <th>Fees</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
                 {appointments.map((appointment) => (
-                  <tr key={appointment.id} className="interactive-row">
+                  <tr key={appointment.id}>
                     <td>{appointment.id}</td>
-                    <td>{appointment.doctor}</td>
-                    <td>{appointment.patient}</td>
+                    <td className="d-flex align-items-center gap-2">
+                      <img
+                        src="https://via.placeholder.com/30"
+                        alt="patient"
+                        className="rounded-circle"
+                      />
+                      <span>{appointment.patient}</span>
+                    </td>
+                    <td>24</td>
                     <td>{appointment.time}</td>
+                    <td className="d-flex align-items-center gap-2">
+                      <img
+                        src="https://via.placeholder.com/30"
+                        alt="doctor"
+                        className="rounded-circle"
+                      />
+                      <span>{appointment.doctor}</span>
+                    </td>
+                    <td>$40</td>
+                    <td className="text-success fw-semibold">Completed</td>
                   </tr>
                 ))}
               </tbody>
@@ -93,35 +112,43 @@ const Appointments = () => {
           </div>
         </div>
 
-        {/* Inline styles for hover effects and responsiveness */}
+        {/* Styles */}
         <style>{`
-          .interactive-row {
-            cursor: pointer;
-            transition: all 0.3s ease;
-          }
-          .interactive-row:hover {
-            background: #40E0D0;
-            color: white;
-          }
-          th {
-            position: relative;
-          }
-          th:hover {
-            background-color: #40E0D0;
-            color: white;
-          }
           .admin-content {
-            margin-top: 70px;      /* Fixed navbar height */
-            margin-left: 200px;    /* Fixed sidebar width on large screens */
+            margin-top: 70px;
+            margin-left: 200px;
             padding: 20px;
             background-color: #f5f5f5;
             min-height: 100vh;
             transition: margin 0.3s ease;
           }
+
           @media (max-width: 991px) {
             .admin-content {
-              margin-left: 0 !important;  /* Remove left margin on small screens */
+              margin-left: 0 !important;
             }
+          }
+
+          table th {
+            cursor: pointer;
+            vertical-align: middle;
+            white-space: nowrap;
+          }
+
+          table td, table th {
+            vertical-align: middle;
+            background-color: white;
+            border-bottom: 1px solid #f0f0f0;
+          }
+
+          table tr:hover {
+            background-color: #f0f8ff;
+          }
+
+          table img {
+            width: 30px;
+            height: 30px;
+            object-fit: cover;
           }
         `}</style>
       </div>

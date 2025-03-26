@@ -71,27 +71,18 @@ const PatientsAppointments = () => {
   useEffect(() => {
     if (docSlots[slotIndex] && docSlots[slotIndex].length > 0) {
       const dateObj = docSlots[slotIndex][0].datetime;
-      setSelectedDate(dateObj.toISOString().split("T")[0]); 
+      setSelectedDate(dateObj.toISOString().split("T")[0]);
     }
   }, [slotIndex, docSlots]);
 
   const handleConfirmBooking = async () => {
     try {
-      if (!uToken) {
-        return navigate('/login');
-      }
-      if (!slotTime) {
-        return alert('Please select a time slot first!');
-      }
-      if (!selectedDate) {
-        return alert('Date not determined. Please select a day slot first!');
-      }
+      if (!uToken) return navigate('/login');
+      if (!slotTime) return alert('Please select a time slot first!');
+      if (!selectedDate) return alert('Please select a day first!');
 
       const userId = userData?._id || localStorage.getItem("uId");
-
-      if (!userId) {
-        return alert("User ID not found. Please log in again.");
-      }
+      if (!userId) return alert("User ID not found. Please log in again.");
 
       const requestBody = {
         userId,
@@ -103,11 +94,7 @@ const PatientsAppointments = () => {
       const response = await axios.post(
         'http://localhost:4002/api/user/book-appointment',
         requestBody,
-        {
-          headers: {
-            Authorization: `Bearer ${uToken}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${uToken}` } }
       );
 
       if (response.data && response.data.success) {
@@ -124,45 +111,44 @@ const PatientsAppointments = () => {
   return (
     <UserLayout>
       <div className="container my-5">
-        <h2 className="text-center mb-5" style={{ color: '#007991', fontWeight: 'bold' }}>
+        <h2 className="text-center mb-5 fw-bold" style={{ color: '#007991' }}>
           Book an Appointment
         </h2>
 
-        <div className="row g-4">
-          <div className="col-12 col-md-4">
-            <div className="card shadow-sm border-0">
-              <img
-                src={docInfo?.image}
-                alt={docInfo?.name}
-                className="card-img-top"
-                style={{
-                  objectFit: 'cover',
-                  height: '300px',
-                  backgroundColor: '#e7f3ff',
-                }}
-              />
-            </div>
+        {/* Doctor Info */}
+        <div className="row g-4 mb-5">
+          <div className="col-12 col-md-4 d-flex justify-content-center">
+            <img
+              src={docInfo?.image}
+              alt={docInfo?.name}
+              style={{
+                width: '100%',
+                maxWidth: '300px',
+                height: 'auto',
+                objectFit: 'cover',
+                borderRadius: '10px',
+                backgroundColor: '#e7f3ff',
+              }}
+            />
           </div>
 
           <div className="col-12 col-md-8">
             <div className="card shadow-sm border-0 h-100">
               <div className="card-body p-4">
-                <h4 className="card-title mb-2" style={{ color: '#007991' }}>
+                <h4 className="mb-2 fw-bold" style={{ color: '#007991' }}>
                   {docInfo?.name}
                 </h4>
-                <p className="mb-1 text-muted">
-                  {docInfo?.degree} - {docInfo?.speciality}
-                </p>
-                <button className="btn btn-sm text-white" style={{ background: '#00ACC1', border: 'none', fontWeight: '600' }}>
-                  {docInfo?.experience}
-                </button>
-
-                <div className="mt-3">
-                  <h6 style={{ fontWeight: 'bold', color: '#007991' }}>About</h6>
-                  <p className="text-muted">{docInfo?.about}</p>
+                <p className="mb-1 text-muted">{docInfo?.degree} - {docInfo?.speciality}</p>
+                <div className="mb-2">
+                  <span className="badge bg-info text-white px-3 py-2 fw-semibold rounded-pill">
+                    {docInfo?.experience}
+                  </span>
                 </div>
 
-                <p className="fw-semibold mt-4">
+                <h6 className="fw-bold" style={{ color: '#007991' }}>About</h6>
+                <p className="text-muted">{docInfo?.about}</p>
+
+                <p className="fw-semibold mt-3 mb-0">
                   Appointment fee: <span style={{ color: '#007991' }}>{docInfo?.fees}</span>
                 </p>
               </div>
@@ -170,34 +156,78 @@ const PatientsAppointments = () => {
           </div>
         </div>
 
-        <h5 className="text-center mt-5" style={{ color: '#007991', fontWeight: 'bold' }}>
-          Booking Slots
-        </h5>
+        {/* Booking Slots */}
+        <h5 className="fw-bold mb-3" style={{ color: '#007991' }}>Booking Slots</h5>
 
-        <div className="d-flex justify-content-center mt-3 flex-wrap gap-3">
+        {/* Day Buttons */}
+        <div className="d-flex flex-wrap gap-3 mb-4">
           {docSlots.map((slotsForDay, index) => {
             const firstSlot = slotsForDay[0];
             const dayName = firstSlot ? daysOfWeek[firstSlot.datetime.getDay()] : '';
             const dayDate = firstSlot ? firstSlot.datetime.getDate() : '';
+            const isActive = slotIndex === index;
+
             return (
-              <button key={index} className={`btn ${slotIndex === index ? 'btn-primary' : 'btn-outline-primary'}`} onClick={() => setSlotIndex(index)}>
-                {dayName} {dayDate}
+              <button
+                key={index}
+                onClick={() => setSlotIndex(index)}
+                className="d-flex flex-column align-items-center justify-content-center fw-bold"
+                style={{
+                  borderRadius: '50px',
+                  padding: '10px 16px',
+                  minWidth: '60px',
+                  border: isActive ? 'none' : '2px solid #007991',
+                  backgroundColor: isActive ? '#007991' : 'transparent',
+                  color: isActive ? 'white' : '#007991',
+                  fontSize: '14px',
+                }}
+              >
+                {dayName}
+                <span>{dayDate}</span>
               </button>
             );
           })}
         </div>
 
-        <div className="d-flex justify-content-center mt-3 flex-wrap gap-2">
+        {/* Time Buttons */}
+        <div className="d-flex flex-wrap gap-3 mb-4">
           {docSlots[slotIndex] &&
-            docSlots[slotIndex].map((timeObj, idx) => (
-              <button key={idx} className={`btn ${slotTime === timeObj.time ? 'btn-success' : 'btn-outline-success'}`} onClick={() => setSlotTime(timeObj.time)}>
-                {timeObj.time}
-              </button>
-            ))}
+            docSlots[slotIndex].map((timeObj, idx) => {
+              const isSelected = slotTime === timeObj.time;
+              return (
+                <button
+                  key={idx}
+                  onClick={() => setSlotTime(timeObj.time)}
+                  style={{
+                    borderRadius: '30px',
+                    padding: '10px 20px',
+                    border: `2px solid #007991`,
+                    backgroundColor: isSelected ? '#007991' : 'transparent',
+                    color: isSelected ? 'white' : '#007991',
+                    fontWeight: 600,
+                    fontSize: '14px',
+                  }}
+                >
+                  {timeObj.time}
+                </button>
+              );
+            })}
         </div>
 
+        {/* Confirm Booking */}
         <div className="text-center mt-4">
-          <button onClick={handleConfirmBooking} className="btn btn-lg text-white" style={{ background: '#007991', borderRadius: '20px' }}>
+          <button
+            onClick={handleConfirmBooking}
+            className="fw-bold text-white"
+            style={{
+              padding: '12px 40px',
+              borderRadius: '40px',
+              background: 'linear-gradient(to right, #4dd0e1, #007991)',
+              border: 'none',
+              fontSize: '16px',
+              boxShadow: '0px 5px 15px rgba(0,0,0,0.1)',
+            }}
+          >
             Confirm Booking
           </button>
         </div>

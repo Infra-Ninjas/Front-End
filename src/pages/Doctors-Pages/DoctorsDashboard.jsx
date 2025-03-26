@@ -1,138 +1,131 @@
-import React, { useState } from 'react';
-import DoctorLayout from './DoctorsLayout'; // or your actual layout path
+import React from 'react';
+import DoctorLayout from './DoctorsLayout';
 import { assets } from '../../assets/assets_frontend/assets';
+import {FaMoneyBillWave,FaCalendarAlt,FaUser,FaCheck,FaTimes,FaRegCalendarAlt,} from 'react-icons/fa';
 
 const DoctorDashboard = () => {
-  const [stats, setStats] = useState({
-    totalAppointments: 25,
-    completedAppointments: 15,
-    cancelledAppointments: 3,
-    totalEarnings: 1200,
-  });
+  const stats = [
+    {
+      icon: <FaMoneyBillWave size={24} className="text-primary" />,
+      label: 'Earnings',
+      value: '$80',
+    },
+    {
+      icon: <FaCalendarAlt size={24} className="text-info" />,
+      label: 'Appointments',
+      value: '4',
+    },
+    {
+      icon: <FaUser size={24} className="text-secondary" />,
+      label: 'Patients',
+      value: '2',
+    },
+  ];
 
-  const currency = '$';
+  const bookings = [
+    { name: 'Avinash Kr', date: '5 Oct 2024', status: 'Pending' },
+    { name: 'GreatStack', date: '26 Sep 2024', status: 'Cancelled' },
+    { name: 'GreatStack', date: '25 Sep 2024', status: 'Completed' },
+    { name: 'GreatStack', date: '23 Sep 2024', status: 'Completed' },
+  ];
 
   return (
     <DoctorLayout>
-      {/* Centered Title */}
-      <h2 className="mb-4 fw-bold text-center">Doctor Dashboard</h2>
-
-      {/* Stats Row (max-width = 900px, centered) */}
-      <div className="row g-3 mb-4" style={{ maxWidth: '900px', margin: '0 auto' }}>
-        {/* Card 1: Total Appointments */}
-        <div className="col-md-3">
-          <div
-            className="card border-0 shadow-sm text-center"
-            style={{ minHeight: '130px' }}
-          >
-            <div className="card-body d-flex flex-column align-items-center justify-content-center">
-              <h6 className="fw-semibold text-secondary">Total Appts</h6>
-              <p className="fs-4 fw-bold mb-0">{stats.totalAppointments}</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 2: Completed Appointments */}
-        <div className="col-md-3">
-          <div
-            className="card border-0 shadow-sm text-center"
-            style={{ minHeight: '130px' }}
-          >
-            <div className="card-body d-flex flex-column align-items-center justify-content-center">
-              <h6 className="fw-semibold text-secondary">Completed Appts</h6>
-              <p className="fs-4 fw-bold text-success mb-0">
-                {stats.completedAppointments}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 3: Cancelled Appointments */}
-        <div className="col-md-3">
-          <div
-            className="card border-0 shadow-sm text-center"
-            style={{ minHeight: '130px' }}
-          >
-            <div className="card-body d-flex flex-column align-items-center justify-content-center">
-              <h6 className="fw-semibold text-secondary">Cancelled Appts</h6>
-              <p className="fs-4 fw-bold text-danger mb-0">
-                {stats.cancelledAppointments}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 4: Total Earnings */}
-        <div className="col-md-3">
-          <div
-            className="card border-0 shadow-sm text-center"
-            style={{ minHeight: '130px' }}
-          >
-            <div className="card-body d-flex flex-column align-items-center justify-content-center">
-              <h6 className="fw-semibold text-secondary">Total Earnings</h6>
-              <p className="fs-4 fw-bold text-primary mb-0">
-                {currency}
-                {stats.totalEarnings}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Upcoming Appointments (max-width = 900px, centered) */}
-      <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-        <h5 className="fw-bold mb-3">Upcoming Appointments</h5>
-        <div className="list-group">
-          {/* Appointment Item 1 */}
-          <div className="list-group-item d-flex align-items-center justify-content-between">
-            <div className="d-flex align-items-center gap-3">
-              <img
-                src={assets.profile_pic}
-                alt="Patient"
-                style={{ width: '40px', height: '40px', borderRadius: '50%' }}
-              />
-              <div>
-                <p className="mb-1 fw-bold">Jane Doe</p>
-                <small className="text-muted">Tomorrow, 10:00 AM</small>
-              </div>
-            </div>
-            <span
-              className="badge"
+      <div className="py-4 d-flex flex-column align-items-center" style={{ background: '#f8f9fa' }}>
+        {/* Stat Boxes */}
+        <div className="d-flex gap-4 flex-wrap justify-content-center mb-5">
+          {stats.map((stat, i) => (
+            <div
+              key={i}
+              className="d-flex flex-column align-items-center p-4"
               style={{
-                background: 'linear-gradient(to right, #22c1c3, #40e0d0)',
-                color: '#fff',
-                borderRadius: '12px',
-                padding: '6px 12px',
+                background: '#fff',
+                borderRadius: '16px',
+                boxShadow: '0 4px 10px rgba(0,0,0,0.05)',
+                width: '180px',
+                height: '120px',
               }}
             >
-              Online
-            </span>
+              <div className="mb-2">{stat.icon}</div>
+              <h5 className="fw-bold mb-0">{stat.value}</h5>
+              <small className="text-muted">{stat.label}</small>
+            </div>
+          ))}
+        </div>
+
+        {/* Bookings Card */}
+        <div
+          className="p-4 w-100"
+          style={{
+            maxWidth: '850px',
+            background: '#fff',
+            borderRadius: '16px',
+            boxShadow: '0 4px 10px rgba(0,0,0,0.06)',
+          }}
+        >
+          {/* Card Header */}
+          <div className="d-flex align-items-center mb-4">
+            <FaRegCalendarAlt className="me-2 text-primary" />
+            <h5 className="fw-bold mb-0">Latest Bookings</h5>
           </div>
 
-          {/* Appointment Item 2 */}
-          <div className="list-group-item d-flex align-items-center justify-content-between">
-            <div className="d-flex align-items-center gap-3">
-              <img
-                src={assets.profile_pic}
-                alt="Patient"
-                style={{ width: '40px', height: '40px', borderRadius: '50%' }}
-              />
-              <div>
-                <p className="mb-1 fw-bold">Mark Smith</p>
-                <small className="text-muted">Tomorrow, 11:30 AM</small>
+          {/* Bookings List */}
+          <div className="d-flex flex-column gap-4">
+            {bookings.map((booking, index) => (
+              <div
+                key={index}
+                className="d-flex justify-content-between align-items-center pb-2 border-bottom"
+              >
+                {/* Left side: Image, name, date */}
+                <div className="d-flex align-items-center gap-3">
+                  <img
+                    src={assets.profile_pic}
+                    alt="profile"
+                    style={{ width: 40, height: 40, borderRadius: '50%' }}
+                  />
+                  <div>
+                    <div className="fw-semibold">{booking.name}</div>
+                    <small className="text-muted">Booking on {booking.date}</small>
+                  </div>
+                </div>
+
+                {/* Right side: Action icons or status */}
+                {index === 0 ? (
+                  <div className="d-flex align-items-center gap-2">
+                    <div
+                      className="d-flex align-items-center justify-content-center"
+                      style={{
+                        background: '#f8d7da',
+                        borderRadius: '50%',
+                        width: 30,
+                        height: 30,
+                      }}
+                    >
+                      <FaTimes className="text-danger" />
+                    </div>
+                    <div
+                      className="d-flex align-items-center justify-content-center"
+                      style={{
+                        background: '#d4edda',
+                        borderRadius: '50%',
+                        width: 30,
+                        height: 30,
+                      }}
+                    >
+                      <FaCheck className="text-success" />
+                    </div>
+                  </div>
+                ) : (
+                  <span
+                    className={`fw-semibold ${
+                      booking.status === 'Cancelled' ? 'text-danger' : 'text-success'
+                    }`}
+                  >
+                    {booking.status}
+                  </span>
+                )}
               </div>
-            </div>
-            <span
-              className="badge"
-              style={{
-                background: 'linear-gradient(to right, #22c1c3, #40e0d0)',
-                color: '#fff',
-                borderRadius: '12px',
-                padding: '6px 12px',
-              }}
-            >
-              Cash
-            </span>
+            ))}
           </div>
         </div>
       </div>
