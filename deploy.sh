@@ -7,29 +7,29 @@ echo "🚀 Logging in to Docker (if needed)..."
 # --- Pull, Tag, and Clean Up Original Tags ---
 
 echo "📦 Pulling authentication-service image..."
-docker pull --platform linux/amd64 yashikadesul/authentication-service:latest
-docker tag yashikadesul/authentication-service:latest authentication-service:latest
-docker rmi -f yashikadesul/authentication-service:latest
+docker pull --platform linux/amd64 yashikadesul07/authentication-service:latest
+docker tag yashikadesul07/authentication-service:latest authentication-service:latest
+docker rmi -f yashikadesul07/authentication-service:latest
 
 echo "📦 Pulling admin-service image..."
-docker pull --platform linux/amd64 yashikadesul/admin-service:latest
-docker tag yashikadesul/admin-service:latest admin-service:latest
-docker rmi -f yashikadesul/admin-service:latest
+docker pull --platform linux/amd64 yashikadesul07/admin-service:latest
+docker tag yashikadesul07/admin-service:latest admin-service:latest
+docker rmi -f yashikadesul07/admin-service:latest
 
 echo "📦 Pulling db-service image..."
-docker pull --platform linux/amd64 yashikadesul/db-service:latest
-docker tag yashikadesul/db-service:latest db-service:latest
-docker rmi -f yashikadesul/db-service:latest
+docker pull --platform linux/amd64 yashikadesul07/db-service:latest
+docker tag yashikadesul07/db-service:latest db-service:latest
+docker rmi -f yashikadesul07/db-service:latest
 
 echo "📦 Pulling user-service image..."
-docker pull --platform linux/amd64 yashikadesul/user-service:latest
-docker tag yashikadesul/user-service:latest user-service:latest
-docker rmi -f yashikadesul/user-service:latest
+docker pull --platform linux/amd64 yashikadesul07/user-service:latest
+docker tag yashikadesul07/user-service:latest user-service:latest
+docker rmi -f yashikadesul07/user-service:latest
 
 echo "📦 Pulling doctor-service image..."
-docker pull --platform linux/amd64 yashikadesul/doctor-service:latest
-docker tag yashikadesul/doctor-service:latest doctor-service:latest
-docker rmi -f yashikadesul/doctor-service:latest
+docker pull --platform linux/amd64 yashikadesul07/doctor-service:latest
+docker tag yashikadesul07/doctor-service:latest doctor-service:latest
+docker rmi -f yashikadesul07/doctor-service:latest
 
 echo "🖼️  Listing newly tagged images:"
 docker images | grep -E "authentication-service|admin-service|db-service|user-service|doctor-service"

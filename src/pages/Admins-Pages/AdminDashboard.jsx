@@ -1,39 +1,73 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import AdminNavbar from "../../components/Admins-Components/AdminNavbar";
 import SideBar from "../../components/Admins-Components/SideBar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FaUserMd, FaUsers, FaCalendarCheck, FaDollarSign } from "react-icons/fa";
 
 const Dashboard = () => {
-  const stats = [
-    { label: "Total Doctors", value: 25, icon: <FaUserMd /> },
-    { label: "Total Patients", value: 120, icon: <FaUsers /> },
-    { label: "Appointments Today", value: 15, icon: <FaCalendarCheck /> },
-    { label: "Revenue", value: "$4,500", icon: <FaDollarSign /> }
-  ];
+  const [stats, setStats] = useState([
+    { label: "Total Doctors", value: 0, icon: <FaUserMd /> },
+    { label: "Total Patients", value: 0, icon: <FaUsers /> },
+    { label: "Appointments Today", value: 0, icon: <FaCalendarCheck /> },
+    { label: "Revenue", value: "$0", icon: <FaDollarSign /> },
+  ]);
 
-  const initialAppointments = [
-    { id: 1, doctor: "Dr. John Doe", patient: "Alice", time: "10:30 AM" },
-    { id: 2, doctor: "Dr. Sarah Lee", patient: "Bob", time: "11:00 AM" },
-    { id: 3, doctor: "Dr. Michael Smith", patient: "Charlie", time: "11:30 AM" },
-    { id: 4, doctor: "Dr. Emily Clark", patient: "David", time: "12:00 PM" }
-  ];
-
-  const [appointments, setAppointments] = useState(initialAppointments);
+  const [appointments, setAppointments] = useState([]);
   const [search, setSearch] = useState("");
   const [sortColumn, setSortColumn] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
 
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const token = localStorage.getItem("aToken");
+        const res = await axios.get("http://localhost:4001/api/admin/dashboard", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (res.data.success) {
+          const dashData = res.data.dashData;
+
+          // Update stats dynamically
+          setStats([
+            { label: "Total Doctors", value: dashData.doctors, icon: <FaUserMd /> },
+            { label: "Total Patients", value: dashData.patients, icon: <FaUsers /> },
+            { label: "Appointments Today", value: dashData.appointments, icon: <FaCalendarCheck /> },
+            { label: "Revenue", value: "$4,500", icon: <FaDollarSign /> }, // Static revenue for now
+          ]);
+
+          // Format appointments using doctor and user names
+          const formattedAppointments = dashData.latestAppointments.map((item, index) => ({
+            id: index + 1,
+            doctor: item.docData?.name || "Doctor",
+            patient: item.userData?.name || "Patient",
+            time: `${item.slotDate} ${item.slotTime}`,
+          }));
+
+          setAppointments(formattedAppointments);
+        }
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
   const handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
     setSearch(value);
-    const filtered = initialAppointments.filter(
-      (appointment) =>
-        appointment.doctor.toLowerCase().includes(value) ||
-        appointment.patient.toLowerCase().includes(value) ||
-        appointment.time.toLowerCase().includes(value)
+    setAppointments((prev) =>
+      prev.filter(
+        (a) =>
+          a.doctor.toLowerCase().includes(value) ||
+          a.patient.toLowerCase().includes(value) ||
+          a.time.toLowerCase().includes(value)
+      )
     );
-    setAppointments(filtered);
   };
 
   const handleSort = (column) => {
@@ -123,7 +157,6 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Additional Styles */}
       <style>{`
         .stat-card:hover {
           box-shadow: 0 6px 15px rgba(0,0,0,0.05);

@@ -4,10 +4,12 @@ import { useDoctorContext } from '../../contexts/Doctors-Context/DoctorContextPr
 import { useUserContext } from "../../contexts/Users-Context/UserContextProvider";
 import axios from 'axios';
 import UserLayout from "./UsersLayout";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const PatientsAppointments = () => {
   const { docId } = useParams();
-  const { doctors } = useDoctorContext();
+  const { getAllDoctors } = useDoctorContext();
   const { uToken, userData } = useUserContext();
   const navigate = useNavigate();
 
@@ -16,21 +18,56 @@ const PatientsAppointments = () => {
   const [slotIndex, setSlotIndex] = useState(0);
   const [slotTime, setSlotTime] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
+  const [bookedSlots, setBookedSlots] = useState([]);
 
   const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
   useEffect(() => {
-    if (doctors && docId) {
-      const foundDoc = doctors.find((doc) => doc._id === docId);
-      setDocInfo(foundDoc);
-    }
-  }, [doctors, docId]);
+    const loadInitialDoctor = async () => {
+      const freshDoctors = await getAllDoctors();
+      const foundDoc = freshDoctors.find((doc) => doc._id === docId);
+      if (foundDoc) setDocInfo(foundDoc);
+    };
+    loadInitialDoctor();
+  }, [docId]);
 
   useEffect(() => {
     if (docInfo) {
       generateSlots();
     }
   }, [docInfo]);
+
+  useEffect(() => {
+    if (docSlots[slotIndex] && docSlots[slotIndex].length > 0) {
+      const dateObj = docSlots[slotIndex][0].datetime;
+      setSelectedDate(dateObj.toISOString().split("T")[0]);
+    }
+  }, [slotIndex, docSlots]);
+
+  useEffect(() => {
+    const fetchBookedSlots = async () => {
+      try {
+        const freshDoctors = await getAllDoctors();
+        const thisDoctor = freshDoctors.find((doc) => doc._id === docId);
+        if (!thisDoctor) return;
+
+        setDocInfo(thisDoctor); // 👈 sync latest info to UI
+
+        const bookingsForDate = thisDoctor.bookings?.filter(
+          (b) => b.slotDate === selectedDate
+        ) ?? [];
+
+        const times = bookingsForDate.map((b) => b.slotTime);
+        setBookedSlots(times);
+      } catch (err) {
+        console.error("Failed to fetch booked slots:", err);
+      }
+    };
+
+    if (selectedDate && docId) {
+      fetchBookedSlots();
+    }
+  }, [selectedDate, docId]);
 
   const generateSlots = () => {
     const newSlots = [];
@@ -68,21 +105,14 @@ const PatientsAppointments = () => {
     setDocSlots(newSlots);
   };
 
-  useEffect(() => {
-    if (docSlots[slotIndex] && docSlots[slotIndex].length > 0) {
-      const dateObj = docSlots[slotIndex][0].datetime;
-      setSelectedDate(dateObj.toISOString().split("T")[0]);
-    }
-  }, [slotIndex, docSlots]);
-
   const handleConfirmBooking = async () => {
     try {
       if (!uToken) return navigate('/login');
-      if (!slotTime) return alert('Please select a time slot first!');
-      if (!selectedDate) return alert('Please select a day first!');
+      if (!slotTime) return toast.warn('Please select a time slot first!');
+      if (!selectedDate) return toast.warn('Please select a day first!');
 
       const userId = userData?._id || localStorage.getItem("uId");
-      if (!userId) return alert("User ID not found. Please log in again.");
+      if (!userId) return toast.error("User ID not found. Please log in again.");
 
       const requestBody = {
         userId,
@@ -98,18 +128,33 @@ const PatientsAppointments = () => {
       );
 
       if (response.data && response.data.success) {
-        alert('Appointment booked successfully!');
+        toast.success('Appointment booked successfully!');
+
+        // ✅ Refresh doctor info & booked slots
+        const updatedDoctors = await getAllDoctors();
+        const thisDoctor = updatedDoctors.find((doc) => doc._id === docId);
+        setDocInfo(thisDoctor); // update doctor info in UI
+
+        const newBooked = thisDoctor.bookings?.filter(
+          (b) => b.slotDate === selectedDate
+        )?.map((b) => b.slotTime) || [];
+
+        setBookedSlots(newBooked);
+        setSlotTime('');
+
+        setTimeout(() => navigate('/myappointments'), 1500);
       } else {
-        alert('Failed to book appointment: ' + response.data?.message);
+        toast.error('Failed to book appointment: ' + response.data?.message);
       }
     } catch (error) {
       console.error(error);
-      alert('Error booking appointment: ' + error.message);
+      toast.error('Error booking appointment: ' + error.message);
     }
   };
 
   return (
     <UserLayout>
+      <ToastContainer />
       <div className="container my-5">
         <h2 className="text-center mb-5 fw-bold" style={{ color: '#007991' }}>
           Book an Appointment
@@ -194,18 +239,31 @@ const PatientsAppointments = () => {
           {docSlots[slotIndex] &&
             docSlots[slotIndex].map((timeObj, idx) => {
               const isSelected = slotTime === timeObj.time;
+              const isBooked = bookedSlots.includes(timeObj.time);
+
               return (
                 <button
                   key={idx}
-                  onClick={() => setSlotTime(timeObj.time)}
+                  onClick={() => !isBooked && setSlotTime(timeObj.time)}
+                  disabled={isBooked}
                   style={{
                     borderRadius: '30px',
                     padding: '10px 20px',
-                    border: `2px solid #007991`,
-                    backgroundColor: isSelected ? '#007991' : 'transparent',
-                    color: isSelected ? 'white' : '#007991',
+                    border: '2px solid #007991',
+                    backgroundColor: isBooked
+                      ? '#ccc'
+                      : isSelected
+                      ? '#007991'
+                      : 'transparent',
+                    color: isBooked
+                      ? '#666'
+                      : isSelected
+                      ? 'white'
+                      : '#007991',
                     fontWeight: 600,
                     fontSize: '14px',
+                    cursor: isBooked ? 'not-allowed' : 'pointer',
+                    opacity: isBooked ? 0.6 : 1,
                   }}
                 >
                   {timeObj.time}

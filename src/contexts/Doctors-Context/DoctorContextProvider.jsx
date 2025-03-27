@@ -11,6 +11,7 @@ const DoctorContextProvider = ({ children }) => {
   const [role, setRole] = useState(localStorage.getItem("doctorRole") || null);
   const [docId, setDocId] = useState(localStorage.getItem("docId") || null);
   const [doctors, setDoctors] = useState([]); // Store all doctors
+  
 
   const doctorserviceurl = import.meta.env.VITE_DOCTORSERVICE_URL;
   const navigate = useNavigate();
@@ -30,6 +31,7 @@ const DoctorContextProvider = ({ children }) => {
       const { data } = await axios.get(`${doctorserviceurl}/api/doctor/list`);
       if (data && Array.isArray(data.doctors)) {
         setDoctors(data.doctors);
+        return data.doctors; // return it here ✅
       } else {
         console.error("Unexpected doctors API response:", data);
         setDoctors([]);
@@ -90,6 +92,8 @@ const DoctorContextProvider = ({ children }) => {
         login,
         logout,
         getAllDoctors,
+       
+
       }}
     >
       {children}

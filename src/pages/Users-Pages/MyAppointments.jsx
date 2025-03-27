@@ -32,6 +32,36 @@ const MyAppointments = () => {
     }
   };
 
+  const cancelAppointment = async (appointmentId) => {
+    const confirmCancel = window.confirm("Are you sure you want to cancel this appointment?");
+    if (!confirmCancel) return;
+
+    try {
+      const response = await axios.post(
+        "http://localhost:4002/api/user/cancel-appointment",
+        {
+          userId: uId,
+          appointmentId: appointmentId,
+        },
+        {
+          headers: { Authorization: `Bearer ${uToken}` },
+        }
+      );
+
+      if (response.data?.success) {
+        alert("Appointment Cancelled");
+        // Remove the cancelled appointment from the state
+        setAppointments((prev) => prev.filter((apt) => apt._id !== appointmentId));
+      } else {
+        alert("Failed to cancel appointment");
+        console.error("Cancel error:", response.data);
+      }
+    } catch (error) {
+      alert("Something went wrong");
+      console.error("Error cancelling appointment:", error.response || error.message);
+    }
+  };
+
   return (
     <UserLayout>
       <h2 className="mb-4 fw-bold text-center">My Appointments</h2>
@@ -88,6 +118,14 @@ const MyAppointments = () => {
                           backgroundColor: "white",
                           color: "#00838F",
                         }}
+                        onMouseEnter={(e) => {
+                          e.target.style.backgroundColor = "#00838F";
+                          e.target.style.color = "white";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.backgroundColor = "white";
+                          e.target.style.color = "#00838F";
+                        }}
                       >
                         Pay Online
                       </button>
@@ -98,7 +136,17 @@ const MyAppointments = () => {
                           border: "2px solid #f44336",
                           backgroundColor: "white",
                           color: "#f44336",
+                          transition: "all 0.2s ease",
                         }}
+                        onMouseEnter={(e) => {
+                          e.target.style.backgroundColor = "#f44336";
+                          e.target.style.color = "white";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.backgroundColor = "white";
+                          e.target.style.color = "#f44336";
+                        }}
+                        onClick={() => cancelAppointment(appointmentId)}
                       >
                         Cancel Appointment
                       </button>

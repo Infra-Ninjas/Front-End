@@ -1,33 +1,92 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import DoctorLayout from './DoctorsLayout';
 import { assets } from '../../assets/assets_frontend/assets';
-import {FaMoneyBillWave,FaCalendarAlt,FaUser,FaCheck,FaTimes,FaRegCalendarAlt,} from 'react-icons/fa';
+import {
+  FaMoneyBillWave,
+  FaCalendarAlt,
+  FaUser,
+  FaCheck,
+  FaTimes,
+  FaRegCalendarAlt,
+} from 'react-icons/fa';
 
 const DoctorDashboard = () => {
-  const stats = [
+  const [stats, setStats] = useState([
     {
       icon: <FaMoneyBillWave size={24} className="text-primary" />,
       label: 'Earnings',
-      value: '$80',
+      value: '$0',
     },
     {
       icon: <FaCalendarAlt size={24} className="text-info" />,
       label: 'Appointments',
-      value: '4',
+      value: '0',
     },
     {
       icon: <FaUser size={24} className="text-secondary" />,
       label: 'Patients',
-      value: '2',
+      value: '0',
     },
-  ];
+  ]);
 
-  const bookings = [
-    { name: 'Avinash Kr', date: '5 Oct 2024', status: 'Pending' },
-    { name: 'GreatStack', date: '26 Sep 2024', status: 'Cancelled' },
-    { name: 'GreatStack', date: '25 Sep 2024', status: 'Completed' },
-    { name: 'GreatStack', date: '23 Sep 2024', status: 'Completed' },
-  ];
+  const [bookings, setBookings] = useState([]);
+  const doctorserviceurl = import.meta.env.VITE_DOCTORSERVICE_URL || "http://localhost:4003";
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const dToken = localStorage.getItem("dToken");
+        const res = await axios.get(`${doctorserviceurl}/api/doctor/dashboard`, {
+          headers: {
+            Authorization: `Bearer ${dToken}`,
+          },
+        });
+
+        if (res.data.success) {
+          const dashData = res.data.dashData;
+
+          setStats([
+            {
+              icon: <FaMoneyBillWave size={24} className="text-primary" />,
+              label: 'Earnings',
+              value: `$${dashData.earnings || 0}`,
+            },
+            {
+              icon: <FaCalendarAlt size={24} className="text-info" />,
+              label: 'Appointments',
+              value: dashData.appointments || 0,
+            },
+            {
+              icon: <FaUser size={24} className="text-secondary" />,
+              label: 'Patients',
+              value: dashData.patients || 0,
+            },
+          ]);
+
+          const formattedBookings = dashData.latestAppointments.map((apt) => {
+            const status = apt.cancelled
+              ? 'Cancelled'
+              : apt.isCompleted
+              ? 'Completed'
+              : 'Pending';
+
+            return {
+              name: apt.userData?.name || 'Patient',
+              date: `${apt.slotDate} ${apt.slotTime}`,
+              status,
+            };
+          });
+
+          setBookings(formattedBookings);
+        }
+      } catch (error) {
+        console.error("❌ Error loading doctor dashboard:", error);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
 
   return (
     <DoctorLayout>
@@ -90,7 +149,7 @@ const DoctorDashboard = () => {
                 </div>
 
                 {/* Right side: Action icons or status */}
-                {index === 0 ? (
+                {booking.status === "Pending" ? (
                   <div className="d-flex align-items-center gap-2">
                     <div
                       className="d-flex align-items-center justify-content-center"

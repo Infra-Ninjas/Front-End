@@ -7,7 +7,9 @@ const UserLayout = ({ children }) => {
     <>
       <UserNavbar />
       <div className="user-layout-container">
-        <UserSidebar />
+        <div className="user-sidebar">
+          <UserSidebar />
+        </div>
         <div className="user-content-wrapper">
           <div className="user-content">
             {children}
@@ -23,22 +25,31 @@ const UserLayout = ({ children }) => {
           background-color: #f9f9f9;
         }
 
+        .user-sidebar {
+          min-width: 240px;
+          max-width: 260px;
+        }
+
         .user-content-wrapper {
           flex: 1;
           padding: 40px 30px;
           display: flex;
           justify-content: center;
+          align-items: flex-start;
         }
 
         .user-content {
           width: 100%;
-          max-width: 1200px;
+          max-width: 1000px;
         }
 
         @media (max-width: 991px) {
           .user-layout-container {
             flex-direction: column;
-            margin-left: 0;
+          }
+
+          .user-sidebar {
+            width: 100%;
           }
 
           .user-content-wrapper {
