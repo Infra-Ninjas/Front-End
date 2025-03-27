@@ -25,7 +25,6 @@ const PatientList = () => {
       if (response.data?.success) {
         const sorted = response.data.appointments.sort((a, b) => b.date - a.date);
         setAllAppointments(sorted);
-
         setStatusFilter("All");
         setCurrentPage(1);
       } else {
@@ -89,7 +88,7 @@ const PatientList = () => {
     }
 
     setFilteredAppointments(filtered);
-    setCurrentPage(1); // reset to first page when filter changes
+    setCurrentPage(1);
   }, [statusFilter, allAppointments]);
 
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -110,7 +109,7 @@ const PatientList = () => {
             className="form-select w-auto"
           >
             <option value="All">All</option>
-
+            <option value="Pending">Pending</option>
             <option value="Completed">Completed</option>
             <option value="Cancelled">Cancelled</option>
           </select>
@@ -154,7 +153,44 @@ const PatientList = () => {
                       </span>
                     </div>
                   </td>
-                  <td><span className="badge bg-light border">CASH</span></td>
+
+                  {/* Dynamic Payment with Icon */}
+                  <td>
+                    <span
+                      style={{
+                        textTransform: "uppercase",
+                        fontSize: "13px",
+                        fontWeight: "500",
+                        padding: "4px 10px",
+                        borderRadius: "999px",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "6px",
+                        backgroundColor:
+                          apt.paymentType === "cash"
+                            ? "#e7f1ff"
+                            : apt.paymentType === "card"
+                            ? "#e7fce7"
+                            : apt.paymentType === "online"
+                            ? "#f3e7ff"
+                            : "#f0f0f0",
+                        color:
+                          apt.paymentType === "cash"
+                            ? "#0d6efd"
+                            : apt.paymentType === "card"
+                            ? "#198754"
+                            : apt.paymentType === "online"
+                            ? "#6f42c1"
+                            : "#6c757d",
+                      }}
+                    >
+                      {apt.paymentType === "cash" && <>💵 CASH</>}
+                      {apt.paymentType === "card" && <>💳 CARD</>}
+                      {apt.paymentType === "online" && <>🌐 ONLINE</>}
+                      {!["cash", "card", "online"].includes(apt.paymentType) && <> {apt.paymentType?.toUpperCase() || "Cash"}</>}
+                    </span>
+                  </td>
+
                   <td>24</td>
                   <td>{apt.slotDate}, {apt.slotTime}</td>
                   <td>${apt.fees || "40"}</td>
