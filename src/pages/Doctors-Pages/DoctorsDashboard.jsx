@@ -64,19 +64,21 @@ const DoctorDashboard = () => {
             },
           ]);
 
-          const formattedBookings = dashData.latestAppointments.map((apt) => {
-            const status = apt.cancelled
-              ? 'Cancelled'
-              : apt.isCompleted
-              ? 'Completed'
-              : 'Pending';
+          const formattedBookings = dashData.latestAppointments
+            .sort((a, b) => b.date - a.date) // Sort latest first
+            .map((apt) => {
+              const status = apt.cancelled
+                ? 'Cancelled'
+                : apt.isCompleted
+                ? 'Completed'
+                : 'Pending';
 
-            return {
-              name: apt.userData?.name || 'Patient',
-              date: `${apt.slotDate} ${apt.slotTime}`,
-              status,
-            };
-          });
+              return {
+                name: apt.userData?.name || 'Patient',
+                date: `${apt.slotDate} ${apt.slotTime}`,
+                status,
+              };
+            });
 
           setBookings(formattedBookings);
         }

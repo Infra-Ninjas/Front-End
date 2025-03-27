@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import UserLayout from "./UsersLayout";
 import { useUserContext } from "../../contexts/Users-Context/UserContextProvider";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const MyAppointments = () => {
   const [appointments, setAppointments] = useState([]);
@@ -25,9 +27,11 @@ const MyAppointments = () => {
       if (response.data?.success) {
         setAppointments(response.data.appointments);
       } else {
+        toast.error("Failed to fetch appointments.");
         console.error("API response failed:", response.data);
       }
     } catch (error) {
+      toast.error("Something went wrong while fetching appointments.");
       console.error("Error fetching appointments:", error.response || error.message);
     }
   };
@@ -49,15 +53,14 @@ const MyAppointments = () => {
       );
 
       if (response.data?.success) {
-        alert("Appointment Cancelled");
-        // Remove the cancelled appointment from the state
+        toast.success("Appointment cancelled successfully");
         setAppointments((prev) => prev.filter((apt) => apt._id !== appointmentId));
       } else {
-        alert("Failed to cancel appointment");
+        toast.error("Failed to cancel appointment");
         console.error("Cancel error:", response.data);
       }
     } catch (error) {
-      alert("Something went wrong");
+      toast.error("⚠️ Something went wrong. Please try again.");
       console.error("Error cancelling appointment:", error.response || error.message);
     }
   };
@@ -126,6 +129,7 @@ const MyAppointments = () => {
                           e.target.style.backgroundColor = "white";
                           e.target.style.color = "#00838F";
                         }}
+                        onClick={() => toast.info("💳 Payment integration coming soon!")}
                       >
                         Pay Online
                       </button>
