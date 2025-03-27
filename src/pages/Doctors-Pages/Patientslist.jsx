@@ -109,7 +109,6 @@ const PatientList = () => {
             className="form-select w-auto"
           >
             <option value="All">All</option>
-            <option value="Pending">Pending</option>
             <option value="Completed">Completed</option>
             <option value="Cancelled">Cancelled</option>
           </select>
