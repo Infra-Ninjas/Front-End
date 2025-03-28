@@ -51,14 +51,11 @@ const PatientsAppointments = () => {
         const thisDoctor = freshDoctors.find((doc) => doc._id === docId);
         if (!thisDoctor) return;
 
-        setDocInfo(thisDoctor); // 👈 sync latest info to UI
+        setDocInfo(thisDoctor);
 
-        const bookingsForDate = thisDoctor.bookings?.filter(
-          (b) => b.slotDate === selectedDate
-        ) ?? [];
-
-        const times = bookingsForDate.map((b) => b.slotTime);
-        setBookedSlots(times);
+        // ✅ Use slots_booked directly
+        const bookedTimes = thisDoctor.slots_booked?.[selectedDate] || [];
+        setBookedSlots(bookedTimes);
       } catch (err) {
         console.error("Failed to fetch booked slots:", err);
       }
@@ -130,15 +127,12 @@ const PatientsAppointments = () => {
       if (response.data && response.data.success) {
         toast.success('Appointment booked successfully!');
 
-        // ✅ Refresh doctor info & booked slots
+        // ✅ Refresh booked slots right away
         const updatedDoctors = await getAllDoctors();
         const thisDoctor = updatedDoctors.find((doc) => doc._id === docId);
-        setDocInfo(thisDoctor); // update doctor info in UI
+        setDocInfo(thisDoctor);
 
-        const newBooked = thisDoctor.bookings?.filter(
-          (b) => b.slotDate === selectedDate
-        )?.map((b) => b.slotTime) || [];
-
+        const newBooked = thisDoctor.slots_booked?.[selectedDate] || [];
         setBookedSlots(newBooked);
         setSlotTime('');
 
@@ -249,21 +243,26 @@ const PatientsAppointments = () => {
                   style={{
                     borderRadius: '30px',
                     padding: '10px 20px',
-                    border: '2px solid #007991',
+                    border: isBooked
+                      ? '2px solid #ccc'
+                      : isSelected
+                      ? '2px solid #004d4d'
+                      : '2px solid #007991',
                     backgroundColor: isBooked
                       ? '#ccc'
                       : isSelected
                       ? '#007991'
-                      : 'transparent',
+                      : 'white',
                     color: isBooked
                       ? '#666'
                       : isSelected
                       ? 'white'
                       : '#007991',
-                    fontWeight: 600,
+                    fontWeight: isBooked ? 500 : 700,
                     fontSize: '14px',
                     cursor: isBooked ? 'not-allowed' : 'pointer',
                     opacity: isBooked ? 0.6 : 1,
+                    boxShadow: isBooked ? 'none' : '0 2px 6px rgba(0, 121, 145, 0.15)',
                   }}
                 >
                   {timeObj.time}
