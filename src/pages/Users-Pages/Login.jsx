@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useUserContext } from "../../contexts/Users-Context/UserContextProvider.jsx";
+import { set } from "mongoose";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -43,7 +44,8 @@ const Login = () => {
         setName("");
         setEmail("");
         setPassword("");
-        navigate("/login"); // ✅ Go to login page after sign up
+        setState("login"); // Switch to login state after sign up
+        // navigate("/login"); // ✅ Go to login page after sign up
       } catch (error) {
         toast.error(
           error?.response?.data?.message ||
