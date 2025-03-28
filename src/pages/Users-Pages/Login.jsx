@@ -2,37 +2,28 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-
-// 1) Import the user context hook (adjust the import path if needed)
 import { useUserContext } from "../../contexts/Users-Context/UserContextProvider.jsx";
 
-// 2) Use your environment variable for the backend URL
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 const Login = () => {
-  const [state, setState] = useState("login"); // toggles between "login" and "Sign Up"
+  const [state, setState] = useState("login");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-
-  // 3) Get the login function from your user context
   const { login } = useUserContext();
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
 
     if (state === "login") {
-      // LOGIN FLOW
       try {
         const response = await axios.post(`${backendUrl}/api/user/login`, {
           email,
           password,
         });
-        // Assuming the response contains { token, role }
-        login(response.data);
-        navigate ("/myprofile")
-        // Clear input fields after successful login
+        login(response.data, "Login successful!", "/myprofile");
         setEmail("");
         setPassword("");
       } catch (error) {
@@ -41,20 +32,18 @@ const Login = () => {
         );
       }
     } else {
-      // SIGN-UP FLOW
       try {
         const response = await axios.post(`${backendUrl}/api/user/register`, {
           name,
           email,
           password,
         });
-        // Assuming the response contains { token, role }
-        login(response.data,  "Registered successfully!");
-        // Clear input fields after successful registration
+
+        toast.success("Account created successfully!");
         setName("");
         setEmail("");
         setPassword("");
-        navigate("/login")
+        navigate("/login"); // ✅ Go to login page after sign up
       } catch (error) {
         toast.error(
           error?.response?.data?.message ||
@@ -65,7 +54,6 @@ const Login = () => {
     }
   };
 
- 
   const styles = {
     container: {
       display: "flex",
@@ -82,7 +70,6 @@ const Login = () => {
       borderRadius: "10px",
       boxShadow: "0px 4px 6px rgba(0,0,0,0.1)",
       textAlign: "center",
-      transition: "transform 0.3s ease, boxShadow 0.3s ease",
     },
     heading: {
       fontSize: "24px",
