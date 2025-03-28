@@ -31,12 +31,13 @@ const DoctorDashboard = () => {
   ]);
 
   const [bookings, setBookings] = useState([]);
-  const doctorserviceurl = import.meta.env.VITE_DOCTORSERVICE_URL || "http://localhost:4003";
+  const doctorserviceurl =
+    import.meta.env.VITE_DOCTORSERVICE_URL || 'http://localhost:4003';
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const dToken = localStorage.getItem("dToken");
+        const dToken = localStorage.getItem('dToken');
         const res = await axios.get(`${doctorserviceurl}/api/doctor/dashboard`, {
           headers: {
             Authorization: `Bearer ${dToken}`,
@@ -65,7 +66,7 @@ const DoctorDashboard = () => {
           ]);
 
           const formattedBookings = dashData.latestAppointments
-            .sort((a, b) => b.date - a.date) // Sort latest first
+            .sort((a, b) => b.date - a.date)
             .map((apt) => {
               const status = apt.cancelled
                 ? 'Cancelled'
@@ -83,7 +84,7 @@ const DoctorDashboard = () => {
           setBookings(formattedBookings);
         }
       } catch (error) {
-        console.error("❌ Error loading doctor dashboard:", error);
+        console.error('❌ Error loading doctor dashboard:', error);
       }
     };
 
@@ -92,101 +93,121 @@ const DoctorDashboard = () => {
 
   return (
     <DoctorLayout>
-      <div className="py-4 d-flex flex-column align-items-center" style={{ background: '#f8f9fa' }}>
-        {/* Stat Boxes */}
-        <div className="d-flex gap-4 flex-wrap justify-content-center mb-5">
-          {stats.map((stat, i) => (
-            <div
-              key={i}
-              className="d-flex flex-column align-items-center p-4"
-              style={{
-                background: '#fff',
-                borderRadius: '16px',
-                boxShadow: '0 4px 10px rgba(0,0,0,0.05)',
-                width: '180px',
-                height: '120px',
-              }}
-            >
-              <div className="mb-2">{stat.icon}</div>
-              <h5 className="fw-bold mb-0">{stat.value}</h5>
-              <small className="text-muted">{stat.label}</small>
-            </div>
-          ))}
-        </div>
-
-        {/* Bookings Card */}
+      {/* Removed background: '#f8f9fa' so there's no extra gray layer.
+          Kept marginLeft so the sidebar won't overlap the content. */}
+      <div
+        className="py-4 d-flex flex-column align-items-center"
+        style={{ marginLeft: '250px' }}
+      >
+        {/* White wrapper for stats & bookings remains the same */}
         <div
-          className="p-4 w-100"
           style={{
-            maxWidth: '850px',
             background: '#fff',
             borderRadius: '16px',
-            boxShadow: '0 4px 10px rgba(0,0,0,0.06)',
+            boxShadow: '0 4px 10px rgba(0,0,0,0.05)',
+            width: '90%',
+            maxWidth: '1200px',
+            padding: '20px',
           }}
         >
-          {/* Card Header */}
-          <div className="d-flex align-items-center mb-4">
-            <FaRegCalendarAlt className="me-2 text-primary" />
-            <h5 className="fw-bold mb-0">Latest Bookings</h5>
-          </div>
-
-          {/* Bookings List */}
-          <div className="d-flex flex-column gap-4">
-            {bookings.map((booking, index) => (
+          {/* Stat Boxes */}
+          <div className="d-flex gap-4 flex-wrap justify-content-center mb-5">
+            {stats.map((stat, i) => (
               <div
-                key={index}
-                className="d-flex justify-content-between align-items-center pb-2 border-bottom"
+                key={i}
+                className="d-flex flex-column align-items-center p-4"
+                style={{
+                  background: '#fff',
+                  borderRadius: '16px',
+                  boxShadow: '0 4px 10px rgba(0,0,0,0.05)',
+                  width: '180px',
+                  height: '120px',
+                }}
               >
-                {/* Left side: Image, name, date */}
-                <div className="d-flex align-items-center gap-3">
-                  <img
-                    src={assets.profile_pic}
-                    alt="profile"
-                    style={{ width: 40, height: 40, borderRadius: '50%' }}
-                  />
-                  <div>
-                    <div className="fw-semibold">{booking.name}</div>
-                    <small className="text-muted">Booking on {booking.date}</small>
-                  </div>
-                </div>
-
-                {/* Right side: Action icons or status */}
-                {booking.status === "Pending" ? (
-                  <div className="d-flex align-items-center gap-2">
-                    <div
-                      className="d-flex align-items-center justify-content-center"
-                      style={{
-                        background: '#f8d7da',
-                        borderRadius: '50%',
-                        width: 30,
-                        height: 30,
-                      }}
-                    >
-                      <FaTimes className="text-danger" />
-                    </div>
-                    <div
-                      className="d-flex align-items-center justify-content-center"
-                      style={{
-                        background: '#d4edda',
-                        borderRadius: '50%',
-                        width: 30,
-                        height: 30,
-                      }}
-                    >
-                      <FaCheck className="text-success" />
-                    </div>
-                  </div>
-                ) : (
-                  <span
-                    className={`fw-semibold ${
-                      booking.status === 'Cancelled' ? 'text-danger' : 'text-success'
-                    }`}
-                  >
-                    {booking.status}
-                  </span>
-                )}
+                <div className="mb-2">{stat.icon}</div>
+                <h5 className="fw-bold mb-0">{stat.value}</h5>
+                <small className="text-muted">{stat.label}</small>
               </div>
             ))}
+          </div>
+
+          {/* Bookings Card */}
+          <div
+            className="p-4 w-100"
+            style={{
+              maxWidth: '850px',
+              background: '#fff',
+              borderRadius: '16px',
+              boxShadow: '0 4px 10px rgba(0,0,0,0.06)',
+              margin: '0 auto',
+            }}
+          >
+            {/* Card Header */}
+            <div className="d-flex align-items-center mb-4">
+              <FaRegCalendarAlt className="me-2 text-primary" />
+              <h5 className="fw-bold mb-0">Latest Bookings</h5>
+            </div>
+
+            {/* Bookings List */}
+            <div className="d-flex flex-column gap-4">
+              {bookings.map((booking, index) => (
+                <div
+                  key={index}
+                  className="d-flex justify-content-between align-items-center pb-2 border-bottom"
+                >
+                  {/* Left side: Image, name, date */}
+                  <div className="d-flex align-items-center gap-3">
+                    <img
+                      src={assets.profile_pic}
+                      alt="profile"
+                      style={{ width: 40, height: 40, borderRadius: '50%' }}
+                    />
+                    <div>
+                      <div className="fw-semibold">{booking.name}</div>
+                      <small className="text-muted">
+                        Booking on {booking.date}
+                      </small>
+                    </div>
+                  </div>
+
+                  {/* Right side: Action icons or status */}
+                  {booking.status === 'Pending' ? (
+                    <div className="d-flex align-items-center gap-2">
+                      <div
+                        className="d-flex align-items-center justify-content-center"
+                        style={{
+                          background: '#f8d7da',
+                          borderRadius: '50%',
+                          width: 30,
+                          height: 30,
+                        }}
+                      >
+                        <FaTimes className="text-danger" />
+                      </div>
+                      <div
+                        className="d-flex align-items-center justify-content-center"
+                        style={{
+                          background: '#d4edda',
+                          borderRadius: '50%',
+                          width: 30,
+                          height: 30,
+                        }}
+                      >
+                        <FaCheck className="text-success" />
+                      </div>
+                    </div>
+                  ) : (
+                    <span
+                      className={`fw-semibold ${
+                        booking.status === 'Cancelled' ? 'text-danger' : 'text-success'
+                      }`}
+                    >
+                      {booking.status}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

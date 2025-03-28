@@ -40,7 +40,6 @@ const DoctorsList = () => {
             {doctors.map((item) => (
               <div className="col-12 col-sm-6 col-md-4" key={item._id}>
                 <div className="card border-0 shadow-lg p-3 h-100 doctor-card">
-                  
                   {/* Doctor Image */}
                   <div className="d-flex justify-content-center mb-3">
                     <img
@@ -56,8 +55,15 @@ const DoctorsList = () => {
                     />
                   </div>
                   <div className="card-body d-flex flex-column text-center">
-                    <h5 className="card-title mb-1" style={{ fontSize: '1rem' }}>{item.name}</h5>
-                    <p className="card-subtitle text-muted mb-2" style={{ fontSize: '0.85rem' }}>{item.speciality}</p>
+                    <h5 className="card-title mb-1" style={{ fontSize: '1rem' }}>
+                      {item.name}
+                    </h5>
+                    <p
+                      className="card-subtitle text-muted mb-2"
+                      style={{ fontSize: '0.85rem' }}
+                    >
+                      {item.speciality}
+                    </p>
                     <div className="mt-auto">
                       <div className="form-check d-inline-block">
                         <input
@@ -66,11 +72,15 @@ const DoctorsList = () => {
                           checked={item.available}
                           onChange={() => changeAvailability(item._id)}
                         />
-                        <label className="form-check-label ms-2" style={{ fontSize: '0.9rem' }}>Available</label>
+                        <label
+                          className="form-check-label ms-2"
+                          style={{ fontSize: '0.9rem' }}
+                        >
+                          Available
+                        </label>
                       </div>
                     </div>
                   </div>
-
                 </div>
               </div>
             ))}
@@ -84,7 +94,7 @@ const DoctorsList = () => {
           margin-left: 220px;
           padding: 40px 20px;
           min-height: 100vh;
-          background-color: #f9f9f9;
+          /* Removed background-color: #f9f9f9; so there's no gray layer */
           display: flex;
           justify-content: center;
         }
