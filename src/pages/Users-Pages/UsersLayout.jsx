@@ -6,23 +6,59 @@ const UserLayout = ({ children }) => {
   return (
     <>
       <UserNavbar />
-      <UserSidebar />
-      <div className="user-content">
-        {children}
+      <div className="user-layout-container">
+        <div className="user-sidebar">
+          <UserSidebar />
+        </div>
+        <div className="user-content-wrapper">
+          <div className="user-content">
+            {children}
+          </div>
+        </div>
       </div>
+
       <style>{`
-        .user-content {
-          /* Decrease or remove the top margin to reduce empty space */
-          margin-top: 70px;    /* was 70px */
-          margin-left: 200px; /* keep the sidebar offset */
-          padding: 20px;
+        .user-layout-container {
+          display: flex;
+          margin-top: 60px; /* Height of the navbar */
           min-height: 100vh;
-          background-color: #f5f5f5;
-          transition: margin 0.3s ease;
+          background-color: #f9f9f9;
         }
+
+        .user-sidebar {
+          min-width: 240px;
+          max-width: 260px;
+        }
+
+        .user-content-wrapper {
+          flex: 1;
+          padding: 40px 30px;
+          display: flex;
+          justify-content: center;
+          align-items: flex-start;
+        }
+
+        .user-content {
+          width: 100%;
+          max-width: 1000px;
+        }
+
         @media (max-width: 991px) {
+          .user-layout-container {
+            flex-direction: column;
+          }
+
+          .user-sidebar {
+            width: 100%;
+          }
+
+          .user-content-wrapper {
+            padding: 20px;
+            justify-content: flex-start;
+          }
+
           .user-content {
-            margin-left: 50 !important;
+            max-width: 100%;
           }
         }
       `}</style>

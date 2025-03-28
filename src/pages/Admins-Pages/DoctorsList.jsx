@@ -4,6 +4,7 @@ import { useAdminContext } from '../../contexts/Admin-Context/AdminContextProvid
 import AdminNavbar from "../../components/Admins-Components/AdminNavbar";
 import SideBar from "../../components/Admins-Components/SideBar";
 import axios from "axios";
+import AdminLayout from "./AdminLayout";
 
 const DoctorsList = () => {
   const { aToken, changeAvailability } = useAdminContext();
@@ -31,45 +32,38 @@ const DoctorsList = () => {
     <>
       <AdminNavbar />
       <SideBar />
-      <div
-        className="admin-content"
-        style={{
-          marginTop: '70px',
-          marginLeft: '200px',
-          backgroundColor: '#f5f5f5',
-          minHeight: '100vh',
-          padding: '20px',
-        }}
-      >
-        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-          <h2 className="mb-4 fw-bold text-center" style={{ marginTop: 0 }}>All Doctors</h2>
-          <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+      <div className="admin-content">
+        <div className="container" style={{ maxWidth: '1000px' }}>
+          <h2 className="fw-bold text-center page-title">All Doctors</h2>
+
+          <div className="row g-4">
             {doctors.map((item) => (
-              <div className="col" key={item._id}>
-                <div className="card h-100 shadow-sm doctor-card" style={{ borderRadius: '8px' }}>
-                  <div
-                    className="d-flex align-items-center justify-content-center rounded-top"
-                    style={{
-                      width: '100%',
-                      height: '140px',
-                      overflow: 'hidden',
-                      backgroundColor: '#f8f9fa',
-                    }}
-                  >
+              <div className="col-12 col-sm-6 col-md-4" key={item._id}>
+                <div className="card border-0 shadow-lg p-3 h-100 doctor-card">
+                  {/* Doctor Image */}
+                  <div className="d-flex justify-content-center mb-3">
                     <img
                       src={item.image}
                       alt={item.name}
+                      className="rounded-circle"
                       style={{
-                        maxHeight: '100%',
-                        maxWidth: '100%',
-                        objectFit: 'contain',
-                        objectPosition: 'center',
+                        width: "120px",
+                        height: "120px",
+                        objectFit: "cover",
+                        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
                       }}
                     />
                   </div>
                   <div className="card-body d-flex flex-column text-center">
-                    <h5 className="card-title mb-1" style={{ fontSize: '1rem' }}>{item.name}</h5>
-                    <p className="card-subtitle text-muted mb-2" style={{ fontSize: '0.85rem' }}>{item.speciality}</p>
+                    <h5 className="card-title mb-1" style={{ fontSize: '1rem' }}>
+                      {item.name}
+                    </h5>
+                    <p
+                      className="card-subtitle text-muted mb-2"
+                      style={{ fontSize: '0.85rem' }}
+                    >
+                      {item.speciality}
+                    </p>
                     <div className="mt-auto">
                       <div className="form-check d-inline-block">
                         <input
@@ -78,27 +72,52 @@ const DoctorsList = () => {
                           checked={item.available}
                           onChange={() => changeAvailability(item._id)}
                         />
-                        <label className="form-check-label ms-2" style={{ fontSize: '0.9rem' }}>Available</label>
+                        <label
+                          className="form-check-label ms-2"
+                          style={{ fontSize: '0.9rem' }}
+                        >
+                          Available
+                        </label>
                       </div>
                     </div>
-                  </div> 
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
       </div>
+
       <style>{`
+        .admin-content {
+          margin-top: 60px;
+          margin-left: 220px;
+          padding: 40px 20px;
+          min-height: 100vh;
+          /* Removed background-color: #f9f9f9; so there's no gray layer */
+          display: flex;
+          justify-content: center;
+        }
+
+        .page-title {
+          margin-bottom: 24px;
+          margin-top: -10px;
+        }
+
         .doctor-card {
           transition: transform 0.3s ease, box-shadow 0.3s ease;
+          border-radius: 16px;
         }
+
         .doctor-card:hover {
           transform: translateY(-5px);
-          box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+          box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         }
+
         @media (max-width: 991px) {
           .admin-content {
-            margin-left: 0 !important;
+            margin-left: 0;
+            padding: 20px;
           }
         }
       `}</style>

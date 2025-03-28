@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import UserLayout from "./UsersLayout";
 import { useUserContext } from "../../contexts/Users-Context/UserContextProvider";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const MyAppointments = () => {
   const [appointments, setAppointments] = useState([]);
@@ -25,10 +27,41 @@ const MyAppointments = () => {
       if (response.data?.success) {
         setAppointments(response.data.appointments);
       } else {
+        toast.error("Failed to fetch appointments.");
         console.error("API response failed:", response.data);
       }
     } catch (error) {
+      toast.error("Something went wrong while fetching appointments.");
       console.error("Error fetching appointments:", error.response || error.message);
+    }
+  };
+
+  const cancelAppointment = async (appointmentId) => {
+    const confirmCancel = window.confirm("Are you sure you want to cancel this appointment?");
+    if (!confirmCancel) return;
+
+    try {
+      const response = await axios.post(
+        "http://localhost:4002/api/user/cancel-appointment",
+        {
+          userId: uId,
+          appointmentId: appointmentId,
+        },
+        {
+          headers: { Authorization: `Bearer ${uToken}` },
+        }
+      );
+
+      if (response.data?.success) {
+        toast.success("Appointment cancelled successfully");
+        setAppointments((prev) => prev.filter((apt) => apt._id !== appointmentId));
+      } else {
+        toast.error("Failed to cancel appointment");
+        console.error("Cancel error:", response.data);
+      }
+    } catch (error) {
+      toast.error("⚠️ Something went wrong. Please try again.");
+      console.error("Error cancelling appointment:", error.response || error.message);
     }
   };
 
@@ -56,10 +89,10 @@ const MyAppointments = () => {
                       <img
                         src={docImage}
                         alt={docName}
-                        className="rounded-3"
+                        className="rounded-circle"
                         style={{
-                          width: "160px",
-                          height: "160px",
+                          width: "140px",
+                          height: "140px",
                           objectFit: "cover",
                           boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
                         }}
@@ -80,7 +113,7 @@ const MyAppointments = () => {
                       </p>
                     </div>
 
-                    <div className="d-flex flex-column gap-3">
+                    <div className="d-flex flex-column gap-3 mt-3 mt-md-0">
                       <button
                         className="btn px-4 py-2 fw-semibold rounded-pill"
                         style={{
@@ -88,6 +121,15 @@ const MyAppointments = () => {
                           backgroundColor: "white",
                           color: "#00838F",
                         }}
+                        onMouseEnter={(e) => {
+                          e.target.style.backgroundColor = "#00838F";
+                          e.target.style.color = "white";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.backgroundColor = "white";
+                          e.target.style.color = "#00838F";
+                        }}
+                        onClick={() => toast.info("💳 Payment integration coming soon!")}
                       >
                         Pay Online
                       </button>
@@ -98,7 +140,17 @@ const MyAppointments = () => {
                           border: "2px solid #f44336",
                           backgroundColor: "white",
                           color: "#f44336",
+                          transition: "all 0.2s ease",
                         }}
+                        onMouseEnter={(e) => {
+                          e.target.style.backgroundColor = "#f44336";
+                          e.target.style.color = "white";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.backgroundColor = "white";
+                          e.target.style.color = "#f44336";
+                        }}
+                        onClick={() => cancelAppointment(appointmentId)}
                       >
                         Cancel Appointment
                       </button>

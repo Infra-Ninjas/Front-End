@@ -1,4 +1,3 @@
-// UserSidebar.jsx
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useUserContext } from "../../contexts/Users-Context/UserContextProvider";
@@ -59,7 +58,6 @@ const UserSidebar = () => {
       >
         <ul className="nav flex-column pt-3">
           {[
-            { path: "/user-dashboard", icon: assets.home_icon, label: "Dashboard" },
             { path: "/myappointments", icon: assets.add_icon, label: "My Appointments" },
             { path: "/myprofile", icon: assets.people_icon, label: "My Profile" },
             { path: "/usersdoctorslist", icon: assets.people_icon, label: "Doctors Lists" },

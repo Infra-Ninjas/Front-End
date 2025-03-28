@@ -16,11 +16,15 @@ const UsersDoctorsList = () => {
     const fetchDoctors = async () => {
       if (!uToken) return;
       try {
-        const { data } = await axios.get(`${userserviceurl}/api/user/list-doctors`, {
-          headers: {
-            Authorization: `Bearer ${uToken}`,
-          },
-        });
+        // Same API logic, just adding missing backticks for a valid template string
+        const { data } = await axios.get(
+          `${userserviceurl}/api/user/list-doctors`,
+          {
+            headers: {
+              Authorization: `Bearer ${uToken}`,
+            },
+          }
+        );
 
         if (data.success) {
           setDoctors(data.doctors);
@@ -36,6 +40,7 @@ const UsersDoctorsList = () => {
   }, [uToken]);
 
   const handleBookNow = (doctorId) => {
+    // Same logic, just adding missing backticks for a valid template string
     navigate(`/patientsbookappointments/${doctorId}`);
   };
 
@@ -44,10 +49,18 @@ const UsersDoctorsList = () => {
       <div className="container" style={{ maxWidth: "1000px" }}>
         <h2 className="mb-4 fw-bold text-center">All Doctors</h2>
 
-        <div className="row g-4">
+        {/* 
+          Added "align-items-stretch" to the row so all columns/cards 
+          stretch to the same height.
+        */}
+        <div className="row g-4 align-items-stretch">
           {doctors.map((item) => (
             <div className="col-12 col-sm-6 col-md-4" key={item._id}>
-              <div className="card border-0 shadow-lg p-3 h-100 doctor-card">
+              {/*
+                Added "h-100 d-flex flex-column justify-content-between" 
+                to make each card fill its column and align the button at the bottom.
+              */}
+              <div className="card border-0 shadow-lg p-3 h-100 doctor-card d-flex flex-column justify-content-between">
                 {/* Doctor Image */}
                 <div className="d-flex justify-content-center mb-3">
                   <img
@@ -98,7 +111,13 @@ const UsersDoctorsList = () => {
         </div>
       </div>
 
+      {/* CSS Fix: Move "All Doctors" Up Slightly */}
       <style>{`
+        .page-title {
+          margin-bottom: 24px;
+          margin-top: -10px; /* Moves title slightly up */
+        }
+
         .doctor-card {
           transition: transform 0.3s ease, box-shadow 0.3s ease;
           border-radius: 16px;

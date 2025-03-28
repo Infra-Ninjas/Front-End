@@ -1,52 +1,52 @@
 import React from 'react';
-import DoctorNavbar from '../../components/Doctors-Components/DoctorsNavbar';
-import DoctorSidebar from '../../components/Doctors-Components/DoctorsSidebar';
+import AdminNavbar from "../../components/Admins-Components/AdminNavbar";
+import SideBar from "../../components/Admins-Components/SideBar";
 
-const DoctorLayout = ({ children }) => {
+const AdminLayout = ({ children }) => {
   return (
     <>
-      <DoctorNavbar />
-      <div className="doctor-layout-container">
-        <DoctorSidebar />
-        <div className="doctor-content-wrapper">
-          <div className="doctor-content">
+      <AdminNavbar />
+      <div className="admin-layout-container">
+        <AdminSidebar />
+        <div className="admin-content-wrapper">
+          <div className="admin-inner-content">
             {children}
           </div>
         </div>
       </div>
 
       <style>{`
-        .doctor-layout-container {
+        .admin-layout-container {
           display: flex;
           margin-top: 60px; /* Height of the navbar */
           min-height: 100vh;
-          background-color: #f5f5f5;
+          background-color: #f9f9f9;
         }
 
-        .doctor-content-wrapper {
+        .admin-content-wrapper {
           flex: 1;
           padding: 40px 30px;
           display: flex;
           justify-content: center;
         }
 
-        .doctor-content {
+        .admin-inner-content {
           width: 100%;
           max-width: 1200px;
         }
 
         @media (max-width: 991px) {
-          .doctor-layout-container {
+          .admin-layout-container {
             flex-direction: column;
             margin-left: 0;
           }
 
-          .doctor-content-wrapper {
+          .admin-content-wrapper {
             padding: 20px;
             justify-content: flex-start;
           }
 
-          .doctor-content {
+          .admin-inner-content {
             max-width: 100%;
           }
         }
@@ -55,4 +55,4 @@ const DoctorLayout = ({ children }) => {
   );
 };
 
-export default DoctorLayout;
+export default AdminLayout;

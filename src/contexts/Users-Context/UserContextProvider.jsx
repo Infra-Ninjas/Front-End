@@ -7,7 +7,7 @@ const UserContext = createContext();
 const UserContextProvider = ({ children }) => {
   const [uToken, setUToken] = useState(localStorage.getItem("uToken") || null);
   const [role, setRole] = useState(localStorage.getItem("role") || null);
-  const [uId, setUId] = useState(localStorage.getItem("uId") || null); // User ID stored separately
+  const [uId, setUId] = useState(localStorage.getItem("uId") || null);
 
   const navigate = useNavigate();
 
@@ -22,14 +22,10 @@ const UserContextProvider = ({ children }) => {
         }
       }
       if (event.key === "role" && event.storageArea === localStorage) {
-        if (!event.newValue) {
-          setRole(null);
-        }
+        if (!event.newValue) setRole(null);
       }
       if (event.key === "uId" && event.storageArea === localStorage) {
-        if (!event.newValue) {
-          setUId(null);
-        }
+        if (!event.newValue) setUId(null);
       }
     };
 
@@ -37,8 +33,8 @@ const UserContextProvider = ({ children }) => {
     return () => window.removeEventListener("storage", handleStorageChange);
   }, [navigate]);
 
-  // Login function
-  const login = (data, successMessage = "Login successful!") => {
+  // ✅ Updated login function with optional redirectPath
+  const login = (data, successMessage = "Login successful!", redirectPath = "/user-dashboard") => {
     if (data && data.token && data.role && data.userId) {
       setUToken(data.token);
       setRole(data.role);
@@ -49,13 +45,12 @@ const UserContextProvider = ({ children }) => {
       localStorage.setItem("uId", data.userId);
 
       toast.success(successMessage);
-      navigate("/user-dashboard");
+      navigate(redirectPath);
     } else {
       toast.error("Invalid login response!");
     }
   };
 
-  // Logout function
   const logout = () => {
     setUToken(null);
     setRole(null);
@@ -72,7 +67,7 @@ const UserContextProvider = ({ children }) => {
       value={{
         uToken,
         role,
-        uId, // Now providing uId
+        uId,
         login,
         logout,
       }}

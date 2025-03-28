@@ -1,39 +1,73 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import AdminNavbar from "../../components/Admins-Components/AdminNavbar";
 import SideBar from "../../components/Admins-Components/SideBar";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { FaUserMd, FaUsers, FaCalendarCheck, FaDollarSign } from "react-icons/fa";
 
 const Dashboard = () => {
-  // Dummy stats data
-  const stats = {
-    totalDoctors: 25,
-    totalPatients: 120,
-    appointmentsToday: 15,
-    revenue: "$4,500"
-  };
+  const [stats, setStats] = useState([
+    { label: "Total Doctors", value: 0, icon: <FaUserMd /> },
+    { label: "Total Patients", value: 0, icon: <FaUsers /> },
+    { label: "Appointments Today", value: 0, icon: <FaCalendarCheck /> },
+    { label: "Revenue", value: "$0", icon: <FaDollarSign /> },
+  ]);
 
-  const initialAppointments = [
-    { id: 1, doctor: "Dr. John Doe", patient: "Alice", time: "10:30 AM" },
-    { id: 2, doctor: "Dr. Sarah Lee", patient: "Bob", time: "11:00 AM" },
-    { id: 3, doctor: "Dr. Michael Smith", patient: "Charlie", time: "11:30 AM" },
-    { id: 4, doctor: "Dr. Emily Clark", patient: "David", time: "12:00 PM" }
-  ];
-
-  const [appointments, setAppointments] = useState(initialAppointments);
+  const [appointments, setAppointments] = useState([]);
   const [search, setSearch] = useState("");
   const [sortColumn, setSortColumn] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
 
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const token = localStorage.getItem("aToken");
+        const res = await axios.get("http://localhost:4001/api/admin/dashboard", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (res.data.success) {
+          const dashData = res.data.dashData;
+
+          // Update stats dynamically
+          setStats([
+            { label: "Total Doctors", value: dashData.doctors, icon: <FaUserMd /> },
+            { label: "Total Patients", value: dashData.patients, icon: <FaUsers /> },
+            { label: "Appointments Today", value: dashData.appointments, icon: <FaCalendarCheck /> },
+            { label: "Revenue", value: "$4,500", icon: <FaDollarSign /> }, // Static revenue for now
+          ]);
+
+          // Format appointments using doctor and user names
+          const formattedAppointments = dashData.latestAppointments.map((item, index) => ({
+            id: index + 1,
+            doctor: item.docData?.name || "Doctor",
+            patient: item.userData?.name || "Patient",
+            time: `${item.slotDate} ${item.slotTime}`,
+          }));
+
+          setAppointments(formattedAppointments);
+        }
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
   const handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
     setSearch(value);
-    const filtered = initialAppointments.filter(
-      (appointment) =>
-        appointment.doctor.toLowerCase().includes(value) ||
-        appointment.patient.toLowerCase().includes(value) ||
-        appointment.time.toLowerCase().includes(value)
+    setAppointments((prev) =>
+      prev.filter(
+        (a) =>
+          a.doctor.toLowerCase().includes(value) ||
+          a.patient.toLowerCase().includes(value) ||
+          a.time.toLowerCase().includes(value)
+      )
     );
-    setAppointments(filtered);
   };
 
   const handleSort = (column) => {
@@ -57,40 +91,49 @@ const Dashboard = () => {
       <div
         className="admin-content"
         style={{
-          marginTop: "70px",      // offset for navbar
-          marginLeft: "200px",    // offset for sidebar on large screens
+          marginTop: "70px",
+          marginLeft: "200px",
           padding: "20px",
-          backgroundColor: "#f5f5f5",
-          minHeight: "100vh"
+          backgroundColor: "#f4f4f6",
+          minHeight: "100vh",
         }}
       >
-        <div className="container-fluid main-content" style={{ maxWidth: "900px", margin: "0 auto" }}>
-          <h2 className="mb-4 fw-bold text-center" style={{ marginTop: 0 }}>Dashboard</h2>
-          {/* Stats Section */}
-          <div className="row g-3 mb-4">
-            {Object.entries(stats).map(([key, value]) => (
-              <div className="col-6 col-sm-6 col-md-3" key={key}>
-                <div className="card border-0 shadow p-2 text-center interactive-card">
-                  <h6 className="text-secondary">{key.replace(/([A-Z])/g, " $1")}</h6>
-                  <h4 className="fw-bold">{value}</h4>
+        <div className="container-fluid main-content" style={{ maxWidth: "1000px", margin: "0 auto" }}>
+          <h2 className="mb-4 fw-bold text-center">Dashboard</h2>
+
+          {/* Stat Cards */}
+          <div className="row g-4 mb-4">
+            {stats.map((stat, index) => (
+              <div className="col-6 col-md-3" key={index}>
+                <div className="stat-card shadow-sm d-flex flex-column align-items-center text-center p-3 rounded bg-white">
+                  <div className="icon-wrapper mb-2" style={{ fontSize: "24px", color: "#4e73df" }}>
+                    {stat.icon}
+                  </div>
+                  <div className="stat-label text-muted" style={{ fontSize: "14px" }}>
+                    {stat.label}
+                  </div>
+                  <div className="stat-value fw-bold" style={{ fontSize: "22px" }}>
+                    {stat.value}
+                  </div>
                 </div>
               </div>
             ))}
           </div>
-          {/* Search Bar */}
+
+          {/* Search + Appointments Table */}
           <div className="mb-3 d-flex flex-column flex-sm-row justify-content-between align-items-center">
             <h6 className="fw-bold mb-2 mb-sm-0">Recent Appointments</h6>
             <input
               type="text"
-              className="form-control search-input"
+              className="form-control"
               placeholder="Search by doctor, patient, or time"
               value={search}
               onChange={handleSearch}
             />
           </div>
-          {/* Appointments Table */}
-          <div className="card border-0 shadow p-3 table-responsive" style={{ fontSize: "14px" }}>
-            <table className="table table-hover table-bordered mb-0">
+
+          <div className="card border-0 shadow p-3 table-responsive bg-white rounded">
+            <table className="table mb-0">
               <thead>
                 <tr>
                   <th onClick={() => handleSort("id")} style={{ cursor: "pointer" }}>ID</th>
@@ -101,7 +144,7 @@ const Dashboard = () => {
               </thead>
               <tbody>
                 {appointments.map((appointment) => (
-                  <tr key={appointment.id} className="interactive-row">
+                  <tr key={appointment.id}>
                     <td>{appointment.id}</td>
                     <td>{appointment.doctor}</td>
                     <td>{appointment.patient}</td>
@@ -113,22 +156,14 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+
       <style>{`
-        .interactive-row {
-          cursor: pointer;
-          transition: all 0.3s ease;
+        .stat-card:hover {
+          box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+          transform: translateY(-2px);
+          transition: 0.2s ease;
         }
-        .interactive-row:hover {
-          background: #40E0D0;
-          color: white;
-        }
-        th {
-          position: relative;
-        }
-        th:hover {
-          background-color: #40E0D0;
-          color: white;
-        }
+
         @media (max-width: 991px) {
           .admin-content {
             margin-left: 0 !important;
