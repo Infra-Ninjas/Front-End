@@ -22,6 +22,7 @@ const DoctorLogin = () => {
       );
       // response.data should be { token, role }
       login(response.data, "Welcome Doctor!");
+      navigate("/doctorprofile"); // Redirect to doctor profile page
     } catch (error) {
       toast.error(
         error.response?.data?.message || error.message || "Doctor login failed"

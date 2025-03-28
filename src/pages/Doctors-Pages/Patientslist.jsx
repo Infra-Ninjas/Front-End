@@ -26,7 +26,6 @@ const PatientList = () => {
       if (response.data?.success) {
         const sorted = response.data.appointments.sort((a, b) => b.date - a.date);
         setAllAppointments(sorted);
-        setStatusFilter("All");
         setCurrentPage(1);
       } else {
         setAllAppointments([]);
@@ -77,6 +76,7 @@ const PatientList = () => {
     }
   }, [docId, dToken]);
 
+  // ✅ FIXED FILTER LOGIC
   useEffect(() => {
     let filtered = allAppointments;
 
@@ -85,7 +85,9 @@ const PatientList = () => {
         (apt) => !apt.cancelled && !apt.isCompleted
       );
     } else if (statusFilter === "Completed") {
-      filtered = allAppointments.filter((apt) => apt.isCompleted);
+      filtered = allAppointments.filter(
+        (apt) => apt.isCompleted && !apt.cancelled
+      );
     } else if (statusFilter === "Cancelled") {
       filtered = allAppointments.filter((apt) => apt.cancelled);
     }
@@ -104,14 +106,7 @@ const PatientList = () => {
 
   return (
     <DoctorLayout>
-      {/* 
-        Removed background: "#f8f9fc" so there's no gray layer.
-        Kept marginLeft so the sidebar won't overlap the content.
-      */}
-      <div
-        className="py-4"
-        style={{ minHeight: "100vh", marginLeft: "250px" }}
-      >
+      <div className="py-4" style={{ minHeight: "100vh", marginLeft: "250px" }}>
         <div
           style={{
             background: "#fff",
@@ -125,7 +120,7 @@ const PatientList = () => {
         >
           <h3 className="fw-bold text-center mb-4">All Appointments</h3>
 
-          {/* Filter */}
+          {/* Filter Dropdown */}
           <div className="d-flex justify-content-center mb-3">
             <select
               value={statusFilter}
@@ -133,6 +128,7 @@ const PatientList = () => {
               className="form-select w-auto"
             >
               <option value="All">All</option>
+              <option value="Pending">Pending</option>
               <option value="Completed">Completed</option>
               <option value="Cancelled">Cancelled</option>
             </select>
@@ -185,7 +181,7 @@ const PatientList = () => {
                         </div>
                       </td>
 
-                      {/* Dynamic Payment with Icon */}
+                      {/* Payment Type */}
                       <td>
                         <span
                           style={{
@@ -215,12 +211,7 @@ const PatientList = () => {
                                 : "#6c757d",
                           }}
                         >
-                          {apt.paymentType === "cash" && <>💵 CASH</>}
-                          {apt.paymentType === "card" && <>💳 CARD</>}
-                          {apt.paymentType === "online" && <>🌐 ONLINE</>}
-                          {!["cash", "card", "online"].includes(apt.paymentType) && (
-                            <> {apt.paymentType?.toUpperCase() || "Cash"}</>
-                          )}
+                          {apt.paymentType?.toUpperCase() || "CASH"}
                         </span>
                       </td>
 
