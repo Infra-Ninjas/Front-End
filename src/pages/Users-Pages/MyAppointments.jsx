@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 const MyAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const { uToken, uId } = useUserContext();
+  const userServiceUrl = import.meta.env.VITE_USERSERVICE_URL;
 
   useEffect(() => {
     if (uToken && uId) {
@@ -19,7 +20,7 @@ const MyAppointments = () => {
 
   const fetchAppointments = async () => {
     try {
-      const url = `http://localhost:4002/api/user/list-appointments?userId=${uId}`;
+      const url = `${userServiceUrl}/api/user/list-appointments?userId=${uId}`;
       const response = await axios.get(url, {
         headers: { Authorization: `Bearer ${uToken}` },
       });
@@ -42,7 +43,7 @@ const MyAppointments = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:4002/api/user/cancel-appointment",
+        `${userServiceUrl}/api/user/cancel-appointment`,
         {
           userId: uId,
           appointmentId: appointmentId,

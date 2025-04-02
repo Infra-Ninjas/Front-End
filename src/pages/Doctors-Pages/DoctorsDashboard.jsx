@@ -31,14 +31,13 @@ const DoctorDashboard = () => {
   ]);
 
   const [bookings, setBookings] = useState([]);
-  const doctorserviceurl =
-    import.meta.env.VITE_DOCTORSERVICE_URL || 'http://localhost:4003';
+  const doctorServiceUrl = import.meta.env.VITE_DOCTORSERVICE_URL;
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
         const dToken = localStorage.getItem('dToken');
-        const res = await axios.get(`${doctorserviceurl}/api/doctor/dashboard`, {
+        const res = await axios.get(`${doctorServiceUrl}/api/doctor/dashboard`, {
           headers: {
             Authorization: `Bearer ${dToken}`,
           },
@@ -93,13 +92,10 @@ const DoctorDashboard = () => {
 
   return (
     <DoctorLayout>
-      {/* Removed background: '#f8f9fa' so there's no extra gray layer.
-          Kept marginLeft so the sidebar won't overlap the content. */}
       <div
         className="py-4 d-flex flex-column align-items-center"
         style={{ marginLeft: '250px' }}
       >
-        {/* White wrapper for stats & bookings remains the same */}
         <div
           style={{
             background: '#fff',
@@ -110,7 +106,6 @@ const DoctorDashboard = () => {
             padding: '20px',
           }}
         >
-          {/* Stat Boxes */}
           <div className="d-flex gap-4 flex-wrap justify-content-center mb-5">
             {stats.map((stat, i) => (
               <div
@@ -131,7 +126,6 @@ const DoctorDashboard = () => {
             ))}
           </div>
 
-          {/* Bookings Card */}
           <div
             className="p-4 w-100"
             style={{
@@ -142,20 +136,17 @@ const DoctorDashboard = () => {
               margin: '0 auto',
             }}
           >
-            {/* Card Header */}
             <div className="d-flex align-items-center mb-4">
               <FaRegCalendarAlt className="me-2 text-primary" />
               <h5 className="fw-bold mb-0">Latest Bookings</h5>
             </div>
 
-            {/* Bookings List */}
             <div className="d-flex flex-column gap-4">
               {bookings.map((booking, index) => (
                 <div
                   key={index}
                   className="d-flex justify-content-between align-items-center pb-2 border-bottom"
                 >
-                  {/* Left side: Image, name, date */}
                   <div className="d-flex align-items-center gap-3">
                     <img
                       src={assets.profile_pic}
@@ -170,7 +161,6 @@ const DoctorDashboard = () => {
                     </div>
                   </div>
 
-                  {/* Right side: Action icons or status */}
                   {booking.status === 'Pending' ? (
                     <div className="d-flex align-items-center gap-2">
                       <div

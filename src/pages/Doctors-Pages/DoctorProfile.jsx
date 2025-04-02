@@ -1,4 +1,3 @@
-// DoctorProfile.jsx - Editable name & address with API integration
 import React, { useState, useEffect } from "react";
 import DoctorLayout from "./DoctorsLayout";
 import { assets } from "../../assets/assets_frontend/assets";
@@ -12,9 +11,10 @@ const DoctorProfile = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [saving, setSaving] = useState(false);
 
+  const doctorServiceUrl = import.meta.env.VITE_DOCTORSERVICE_URL;
+
   const [profileData, setProfileData] = useState({
     docId: doctorData?._id || localStorage.getItem("docId") || "",
-
     name: doctorData?.name || "",
     image: doctorData?.image || assets.doc1,
     degree: doctorData?.degree || "MBBS",
@@ -57,7 +57,7 @@ const DoctorProfile = () => {
         address: profileData.address,
       };
 
-      const res = await axios.post("http://localhost:4003/api/doctor/update-profile", payload, {
+      const res = await axios.post(`${doctorServiceUrl}/api/doctor/update-profile`, payload, {
         headers: { Authorization: `Bearer ${dToken}` },
       });
 
@@ -180,7 +180,11 @@ const DoctorProfile = () => {
                     className="btn btn-secondary me-3"
                     onClick={() => {
                       setIsEdit(false);
-                      setProfileData((prev) => ({ ...prev, name: doctorData.name, address: doctorData.address }));
+                      setProfileData((prev) => ({
+                        ...prev,
+                        name: doctorData.name,
+                        address: doctorData.address,
+                      }));
                     }}
                   >Cancel</button>
                   <button
