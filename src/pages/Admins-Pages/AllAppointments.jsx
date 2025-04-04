@@ -24,11 +24,13 @@ const Appointments = () => {
   const [showOnlyCancelled, setShowOnlyCancelled] = useState(false);
   const itemsPerPage = 5;
 
+  const adminServiceUrl = import.meta.env.VITE_ADMINSERVICE_URL;
+
   const fetchAppointments = async () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("aToken");
-      const response = await axios.get("http://localhost:4001/api/admin/list-appointments", {
+      const response = await axios.get(`${adminServiceUrl}/api/admin/list-appointments`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -41,7 +43,10 @@ const Appointments = () => {
             doctor: appt.docData?.name || "Unknown",
             doctorImage: appt.docData?.image || "https://via.placeholder.com/30",
             patient: appt.userData?.name || "Unknown",
-            patientImage: appt.userData?.image !== "Not Set" ? appt.userData?.image : "https://via.placeholder.com/30",
+            patientImage:
+              appt.userData?.image !== "Not Set"
+                ? appt.userData?.image
+                : "https://via.placeholder.com/30",
             time: `${appt.slotDate} (${appt.slotTime})`,
             fees: `$${appt.amount}`,
             cancelled: appt.cancelled,
@@ -67,7 +72,7 @@ const Appointments = () => {
     try {
       const token = localStorage.getItem("aToken");
       const response = await axios.post(
-        "http://localhost:4001/api/admin/cancel-appointment",
+        `${adminServiceUrl}/api/admin/cancel-appointment`,
         { appointmentId: selectedAppointmentId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -101,8 +106,12 @@ const Appointments = () => {
   const sorted = [...filtered].sort((a, b) => {
     if (!sortColumn) return 0;
     return sortOrder === "asc"
-      ? a[sortColumn] < b[sortColumn] ? -1 : 1
-      : a[sortColumn] > b[sortColumn] ? -1 : 1;
+      ? a[sortColumn] < b[sortColumn]
+        ? -1
+        : 1
+      : a[sortColumn] > b[sortColumn]
+      ? -1
+      : 1;
   });
 
   const paginated = sorted.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
@@ -147,13 +156,23 @@ const Appointments = () => {
                   <tr key={appt._id}>
                     <td>{appt.id}</td>
                     <td className="d-flex align-items-center gap-2">
-                      <img src={appt.patientImage} alt="patient" className="rounded-circle" style={{ width: "30px", height: "30px", objectFit: "cover" }} />
+                      <img
+                        src={appt.patientImage}
+                        alt="patient"
+                        className="rounded-circle"
+                        style={{ width: "30px", height: "30px", objectFit: "cover" }}
+                      />
                       <span>{appt.patient}</span>
                     </td>
                     <td>24</td>
                     <td>{appt.time}</td>
                     <td className="d-flex align-items-center gap-2">
-                      <img src={appt.doctorImage} alt="doctor" className="rounded-circle" style={{ width: "30px", height: "30px", objectFit: "cover" }} />
+                      <img
+                        src={appt.doctorImage}
+                        alt="doctor"
+                        className="rounded-circle"
+                        style={{ width: "30px", height: "30px", objectFit: "cover" }}
+                      />
                       <span>{appt.doctor}</span>
                     </td>
                     <td>{appt.fees}</td>
@@ -166,7 +185,11 @@ const Appointments = () => {
                       {!appt.cancelled && (
                         <span
                           className="badge border border-danger text-danger fw-normal"
-                          style={{ cursor: 'pointer', padding: '6px 12px', borderRadius: '12px' }}
+                          style={{
+                            cursor: "pointer",
+                            padding: "6px 12px",
+                            borderRadius: "12px",
+                          }}
                           onClick={() => {
                             setSelectedAppointmentId(appt._id);
                             setShowCancelModal(true);
@@ -182,24 +205,53 @@ const Appointments = () => {
             </table>
 
             <div className="d-flex justify-content-between align-items-center mt-3">
-              <button className="btn btn-outline-secondary btn-sm" disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)}>Previous</button>
-              <span>Page {currentPage} of {totalPages}</span>
-              <button className="btn btn-outline-secondary btn-sm" disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)}>Next</button>
+              <button
+                className="btn btn-outline-secondary btn-sm"
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((p) => p - 1)}
+              >
+                Previous
+              </button>
+              <span>
+                Page {currentPage} of {totalPages}
+              </span>
+              <button
+                className="btn btn-outline-secondary btn-sm"
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage((p) => p + 1)}
+              >
+                Next
+              </button>
             </div>
           </div>
 
           {showCancelModal && (
-            <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+            <div
+              className="modal d-block"
+              tabIndex="-1"
+              style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+            >
               <div className="modal-dialog">
                 <div className="modal-content">
                   <div className="modal-header">
                     <h5 className="modal-title">Confirm Cancel</h5>
-                    <button type="button" className="btn-close" onClick={() => setShowCancelModal(false)}></button>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      onClick={() => setShowCancelModal(false)}
+                    ></button>
                   </div>
                   <div className="modal-body">Are you sure you want to cancel this appointment?</div>
                   <div className="modal-footer">
-                    <button className="btn btn-secondary" onClick={() => setShowCancelModal(false)}>Close</button>
-                    <button className="btn btn-danger" onClick={handleCancelConfirmed}>Yes, Cancel</button>
+                    <button
+                      className="btn btn-secondary"
+                      onClick={() => setShowCancelModal(false)}
+                    >
+                      Close
+                    </button>
+                    <button className="btn btn-danger" onClick={handleCancelConfirmed}>
+                      Yes, Cancel
+                    </button>
                   </div>
                 </div>
               </div>
@@ -207,11 +259,17 @@ const Appointments = () => {
           )}
 
           {toastMessage && (
-            <div className="toast-container position-fixed bottom-0 end-0 p-3" style={{ zIndex: 9999 }}>
+            <div
+              className="toast-container position-fixed bottom-0 end-0 p-3"
+              style={{ zIndex: 9999 }}
+            >
               <div className={`toast show text-white bg-${toastType}`}>
                 <div className="d-flex">
                   <div className="toast-body">{toastMessage}</div>
-                  <button className="btn-close btn-close-white me-2 m-auto" onClick={() => setToastMessage("")}></button>
+                  <button
+                    className="btn-close btn-close-white me-2 m-auto"
+                    onClick={() => setToastMessage("")}
+                  ></button>
                 </div>
               </div>
             </div>

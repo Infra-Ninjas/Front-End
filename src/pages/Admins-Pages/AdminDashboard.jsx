@@ -18,11 +18,13 @@ const Dashboard = () => {
   const [sortColumn, setSortColumn] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
 
+  const adminServiceUrl = import.meta.env.VITE_ADMINSERVICE_URL;
+
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
         const token = localStorage.getItem("aToken");
-        const res = await axios.get("http://localhost:4001/api/admin/dashboard", {
+        const res = await axios.get(`${adminServiceUrl}/api/admin/dashboard`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -31,7 +33,6 @@ const Dashboard = () => {
         if (res.data.success) {
           const dashData = res.data.dashData;
 
-          // Update stats dynamically
           setStats([
             { label: "Total Doctors", value: dashData.doctors, icon: <FaUserMd /> },
             { label: "Total Patients", value: dashData.patients, icon: <FaUsers /> },
@@ -39,7 +40,6 @@ const Dashboard = () => {
             { label: "Revenue", value: "$4,500", icon: <FaDollarSign /> }, // Static revenue for now
           ]);
 
-          // Format appointments using doctor and user names
           const formattedAppointments = dashData.latestAppointments.map((item, index) => ({
             id: index + 1,
             doctor: item.docData?.name || "Doctor",
@@ -55,7 +55,7 @@ const Dashboard = () => {
     };
 
     fetchDashboardData();
-  }, []);
+  }, [adminServiceUrl]);
 
   const handleSearch = (e) => {
     const value = e.target.value.toLowerCase();

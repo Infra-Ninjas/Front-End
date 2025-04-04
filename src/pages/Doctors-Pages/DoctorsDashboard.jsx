@@ -31,86 +31,74 @@ const DoctorDashboard = () => {
   ]);
 
   const [bookings, setBookings] = useState([]);
-  const doctorserviceurl =
-    import.meta.env.VITE_DOCTORSERVICE_URL || 'http://localhost:4003';
+  const doctorServiceUrl = import.meta.env.VITE_DOCTORSERVICE_URL;
+
+  const fetchDashboardData = async () => {
+    try {
+      const dToken = localStorage.getItem('dToken');
+      const res = await axios.get(`${doctorServiceUrl}/api/doctor/dashboard`, {
+        headers: {
+          Authorization: `Bearer ${dToken}`,
+        },
+      });
+
+      if (res.data.success) {
+        const dashData = res.data.dashData;
+
+        setStats([
+          {
+            icon: <FaMoneyBillWave size={24} className="text-primary" />,
+            label: 'Earnings',
+            value: `$${dashData.earnings || 0}`,
+          },
+          {
+            icon: <FaCalendarAlt size={24} className="text-info" />,
+            label: 'Appointments',
+            value: dashData.appointments || 0,
+          },
+          {
+            icon: <FaUser size={24} className="text-secondary" />,
+            label: 'Patients',
+            value: dashData.patients || 0,
+          },
+        ]);
+
+        const formattedBookings = dashData.latestAppointments
+          .sort((a, b) => b.date - a.date)
+          .map((apt) => {
+            const status = apt.cancelled
+              ? 'Cancelled'
+              : apt.isCompleted
+              ? 'Completed'
+              : 'Pending';
+
+            return {
+              name: apt.userData?.name || 'Patient',
+              date: `${apt.slotDate} ${apt.slotTime}`,
+              status,
+            };
+          });
+
+        setBookings(formattedBookings);
+      }
+    } catch (error) {
+      console.error('❌ Error loading doctor dashboard:', error);
+    }
+  };
 
   useEffect(() => {
-    const fetchDashboardData = async () => {
-      try {
-        const dToken = localStorage.getItem('dToken');
-        const res = await axios.get(`${doctorserviceurl}/api/doctor/dashboard`, {
-          headers: {
-            Authorization: `Bearer ${dToken}`,
-          },
-        });
-
-        if (res.data.success) {
-          const dashData = res.data.dashData;
-
-          setStats([
-            {
-              icon: <FaMoneyBillWave size={24} className="text-primary" />,
-              label: 'Earnings',
-              value: `$${dashData.earnings || 0}`,
-            },
-            {
-              icon: <FaCalendarAlt size={24} className="text-info" />,
-              label: 'Appointments',
-              value: dashData.appointments || 0,
-            },
-            {
-              icon: <FaUser size={24} className="text-secondary" />,
-              label: 'Patients',
-              value: dashData.patients || 0,
-            },
-          ]);
-
-          const formattedBookings = dashData.latestAppointments
-            .sort((a, b) => b.date - a.date)
-            .map((apt) => {
-              const status = apt.cancelled
-                ? 'Cancelled'
-                : apt.isCompleted
-                ? 'Completed'
-                : 'Pending';
-
-              return {
-                name: apt.userData?.name || 'Patient',
-                date: `${apt.slotDate} ${apt.slotTime}`,
-                status,
-              };
-            });
-
-          setBookings(formattedBookings);
-        }
-      } catch (error) {
-        console.error('❌ Error loading doctor dashboard:', error);
-      }
-    };
-
     fetchDashboardData();
+
+    if (localStorage.getItem("dashboardNeedsRefresh") === "true") {
+      localStorage.removeItem("dashboardNeedsRefresh");
+      fetchDashboardData();
+    }
   }, []);
 
   return (
     <DoctorLayout>
-      {/* Removed background: '#f8f9fa' so there's no extra gray layer.
-          Kept marginLeft so the sidebar won't overlap the content. */}
-      <div
-        className="py-4 d-flex flex-column align-items-center"
-        style={{ marginLeft: '250px' }}
-      >
-        {/* White wrapper for stats & bookings remains the same */}
-        <div
-          style={{
-            background: '#fff',
-            borderRadius: '16px',
-            boxShadow: '0 4px 10px rgba(0,0,0,0.05)',
-            width: '90%',
-            maxWidth: '1200px',
-            padding: '20px',
-          }}
-        >
-          {/* Stat Boxes */}
+      <div className="py-4 d-flex flex-column align-items-center" style={{ marginLeft: '250px' }}>
+        <div className="bg-white rounded-4 shadow p-4 w-100" style={{ maxWidth: '1200px' }}>
           <div className="d-flex gap-4 flex-wrap justify-content-center mb-5">
             {stats.map((stat, i) => (
               <div
@@ -131,31 +119,18 @@ const DoctorDashboard = () => {
             ))}
           </div>
 
-          {/* Bookings Card */}
-          <div
-            className="p-4 w-100"
-            style={{
-              maxWidth: '850px',
-              background: '#fff',
-              borderRadius: '16px',
-              boxShadow: '0 4px 10px rgba(0,0,0,0.06)',
-              margin: '0 auto',
-            }}
-          >
-            {/* Card Header */}
+          <div className="p-4 w-100" style={{ maxWidth: '850px', margin: '0 auto' }}>
             <div className="d-flex align-items-center mb-4">
               <FaRegCalendarAlt className="me-2 text-primary" />
               <h5 className="fw-bold mb-0">Latest Bookings</h5>
             </div>
 
-            {/* Bookings List */}
             <div className="d-flex flex-column gap-4">
               {bookings.map((booking, index) => (
                 <div
                   key={index}
                   className="d-flex justify-content-between align-items-center pb-2 border-bottom"
                 >
-                  {/* Left side: Image, name, date */}
                   <div className="d-flex align-items-center gap-3">
                     <img
                       src={assets.profile_pic}
@@ -164,44 +139,21 @@ const DoctorDashboard = () => {
                     />
                     <div>
                       <div className="fw-semibold">{booking.name}</div>
-                      <small className="text-muted">
-                        Booking on {booking.date}
-                      </small>
+                      <small className="text-muted">Booking on {booking.date}</small>
                     </div>
                   </div>
 
-                  {/* Right side: Action icons or status */}
                   {booking.status === 'Pending' ? (
                     <div className="d-flex align-items-center gap-2">
-                      <div
-                        className="d-flex align-items-center justify-content-center"
-                        style={{
-                          background: '#f8d7da',
-                          borderRadius: '50%',
-                          width: 30,
-                          height: 30,
-                        }}
-                      >
+                      <div className="bg-danger-subtle rounded-circle d-flex justify-content-center align-items-center" style={{ width: 30, height: 30 }}>
                         <FaTimes className="text-danger" />
                       </div>
-                      <div
-                        className="d-flex align-items-center justify-content-center"
-                        style={{
-                          background: '#d4edda',
-                          borderRadius: '50%',
-                          width: 30,
-                          height: 30,
-                        }}
-                      >
+                      <div className="bg-success-subtle rounded-circle d-flex justify-content-center align-items-center" style={{ width: 30, height: 30 }}>
                         <FaCheck className="text-success" />
                       </div>
                     </div>
                   ) : (
-                    <span
-                      className={`fw-semibold ${
-                        booking.status === 'Cancelled' ? 'text-danger' : 'text-success'
-                      }`}
-                    >
+                    <span className={`fw-semibold ${booking.status === 'Cancelled' ? 'text-danger' : 'text-success'}`}>
                       {booking.status}
                     </span>
                   )}

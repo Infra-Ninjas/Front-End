@@ -19,6 +19,7 @@ const PatientsAppointments = () => {
   const [slotTime, setSlotTime] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
   const [bookedSlots, setBookedSlots] = useState([]);
+  const userServiceUrl = import.meta.env.VITE_USERSERVICE_URL;
 
   const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
@@ -52,8 +53,6 @@ const PatientsAppointments = () => {
         if (!thisDoctor) return;
 
         setDocInfo(thisDoctor);
-
-        // ✅ Use slots_booked directly
         const bookedTimes = thisDoctor.slots_booked?.[selectedDate] || [];
         setBookedSlots(bookedTimes);
       } catch (err) {
@@ -119,7 +118,7 @@ const PatientsAppointments = () => {
       };
 
       const response = await axios.post(
-        'http://localhost:4002/api/user/book-appointment',
+        `${userServiceUrl}/api/user/book-appointment`,
         requestBody,
         { headers: { Authorization: `Bearer ${uToken}` } }
       );
@@ -127,7 +126,6 @@ const PatientsAppointments = () => {
       if (response.data && response.data.success) {
         toast.success('Appointment booked successfully!');
 
-        // ✅ Refresh booked slots right away
         const updatedDoctors = await getAllDoctors();
         const thisDoctor = updatedDoctors.find((doc) => doc._id === docId);
         setDocInfo(thisDoctor);

@@ -13,12 +13,12 @@ const PatientList = () => {
   const [statusFilter, setStatusFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  const doctorserviceurl =
-    import.meta.env.VITE_DOCTORSERVICE_URL || "http://localhost:4003";
+
+  const doctorServiceUrl = import.meta.env.VITE_DOCTORSERVICE_URL;
 
   const getDoctorAppointments = async () => {
     try {
-      const url = `${doctorserviceurl}/api/doctor/appointments?docId=${docId}`;
+      const url = `${doctorServiceUrl}/api/doctor/appointments?docId=${docId}`;
       const response = await axios.get(url, {
         headers: { Authorization: `Bearer ${dToken}` },
       });
@@ -39,12 +39,13 @@ const PatientList = () => {
   const handleComplete = async (appointmentId) => {
     try {
       const response = await axios.post(
-        `${doctorserviceurl}/api/doctor/complete-appointment`,
+        `${doctorServiceUrl}/api/doctor/complete-appointment`,
         { docId, appointmentId },
         { headers: { Authorization: `Bearer ${dToken}` } }
       );
       if (response.data.success) {
         toast.success("Appointment marked as completed");
+        localStorage.setItem("dashboardNeedsRefresh", "true");
         getDoctorAppointments();
       }
     } catch (error) {
@@ -56,12 +57,13 @@ const PatientList = () => {
   const handleCancel = async (appointmentId) => {
     try {
       const response = await axios.post(
-        `${doctorserviceurl}/api/doctor/cancel-appointment`,
+        `${doctorServiceUrl}/api/doctor/cancel-appointment`,
         { docId, appointmentId },
         { headers: { Authorization: `Bearer ${dToken}` } }
       );
       if (response.data.success) {
         toast.success("Appointment cancelled");
+        localStorage.setItem("dashboardNeedsRefresh", "true");
         getDoctorAppointments();
       }
     } catch (error) {
@@ -76,7 +78,6 @@ const PatientList = () => {
     }
   }, [docId, dToken]);
 
-  // ✅ FIXED FILTER LOGIC
   useEffect(() => {
     let filtered = allAppointments;
 
@@ -98,10 +99,7 @@ const PatientList = () => {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredAppointments.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
+  const currentItems = filteredAppointments.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(filteredAppointments.length / itemsPerPage);
 
   return (
@@ -120,7 +118,6 @@ const PatientList = () => {
         >
           <h3 className="fw-bold text-center mb-4">All Appointments</h3>
 
-          {/* Filter Dropdown */}
           <div className="d-flex justify-content-center mb-3">
             <select
               value={statusFilter}
@@ -134,7 +131,6 @@ const PatientList = () => {
             </select>
           </div>
 
-          {/* Table */}
           <div
             className="table-responsive"
             style={{
@@ -180,8 +176,6 @@ const PatientList = () => {
                           </span>
                         </div>
                       </td>
-
-                      {/* Payment Type */}
                       <td>
                         <span
                           style={{
@@ -214,7 +208,6 @@ const PatientList = () => {
                           {apt.paymentType?.toUpperCase() || "CASH"}
                         </span>
                       </td>
-
                       <td>24</td>
                       <td>
                         {apt.slotDate}, {apt.slotTime}
@@ -259,7 +252,6 @@ const PatientList = () => {
             </table>
           </div>
 
-          {/* Pagination */}
           {totalPages > 1 && (
             <div className="d-flex justify-content-center mt-4 gap-3">
               <button

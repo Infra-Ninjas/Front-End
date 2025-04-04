@@ -1,4 +1,3 @@
-// Full MyProfile.jsx with dark mode, drag-and-drop, and complete UI
 import React, { useEffect, useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -36,6 +35,7 @@ const MyProfile = () => {
   );
 
   const dropRef = useRef();
+  const userServiceUrl = import.meta.env.VITE_USERSERVICE_URL;
 
   useEffect(() => {
     document.body.classList.toggle("dark", darkMode);
@@ -45,7 +45,7 @@ const MyProfile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get("http://localhost:4002/api/user/get-profile", {
+        const res = await axios.get(`${userServiceUrl}/api/user/get-profile`, {
           headers: { Authorization: `Bearer ${uToken}` },
         });
         if (res.data.success) {
@@ -108,7 +108,7 @@ const MyProfile = () => {
       formData.append("address", JSON.stringify(userData.address));
       if (newImage) formData.append("image", newImage);
 
-      const res = await axios.post("http://localhost:4002/api/user/update-profile", formData, {
+      const res = await axios.post(`${userServiceUrl}/api/user/update-profile`, formData, {
         headers: {
           Authorization: `Bearer ${uToken}`,
           "Content-Type": "multipart/form-data",
