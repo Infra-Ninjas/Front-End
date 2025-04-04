@@ -10,26 +10,67 @@ const DoctorProfile = () => {
   const { dToken, doctorData } = useDoctorContext();
   const [isEdit, setIsEdit] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const doctorServiceUrl = import.meta.env.VITE_DOCTORSERVICE_URL;
 
   const [profileData, setProfileData] = useState({
     docId: doctorData?._id || localStorage.getItem("docId") || "",
-    name: doctorData?.name || "",
-    image: doctorData?.image || assets.doc1,
-    degree: doctorData?.degree || "MBBS",
-    speciality: doctorData?.speciality || "General Physician",
-    experience: doctorData?.experience || "1 year",
-    about: doctorData?.about || "Doctor description not set.",
-    fees: doctorData?.fees || 0,
-    available: doctorData?.available || false,
-    address: doctorData?.address || {
+    name: "",
+    image: assets.doc1,
+    degree: "MBBS",
+    speciality: "General Physician",
+    experience: "1 year",
+    about: "Doctor description not set.",
+    fees: 0,
+    available: false,
+    address: {
       street: "",
       city: "",
       state: "",
       zip: "",
     },
   });
+
+  useEffect(() => {
+    const fetchDoctorProfile = async () => {
+      try {
+        const res = await axios.get(`${doctorServiceUrl}/api/doctor/profile`, {
+          headers: { Authorization: `Bearer ${dToken}` },
+        });
+
+        if (res.data.success) {
+          const data = res.data.doctorData;
+          setProfileData({
+            docId: data._id,
+            name: data.name,
+            image: data.image || assets.doc1,
+            degree: data.degree || "MBBS",
+            speciality: data.speciality || "General Physician",
+            experience: data.experience || "1 year",
+            about: data.about || "Doctor description not set.",
+            fees: data.fees || 0,
+            available: data.available || false,
+            address: data.address || {
+              street: "",
+              city: "",
+              state: "",
+              zip: "",
+            },
+          });
+        } else {
+          toast.error("Failed to fetch profile");
+        }
+      } catch (err) {
+        console.error(err);
+        toast.error("Error fetching profile");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDoctorProfile();
+  }, [doctorServiceUrl, dToken]);
 
   const handleInputChange = (e, field, subField = null) => {
     if (subField) {
@@ -51,15 +92,26 @@ const DoctorProfile = () => {
   const handleSave = async () => {
     try {
       setSaving(true);
+
       const payload = {
         docId: profileData.docId,
         name: profileData.name,
+        speciality: profileData.speciality,
+        experience: profileData.experience,
+        about: profileData.about,
         address: profileData.address,
       };
 
-      const res = await axios.post(`${doctorServiceUrl}/api/doctor/update-profile`, payload, {
-        headers: { Authorization: `Bearer ${dToken}` },
-      });
+      const res = await axios.post(
+        `${doctorServiceUrl}/api/doctor/update-profile`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${dToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (res.data.success) {
         toast.success("Profile updated successfully");
@@ -74,6 +126,18 @@ const DoctorProfile = () => {
       setSaving(false);
     }
   };
+
+  if (loading) {
+    return (
+      <DoctorLayout>
+        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
+          <div className="spinner-border text-info" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </DoctorLayout>
+    );
+  }
 
   return (
     <DoctorLayout>
@@ -101,18 +165,47 @@ const DoctorProfile = () => {
                   <h2 className="fw-bold" style={{ color: "#00838F" }}>{profileData.name}</h2>
                 )}
                 <p className="text-secondary mb-0">
-                  {profileData.degree} - {profileData.speciality}
+                  {profileData.degree} -{" "}
+                  {isEdit ? (
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={profileData.speciality}
+                      onChange={(e) => handleInputChange(e, "speciality")}
+                    />
+                  ) : (
+                    profileData.speciality
+                  )}
                 </p>
               </div>
             </div>
 
             {/* Professional Info */}
             <h4 className="mb-3" style={{ color: "#00838F" }}>Professional Information</h4>
-            <p className="text-secondary mb-1"><strong>Experience:</strong> {profileData.experience}</p>
+            <p className="text-secondary mb-1"><strong>Experience:</strong>{" "}
+              {isEdit ? (
+                <input
+                  type="text"
+                  className="form-control"
+                  value={profileData.experience}
+                  onChange={(e) => handleInputChange(e, "experience")}
+                />
+              ) : (
+                profileData.experience
+              )}
+            </p>
 
             {/* About */}
             <h4 className="mb-3" style={{ color: "#00838F" }}>About</h4>
-            <p className="text-secondary mb-4">{profileData.about}</p>
+            {isEdit ? (
+              <textarea
+                className="form-control mb-4"
+                value={profileData.about}
+                onChange={(e) => handleInputChange(e, "about")}
+              />
+            ) : (
+              <p className="text-secondary mb-4">{profileData.about}</p>
+            )}
 
             {/* Fee */}
             <h4 className="mb-3" style={{ color: "#00838F" }}>Appointment Fee</h4>
@@ -158,7 +251,7 @@ const DoctorProfile = () => {
               </>
             )}
 
-            {/* Availability (view only) */}
+            {/* Availability */}
             <h4 className="mb-3 mt-4" style={{ color: "#00838F" }}>Availability</h4>
             <div className="form-check mb-4">
               <input
@@ -172,7 +265,7 @@ const DoctorProfile = () => {
               </label>
             </div>
 
-            {/* Action Buttons */}
+            {/* Buttons */}
             <div className="text-end">
               {isEdit ? (
                 <>
@@ -180,13 +273,10 @@ const DoctorProfile = () => {
                     className="btn btn-secondary me-3"
                     onClick={() => {
                       setIsEdit(false);
-                      setProfileData((prev) => ({
-                        ...prev,
-                        name: doctorData.name,
-                        address: doctorData.address,
-                      }));
                     }}
-                  >Cancel</button>
+                  >
+                    Cancel
+                  </button>
                   <button
                     className="btn btn-info text-white fw-semibold"
                     onClick={handleSave}

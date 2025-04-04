@@ -45,6 +45,7 @@ const PatientList = () => {
       );
       if (response.data.success) {
         toast.success("Appointment marked as completed");
+        localStorage.setItem("dashboardNeedsRefresh", "true");
         getDoctorAppointments();
       }
     } catch (error) {
@@ -62,6 +63,7 @@ const PatientList = () => {
       );
       if (response.data.success) {
         toast.success("Appointment cancelled");
+        localStorage.setItem("dashboardNeedsRefresh", "true");
         getDoctorAppointments();
       }
     } catch (error) {
