@@ -26,7 +26,14 @@ const MyAppointments = () => {
       });
 
       if (response.data?.success) {
-        setAppointments(response.data.appointments);
+        const sortedAppointments = [...response.data.appointments].sort((a, b) => {
+          if (a.isCompleted !== b.isCompleted) {
+            return a.isCompleted ? 1 : -1; // show incomplete (not completed) first
+          }
+          return new Date(b.createdAt) - new Date(a.createdAt); // latest first
+        });
+
+        setAppointments(sortedAppointments);
       } else {
         toast.error("Failed to fetch appointments.");
         console.error("API response failed:", response.data);
@@ -37,10 +44,54 @@ const MyAppointments = () => {
     }
   };
 
-  const cancelAppointment = async (appointmentId) => {
-    const confirmCancel = window.confirm("Are you sure you want to cancel this appointment?");
-    if (!confirmCancel) return;
+  const cancelAppointment = (appointmentId) => {
+    toast(
+      ({ closeToast }) => (
+        <div>
+          <p>Are you sure you want to cancel this appointment?</p>
+          <div
+            style={{
+              marginTop: "10px",
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
+          >
+            <button
+              onClick={() => {
+                closeToast();
+                handleCancelAppointment(appointmentId);
+              }}
+              style={{
+                marginRight: "10px",
+                border: "none",
+                background: "none",
+                color: "#f44336",
+                fontWeight: "bold",
+                cursor: "pointer",
+              }}
+            >
+              Yes
+            </button>
+            <button
+              onClick={closeToast}
+              style={{
+                border: "none",
+                background: "none",
+                color: "#00838F",
+                fontWeight: "bold",
+                cursor: "pointer",
+              }}
+            >
+              No
+            </button>
+          </div>
+        </div>
+      ),
+      { autoClose: false }
+    );
+  };
 
+  const handleCancelAppointment = async (appointmentId) => {
     try {
       const response = await axios.post(
         `${userServiceUrl}/api/user/cancel-appointment`,
@@ -55,7 +106,9 @@ const MyAppointments = () => {
 
       if (response.data?.success) {
         toast.success("Appointment cancelled successfully");
-        setAppointments((prev) => prev.filter((apt) => apt._id !== appointmentId));
+        setAppointments((prev) =>
+          prev.filter((apt) => apt._id !== appointmentId)
+        );
       } else {
         toast.error("Failed to cancel appointment");
         console.error("Cancel error:", response.data);
@@ -64,6 +117,14 @@ const MyAppointments = () => {
       toast.error("⚠️ Something went wrong. Please try again.");
       console.error("Error cancelling appointment:", error.response || error.message);
     }
+  };
+
+  const baseBtnStyle = {
+    minWidth: "200px",
+    height: "48px",
+    borderRadius: "50px",
+    fontWeight: "600",
+    transition: "all 0.2s ease",
   };
 
   return (
@@ -76,7 +137,13 @@ const MyAppointments = () => {
             <p className="text-center">No appointments found.</p>
           ) : (
             appointments.map((apt) => {
-              const { _id: appointmentId, docData: doc, slotDate, slotTime } = apt;
+              const {
+                _id: appointmentId,
+                docData: doc,
+                slotDate,
+                slotTime,
+                isCompleted,
+              } = apt;
               const docName = doc?.name || "Doctor Name";
               const docSpecialty = doc?.speciality || "Specialty";
               const docImage = doc?.image || "";
@@ -114,47 +181,64 @@ const MyAppointments = () => {
                       </p>
                     </div>
 
-                    <div className="d-flex flex-column gap-3 mt-3 mt-md-0">
-                      <button
-                        className="btn px-4 py-2 fw-semibold rounded-pill"
-                        style={{
-                          border: "2px solid #00838F",
-                          backgroundColor: "white",
-                          color: "#00838F",
-                        }}
-                        onMouseEnter={(e) => {
-                          e.target.style.backgroundColor = "#00838F";
-                          e.target.style.color = "white";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.target.style.backgroundColor = "white";
-                          e.target.style.color = "#00838F";
-                        }}
-                        onClick={() => toast.info("💳 Payment integration coming soon!")}
-                      >
-                        Pay Online
-                      </button>
+                    <div className="d-flex flex-column gap-3 mt-3 mt-md-0 align-items-center">
+                      {!isCompleted ? (
+                        <>
+                          <button
+                            className="btn"
+                            style={{
+                              ...baseBtnStyle,
+                              border: "2px solid #00838F",
+                              backgroundColor: "white",
+                              color: "#00838F",
+                            }}
+                            onMouseEnter={(e) => {
+                              e.target.style.backgroundColor = "#00838F";
+                              e.target.style.color = "white";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.backgroundColor = "white";
+                              e.target.style.color = "#00838F";
+                            }}
+                            onClick={() => toast.info("💳 Payment integration coming soon!")}
+                          >
+                            Pay Online
+                          </button>
 
-                      <button
-                        className="btn px-4 py-2 fw-semibold rounded-pill"
-                        style={{
-                          border: "2px solid #f44336",
-                          backgroundColor: "white",
-                          color: "#f44336",
-                          transition: "all 0.2s ease",
-                        }}
-                        onMouseEnter={(e) => {
-                          e.target.style.backgroundColor = "#f44336";
-                          e.target.style.color = "white";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.target.style.backgroundColor = "white";
-                          e.target.style.color = "#f44336";
-                        }}
-                        onClick={() => cancelAppointment(appointmentId)}
-                      >
-                        Cancel Appointment
-                      </button>
+                          <button
+                            className="btn"
+                            style={{
+                              ...baseBtnStyle,
+                              border: "2px solid #f44336",
+                              backgroundColor: "white",
+                              color: "#f44336",
+                            }}
+                            onMouseEnter={(e) => {
+                              e.target.style.backgroundColor = "#f44336";
+                              e.target.style.color = "white";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.backgroundColor = "white";
+                              e.target.style.color = "#f44336";
+                            }}
+                            onClick={() => cancelAppointment(appointmentId)}
+                          >
+                            Cancel Appointment
+                          </button>
+                        </>
+                      ) : (
+                        <button
+                          className="btn"
+                          style={{
+                            ...baseBtnStyle,
+                            border: "2px solid #4CAF50",
+                            backgroundColor: "#4CAF50",
+                            color: "white",
+                          }}
+                        >
+                          Completed
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>

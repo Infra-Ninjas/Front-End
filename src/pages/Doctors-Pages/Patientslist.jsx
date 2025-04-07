@@ -212,7 +212,7 @@ const PatientList = () => {
                       <td>
                         {apt.slotDate}, {apt.slotTime}
                       </td>
-                      <td>${apt.fees || "40"}</td>
+                      <td>${apt.docData?.fees || apt.amount || "40"}</td>
                       <td>
                         {!apt.cancelled && !apt.isCompleted ? (
                           <div className="d-flex gap-2 align-items-center">

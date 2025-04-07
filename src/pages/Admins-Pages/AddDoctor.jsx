@@ -8,7 +8,7 @@ import AdminNavbar from "../../components/Admins-Components/AdminNavbar";
 import SideBar from "../../components/Admins-Components/SideBar";
 
 const AddDoctor = () => {
-  const [docImg, setDocImg] = useState(null); // For file upload
+  const [docImg, setDocImg] = useState(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,7 +21,6 @@ const AddDoctor = () => {
   const [city, setCity] = useState("");
   const [stateVal, setStateVal] = useState("");
   const [zip, setZip] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
 
   const navigate = useNavigate();
   const { aToken } = useAdminContext();
@@ -31,61 +30,35 @@ const AddDoctor = () => {
     event.preventDefault();
 
     try {
-      if (!docImg && !imageUrl) {
-        return toast.error("Please upload doctor picture or provide an image URL");
+      if (!docImg) {
+        return toast.error("Please upload doctor picture");
       }
       if (!aToken) {
         return toast.error("Admin not authenticated. Please log in.");
       }
 
       const currentTimestamp = Date.now();
-      let payload;
-      let headers;
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("email", email);
+      formData.append("password", password);
+      formData.append("image", docImg);
+      formData.append("speciality", speciality);
+      formData.append("degree", degree);
+      formData.append("experience", experience);
+      formData.append("about", about);
+      formData.append("fees", fees);
+      formData.append("available", true);
+      formData.append("address", JSON.stringify({ street, city, state: stateVal, zip }));
+      formData.append("date", currentTimestamp);
+      formData.append("slots_booked", JSON.stringify({}));
 
-      if (docImg) {
-        payload = new FormData();
-        payload.append("name", name);
-        payload.append("email", email);
-        payload.append("password", password);
-        payload.append("image", docImg);
-        payload.append("speciality", speciality);
-        payload.append("degree", degree);
-        payload.append("experience", experience);
-        payload.append("about", about);
-        payload.append("fees", fees);
-        payload.append("available", true);
-        payload.append("address", JSON.stringify({ street, city, state: stateVal, zip }));
-        payload.append("date", currentTimestamp);
-        payload.append("slots_booked", JSON.stringify({}));
+      const headers = {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${aToken}`,
+      };
 
-        headers = {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${aToken}`,
-        };
-      } else {
-        payload = {
-          name,
-          email,
-          password,
-          image: imageUrl,
-          speciality,
-          degree,
-          experience,
-          about,
-          fees: Number(fees),
-          available: true,
-          address: { street, city, state: stateVal, zip },
-          date: currentTimestamp,
-          slots_booked: {},
-        };
-
-        headers = {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${aToken}`,
-        };
-      }
-
-      const { data } = await axios.post(`${backendUrl}/api/admin/add-doctor`, payload, { headers });
+      const { data } = await axios.post(`${backendUrl}/api/admin/add-doctor`, formData, { headers });
 
       if (data.success) {
         toast.success(data.message || "Doctor added successfully!");
@@ -94,8 +67,9 @@ const AddDoctor = () => {
         toast.error(data.message || "Failed to add doctor. Please try again.");
       }
     } catch (error) {
+      const message = error.response?.data?.message || "Failed to add doctor. Please try again.";
+      toast.error(message);
       console.error("Add Doctor Error:", error);
-      toast.error(error.response?.data?.message || "Failed to add doctor. Please try again.");
     }
   };
 
@@ -104,15 +78,14 @@ const AddDoctor = () => {
       <AdminNavbar />
       <SideBar />
 
-      {/* Main content container */}
       <div
         className="admin-content"
         style={{
-          marginTop: "70px",      // Offset for fixed AdminNavbar
-          marginLeft: "200px",    // Offset for fixed SideBar on large screens
+          marginTop: "70px",
+          marginLeft: "200px",
           minHeight: "100vh",
           padding: "20px",
-          backgroundColor: "#fff", // Unified white background
+          backgroundColor: "#fff",
         }}
       >
         <div style={{ maxWidth: "900px", margin: "0 auto" }}>
@@ -187,6 +160,7 @@ const AddDoctor = () => {
                       className="form-control"
                       placeholder="Education"
                       required
+                      autoComplete="off"
                     />
                   </div>
                   <div className="col-md-6">
@@ -287,20 +261,6 @@ const AddDoctor = () => {
                     />
                   </div>
                 </div>
-              </div>
-            </div>
-
-            {/* Optional Image URL Input */}
-            <div className="d-flex justify-content-end mt-3">
-              <div style={{ maxWidth: "300px", width: "100%" }}>
-                <label className="form-label">Or provide an Image URL</label>
-                <input
-                  onChange={(e) => setImageUrl(e.target.value)}
-                  value={imageUrl}
-                  type="text"
-                  className="form-control"
-                  placeholder="https://example.com/doctor.jpg"
-                />
               </div>
             </div>
 

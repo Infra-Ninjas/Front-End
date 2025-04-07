@@ -9,8 +9,6 @@ import {
   faIdCard,
   faSpinner,
   faCamera,
-  faMoon,
-  faSun,
 } from "@fortawesome/free-solid-svg-icons";
 import { useUserContext } from "../../contexts/Users-Context/UserContextProvider";
 import axios from "axios";
@@ -29,18 +27,9 @@ const MyProfile = () => {
   const [newImage, setNewImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [darkMode, setDarkMode] = useState(() =>
-    localStorage.getItem("theme") === "dark" ||
-    (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches)
-  );
 
   const dropRef = useRef();
   const userServiceUrl = import.meta.env.VITE_USERSERVICE_URL;
-
-  useEffect(() => {
-    document.body.classList.toggle("dark", darkMode);
-    localStorage.setItem("theme", darkMode ? "dark" : "light");
-  }, [darkMode]);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -148,16 +137,10 @@ const MyProfile = () => {
   return (
     <UserLayout>
       <ToastContainer />
-      <div className="d-flex justify-content-between align-items-center">
-        <h2 className="mb-4 fw-bold text-center">My Profile</h2>
-        <button className="btn btn-sm btn-outline-secondary" onClick={() => setDarkMode(!darkMode)}>
-          <FontAwesomeIcon icon={darkMode ? faSun : faMoon} className="me-1" />
-          {darkMode ? "Light Mode" : "Dark Mode"}
-        </button>
-      </div>
+      <h2 className="mb-4 fw-bold text-center">My Profile</h2>
 
       <div style={{ maxWidth: "900px", margin: "0 auto" }}>
-        <div className={`card shadow-lg p-4 mx-auto ${darkMode ? "bg-dark text-white" : ""}`} style={{ maxWidth: "700px" }}>
+        <div className="card shadow-lg p-4 mx-auto" style={{ maxWidth: "700px" }}>
           <div className="d-flex align-items-center mb-4">
             <div
               ref={dropRef}
