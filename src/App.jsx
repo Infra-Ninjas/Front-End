@@ -53,7 +53,6 @@ const App = () => {
     setIsLoggedIn(!!(aToken || uToken || dToken));
   }, [navbarRefresh, aToken, uToken, dToken]);
 
-  // Pages where Navbar should NOT be shown
   const protectedRoutes = [
     "/admin-dashboard",
     "/AddDoctor",
@@ -70,14 +69,13 @@ const App = () => {
     "/doctorprofile",
     "/doctorappointment",
     "/usersdoctorslist",
-    "/patientsbookappointments" // ✅ fixed: hide navbar here too
+    "/patientsbookappointments"
   ];
 
   const shouldShowNavbar = !protectedRoutes.some((path) =>
     location.pathname.startsWith(path)
   );
 
-  // Pages where Footer SHOULD be shown
   const footerAllowedPaths = [
     "/",
     "/about",
@@ -122,16 +120,16 @@ const App = () => {
         <Route path="/AddDoctor" element={aToken ? <AddDoctor /> : <Navigate to="/admin-login" replace />} />
         <Route path="/DoctorsList" element={aToken ? <DoctorsList /> : <Navigate to="/admin-login" replace />} />
         <Route path="/AllAppointments" element={aToken ? <AllAppointments /> : <Navigate to="/admin-login" replace />} />
-        <Route path="/admindashboard" element={<AdminDashboard />} />
-        <Route path="/doctorslist" element={<DoctorsList />} />
-        <Route path="/addDoctor" element={<AddDoctor />} />
-        <Route path="/allappointments" element={<AllAppointments />} />
+        <Route path="/admindashboard" element={aToken ? <AdminDashboard /> : <Navigate to="/admin-login" replace />} />
+        <Route path="/doctorslist" element={aToken ? <DoctorsList /> : <Navigate to="/admin-login" replace />} />
+        <Route path="/addDoctor" element={aToken ? <AddDoctor /> : <Navigate to="/admin-login" replace />} />
+        <Route path="/allappointments" element={aToken ? <AllAppointments /> : <Navigate to="/admin-login" replace />} />
 
         {/* User */}
-        <Route path="/myprofile" element={<MyProfile />} />
-        <Route path="/myappointments" element={<MyAppointments />} />
-        <Route path="/usersdoctorslist" element={<UsersDoctosList />} />
-        <Route path="/patientsbookappointments/:docId" element={<PatientsAppointments />} />
+        <Route path="/myprofile" element={uToken ? <MyProfile /> : <Navigate to="/login" replace />} />
+        <Route path="/myappointments" element={uToken ? <MyAppointments /> : <Navigate to="/login" replace />} />
+        <Route path="/usersdoctorslist" element={uToken ? <UsersDoctosList /> : <Navigate to="/login" replace />} />
+        <Route path="/patientsbookappointments/:docId" element={uToken ? <PatientsAppointments /> : <Navigate to="/login" replace />} />
 
         {/* Doctor */}
         <Route path="/doctorDashboard" element={dToken ? <DoctorsDashboard /> : <Navigate to="/doctor-login" replace />} />
@@ -141,7 +139,6 @@ const App = () => {
         <Route path="/doctor-login" element={<DoctorLogin />} />
       </Routes>
 
-      {/* Only show footer on selected public pages */}
       {shouldShowFooter && <Footer />}
     </div>
   );

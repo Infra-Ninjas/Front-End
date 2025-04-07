@@ -14,6 +14,7 @@ const Dashboard = () => {
   ]);
 
   const [appointments, setAppointments] = useState([]);
+  const [allAppointmentsBackup, setAllAppointmentsBackup] = useState([]);
   const [search, setSearch] = useState("");
   const [sortColumn, setSortColumn] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
@@ -37,7 +38,7 @@ const Dashboard = () => {
             { label: "Total Doctors", value: dashData.doctors, icon: <FaUserMd /> },
             { label: "Total Patients", value: dashData.patients, icon: <FaUsers /> },
             { label: "Appointments Today", value: dashData.appointments, icon: <FaCalendarCheck /> },
-            { label: "Revenue", value: "$4,500", icon: <FaDollarSign /> }, // Static revenue for now
+            { label: "Revenue", value: `$${dashData.totalRevenue}`, icon: <FaDollarSign /> },
           ]);
 
           const formattedAppointments = dashData.latestAppointments.map((item, index) => ({
@@ -45,9 +46,15 @@ const Dashboard = () => {
             doctor: item.docData?.name || "Doctor",
             patient: item.userData?.name || "Patient",
             time: `${item.slotDate} ${item.slotTime}`,
+            status: item.cancelled
+              ? "Cancelled"
+              : item.isCompleted
+              ? "Completed"
+              : "Pending",
           }));
 
           setAppointments(formattedAppointments);
+          setAllAppointmentsBackup(formattedAppointments);
         }
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
@@ -60,14 +67,18 @@ const Dashboard = () => {
   const handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
     setSearch(value);
-    setAppointments((prev) =>
-      prev.filter(
+
+    if (value === "") {
+      setAppointments(allAppointmentsBackup);
+    } else {
+      const filtered = allAppointmentsBackup.filter(
         (a) =>
           a.doctor.toLowerCase().includes(value) ||
           a.patient.toLowerCase().includes(value) ||
           a.time.toLowerCase().includes(value)
-      )
-    );
+      );
+      setAppointments(filtered);
+    }
   };
 
   const handleSort = (column) => {
@@ -140,17 +151,54 @@ const Dashboard = () => {
                   <th onClick={() => handleSort("doctor")} style={{ cursor: "pointer" }}>Doctor</th>
                   <th onClick={() => handleSort("patient")} style={{ cursor: "pointer" }}>Patient</th>
                   <th onClick={() => handleSort("time")} style={{ cursor: "pointer" }}>Time</th>
+                  <th style={{ paddingLeft: "100px" }}>Status</th>
+
+
                 </tr>
               </thead>
               <tbody>
-                {appointments.map((appointment) => (
-                  <tr key={appointment.id}>
-                    <td>{appointment.id}</td>
-                    <td>{appointment.doctor}</td>
-                    <td>{appointment.patient}</td>
-                    <td>{appointment.time}</td>
+                {appointments.length > 0 ? (
+                  appointments.map((appointment) => (
+                    <tr key={appointment.id}>
+                      <td>{appointment.id}</td>
+                      <td>{appointment.doctor}</td>
+                      <td>{appointment.patient}</td>
+                      <td>{appointment.time}</td>
+                      <td>
+                        <span
+                          className="badge text-white fw-semibold"
+                          style={{
+                            backgroundColor:
+                              appointment.status === "Completed"
+                                ? "#2E7D32" 
+                                : appointment.status === "Cancelled"
+                                ? "#B71C1C"
+                                : "#455A64",
+                            padding: "6px 12px",
+                            borderRadius: "9px",
+                            fontSize: "14px",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            height: "22px",
+                            width: "90px",
+                            margin: "0 auto",
+                            textAlign: "center",
+                            
+                          }}
+                        >
+                          {appointment.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" className="text-center py-3 text-muted">
+                      No results found.
+                    </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>

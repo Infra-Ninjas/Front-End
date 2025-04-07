@@ -152,55 +152,63 @@ const Appointments = () => {
                 </tr>
               </thead>
               <tbody>
-                {paginated.map((appt) => (
-                  <tr key={appt._id}>
-                    <td>{appt.id}</td>
-                    <td className="d-flex align-items-center gap-2">
-                      <img
-                        src={appt.patientImage}
-                        alt="patient"
-                        className="rounded-circle"
-                        style={{ width: "30px", height: "30px", objectFit: "cover" }}
-                      />
-                      <span>{appt.patient}</span>
-                    </td>
-                    <td>24</td>
-                    <td>{appt.time}</td>
-                    <td className="d-flex align-items-center gap-2">
-                      <img
-                        src={appt.doctorImage}
-                        alt="doctor"
-                        className="rounded-circle"
-                        style={{ width: "30px", height: "30px", objectFit: "cover" }}
-                      />
-                      <span>{appt.doctor}</span>
-                    </td>
-                    <td>{appt.fees}</td>
-                    <td>
-                      <span className={`badge ${appt.cancelled ? "bg-danger" : "bg-success"}`}>
-                        {appt.cancelled ? "Cancelled" : "Completed"}
-                      </span>
-                    </td>
-                    <td>
-                      {!appt.cancelled && (
-                        <span
-                          className="badge border border-danger text-danger fw-normal"
-                          style={{
-                            cursor: "pointer",
-                            padding: "6px 12px",
-                            borderRadius: "12px",
-                          }}
-                          onClick={() => {
-                            setSelectedAppointmentId(appt._id);
-                            setShowCancelModal(true);
-                          }}
-                        >
-                          Cancel
+                {paginated.length > 0 ? (
+                  paginated.map((appt) => (
+                    <tr key={appt._id}>
+                      <td>{appt.id}</td>
+                      <td className="d-flex align-items-center gap-2">
+                        <img
+                          src={appt.patientImage}
+                          alt="patient"
+                          className="rounded-circle"
+                          style={{ width: "30px", height: "30px", objectFit: "cover" }}
+                        />
+                        <span>{appt.patient}</span>
+                      </td>
+                      <td>24</td>
+                      <td>{appt.time}</td>
+                      <td className="d-flex align-items-center gap-2">
+                        <img
+                          src={appt.doctorImage}
+                          alt="doctor"
+                          className="rounded-circle"
+                          style={{ width: "30px", height: "30px", objectFit: "cover" }}
+                        />
+                        <span>{appt.doctor}</span>
+                      </td>
+                      <td>{appt.fees}</td>
+                      <td>
+                        <span className={`badge ${appt.cancelled ? "bg-danger" : "bg-success"}`}>
+                          {appt.cancelled ? "Cancelled" : "Completed"}
                         </span>
-                      )}
+                      </td>
+                      <td>
+                        {!appt.cancelled && (
+                          <span
+                            className="badge border border-danger text-danger fw-normal"
+                            style={{
+                              cursor: "pointer",
+                              padding: "6px 12px",
+                              borderRadius: "12px",
+                            }}
+                            onClick={() => {
+                              setSelectedAppointmentId(appt._id);
+                              setShowCancelModal(true);
+                            }}
+                          >
+                            Cancel
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="8" className="text-center py-3 text-muted">
+                      No results found
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
 

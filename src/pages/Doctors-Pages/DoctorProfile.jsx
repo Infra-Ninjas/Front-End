@@ -84,7 +84,7 @@ const DoctorProfile = () => {
     } else {
       setProfileData((prev) => ({
         ...prev,
-        [field]: e.target.value,
+        [field]: e.target.type === "checkbox" ? e.target.checked : e.target.value,
       }));
     }
   };
@@ -100,6 +100,7 @@ const DoctorProfile = () => {
         experience: profileData.experience,
         about: profileData.about,
         address: profileData.address,
+        available: profileData.available,
       };
 
       const res = await axios.post(
@@ -154,58 +155,20 @@ const DoctorProfile = () => {
                 style={{ width: "100px", height: "100px", objectFit: "cover" }}
               />
               <div>
-                {isEdit ? (
-                  <input
-                    type="text"
-                    value={profileData.name}
-                    onChange={(e) => handleInputChange(e, "name")}
-                    className="form-control fw-bold"
-                  />
-                ) : (
-                  <h2 className="fw-bold" style={{ color: "#00838F" }}>{profileData.name}</h2>
-                )}
+                <h2 className="fw-bold" style={{ color: "#00838F" }}>{profileData.name}</h2>
                 <p className="text-secondary mb-0">
-                  {profileData.degree} -{" "}
-                  {isEdit ? (
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={profileData.speciality}
-                      onChange={(e) => handleInputChange(e, "speciality")}
-                    />
-                  ) : (
-                    profileData.speciality
-                  )}
+                  {profileData.degree} - {profileData.speciality}
                 </p>
               </div>
             </div>
 
             {/* Professional Info */}
             <h4 className="mb-3" style={{ color: "#00838F" }}>Professional Information</h4>
-            <p className="text-secondary mb-1"><strong>Experience:</strong>{" "}
-              {isEdit ? (
-                <input
-                  type="text"
-                  className="form-control"
-                  value={profileData.experience}
-                  onChange={(e) => handleInputChange(e, "experience")}
-                />
-              ) : (
-                profileData.experience
-              )}
-            </p>
+            <p className="text-secondary mb-1"><strong>Experience:</strong> {profileData.experience}</p>
 
             {/* About */}
             <h4 className="mb-3" style={{ color: "#00838F" }}>About</h4>
-            {isEdit ? (
-              <textarea
-                className="form-control mb-4"
-                value={profileData.about}
-                onChange={(e) => handleInputChange(e, "about")}
-              />
-            ) : (
-              <p className="text-secondary mb-4">{profileData.about}</p>
-            )}
+            <p className="text-secondary mb-4">{profileData.about}</p>
 
             {/* Fee */}
             <h4 className="mb-3" style={{ color: "#00838F" }}>Appointment Fee</h4>
@@ -258,7 +221,7 @@ const DoctorProfile = () => {
                 type="checkbox"
                 className="form-check-input"
                 checked={profileData.available}
-                readOnly
+                onChange={isEdit ? (e) => handleInputChange(e, "available") : undefined}
               />
               <label className="form-check-label text-secondary">
                 Available
