@@ -151,7 +151,9 @@ const Dashboard = () => {
                   <th onClick={() => handleSort("doctor")} style={{ cursor: "pointer" }}>Doctor</th>
                   <th onClick={() => handleSort("patient")} style={{ cursor: "pointer" }}>Patient</th>
                   <th onClick={() => handleSort("time")} style={{ cursor: "pointer" }}>Time</th>
-                  <th>Status</th>
+                  <th style={{ paddingLeft: "100px" }}>Status</th>
+
+
                 </tr>
               </thead>
               <tbody>
@@ -168,14 +170,21 @@ const Dashboard = () => {
                           style={{
                             backgroundColor:
                               appointment.status === "Completed"
-                                ? "#4CAF50"
+                                ? "#2E7D32" 
                                 : appointment.status === "Cancelled"
-                                ? "#C62828"
-                                : "#607D8B",
-                            padding: "6px 16px",
-                            borderRadius: "12px",
+                                ? "#B71C1C"
+                                : "#455A64",
+                            padding: "6px 12px",
+                            borderRadius: "9px",
                             fontSize: "14px",
-                            display: "inline-block",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            height: "22px",
+                            width: "90px",
+                            margin: "0 auto",
+                            textAlign: "center",
+                            
                           }}
                         >
                           {appointment.status}
