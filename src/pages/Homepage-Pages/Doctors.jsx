@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { assets } from "../../assets/assets_frontend/assets";
-import { useNavigate } from "react-router-dom"; // 1) Import useNavigate
+import { useNavigate } from "react-router-dom";
 
 const specialties = [
   "General Physician",
@@ -16,36 +16,40 @@ const Doctors = () => {
   const [selectedSpecialty, setSelectedSpecialty] = useState(null);
   const [showMore, setShowMore] = useState(false);
   const [doctors, setDoctors] = useState([]);
-  const navigate = useNavigate(); // 2) Initialize the hook
+  const navigate = useNavigate();
 
   const doctorserviceurl = import.meta.env.VITE_DOCTORSERVICE_URL;
 
   useEffect(() => {
     const getAllDoctors = async () => {
       try {
-        const { data } = await axios.get(doctorserviceurl + "/api/doctor/list");
+        const { data } = await axios.get(`${doctorserviceurl}/api/doctor/list`);
 
-        // Check if response has a "doctors" property
         if (data && Array.isArray(data.doctors)) {
-          setDoctors(data.doctors);
+          // Sort by date descending (latest first)
+          const sortedDoctors = data.doctors.sort((a, b) => b.date - a.date);
+          setDoctors(sortedDoctors);
         } else {
           console.error("Unexpected API response format", data);
-          setDoctors([]); // Fallback to empty array
+          setDoctors([]);
         }
       } catch (error) {
         console.error("Error fetching doctors:", error);
-        setDoctors([]); // Ensure it's always an array to prevent .map() errors
+        setDoctors([]);
       }
     };
+
     getAllDoctors();
   }, [doctorserviceurl]);
 
-  // Filter doctors based on the selected specialty
+  // Fix filtering: match ignoring case and trim spaces
   const filteredDoctors = selectedSpecialty
-    ? doctors.filter((doctor) => doctor.speciality === selectedSpecialty)
+    ? doctors.filter(
+        (doctor) =>
+          doctor.speciality?.toLowerCase().trim() === selectedSpecialty.toLowerCase().trim()
+      )
     : doctors;
 
-  // Slice the doctors to show only 4 by default
   const doctorsToShow = showMore ? filteredDoctors : filteredDoctors.slice(0, 4);
 
   return (
@@ -59,8 +63,14 @@ const Doctors = () => {
         {specialties.map((specialty, index) => (
           <button
             key={index}
-            className="btn m-2 text-white"
-            onClick={() => setSelectedSpecialty(specialty)}
+            className={`btn m-2 text-white ${
+              selectedSpecialty === specialty ? "border border-white" : ""
+            }`}
+            onClick={() =>
+              setSelectedSpecialty(
+                selectedSpecialty === specialty ? null : specialty
+              )
+            }
             style={{
               background: "linear-gradient(to right, #30cfd0, #007991)",
               border: "none",
@@ -70,7 +80,8 @@ const Doctors = () => {
             }}
             onMouseEnter={(e) => (e.target.style.background = "#007991")}
             onMouseLeave={(e) =>
-              (e.target.style.background = "linear-gradient(to right, #30cfd0, #007991)")
+              (e.target.style.background =
+                "linear-gradient(to right, #30cfd0, #007991)")
             }
           >
             {specialty}
@@ -85,7 +96,7 @@ const Doctors = () => {
             <div key={doctor._id || index} className="col-md-3 col-sm-6 mb-4">
               <div className="card text-center shadow-sm p-3 border-0">
                 <img
-                  src={doctor.image || assets.doc1} // Fallback image
+                  src={doctor.image || assets.doc1}
                   alt={doctor.name}
                   className="rounded-circle mx-auto d-block border"
                   style={{
@@ -102,7 +113,6 @@ const Doctors = () => {
                 <div className="card-body">
                   <h5 className="card-title font-weight-bold">{doctor.name}</h5>
                   <p className="text-muted">{doctor.speciality}</p>
-                  {/* Availability indicator */}
                   <button
                     className="btn btn-info text-white px-4 py-2 rounded-pill shadow"
                     style={{
@@ -113,7 +123,6 @@ const Doctors = () => {
                     }}
                     onMouseEnter={(e) => (e.target.style.transform = "scale(1.1)")}
                     onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
-                    // 3) onClick to navigate to the appointment page
                     onClick={() => navigate(`/appointment/${doctor._id}`)}
                   >
                     {doctor.available ? "Available" : "Unavailable"}
