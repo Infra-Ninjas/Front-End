@@ -44,8 +44,8 @@ const Appointments = () => {
             doctorImage: appt.docData?.image || "https://via.placeholder.com/30",
             patient: appt.userData?.name || "Unknown",
             patientImage:
-              appt.userData?.image !== "Not Set"
-                ? appt.userData?.image
+              appt.userData?.image && appt.userData?.image !== "Not Set"
+                ? appt.userData.image
                 : "https://via.placeholder.com/30",
             time: `${appt.slotDate} (${appt.slotTime})`,
             fees: `$${appt.amount}`,
@@ -178,12 +178,22 @@ const Appointments = () => {
                       </td>
                       <td>{appt.fees}</td>
                       <td>
-                        <span className={`badge ${appt.cancelled ? "bg-danger" : "bg-success"}`}>
-                          {appt.cancelled ? "Cancelled" : "Completed"}
+                        <span className={`badge ${
+                          appt.cancelled
+                            ? "bg-danger"
+                            : appt.isCompleted
+                            ? "bg-success"
+                            : "bg-secondary"
+                        }`}>
+                          {appt.cancelled
+                            ? "Cancelled"
+                            : appt.isCompleted
+                            ? "Completed"
+                            : "Pending"}
                         </span>
                       </td>
                       <td>
-                        {!appt.cancelled && (
+                        {!appt.cancelled && !appt.isCompleted && (
                           <span
                             className="badge border border-danger text-danger fw-normal"
                             style={{

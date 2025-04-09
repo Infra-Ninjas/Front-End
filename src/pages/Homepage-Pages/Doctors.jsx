@@ -5,10 +5,10 @@ import { assets } from "../../assets/assets_frontend/assets";
 import { useNavigate } from "react-router-dom";
 
 const specialties = [
-  "General Physician",
+  "General physician",
   "Gynecologist",
   "Dermatologist",
-  "Pediatrician",
+  "Pediatricians",
   "Neurologist",
 ];
 
@@ -26,7 +26,6 @@ const Doctors = () => {
         const { data } = await axios.get(`${doctorserviceurl}/api/doctor/list`);
 
         if (data && Array.isArray(data.doctors)) {
-          // Sort by date descending (latest first)
           const sortedDoctors = data.doctors.sort((a, b) => b.date - a.date);
           setDoctors(sortedDoctors);
         } else {
@@ -42,7 +41,7 @@ const Doctors = () => {
     getAllDoctors();
   }, [doctorserviceurl]);
 
-  // Fix filtering: match ignoring case and trim spaces
+  // Normalize specialties for accurate filtering
   const filteredDoctors = selectedSpecialty
     ? doctors.filter(
         (doctor) =>
@@ -67,9 +66,7 @@ const Doctors = () => {
               selectedSpecialty === specialty ? "border border-white" : ""
             }`}
             onClick={() =>
-              setSelectedSpecialty(
-                selectedSpecialty === specialty ? null : specialty
-              )
+              setSelectedSpecialty(selectedSpecialty === specialty ? null : specialty)
             }
             style={{
               background: "linear-gradient(to right, #30cfd0, #007991)",

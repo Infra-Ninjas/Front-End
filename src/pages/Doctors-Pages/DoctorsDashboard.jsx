@@ -143,20 +143,9 @@ const DoctorDashboard = () => {
                     </div>
                   </div>
 
-                  {booking.status === 'Pending' ? (
-                    <div className="d-flex align-items-center gap-2">
-                      <div className="bg-danger-subtle rounded-circle d-flex justify-content-center align-items-center" style={{ width: 30, height: 30 }}>
-                        <FaTimes className="text-danger" />
-                      </div>
-                      <div className="bg-success-subtle rounded-circle d-flex justify-content-center align-items-center" style={{ width: 30, height: 30 }}>
-                        <FaCheck className="text-success" />
-                      </div>
-                    </div>
-                  ) : (
-                    <span className={`fw-semibold ${booking.status === 'Cancelled' ? 'text-danger' : 'text-success'}`}>
-                      {booking.status}
-                    </span>
-                  )}
+                  <span className={`fw-semibold ${booking.status === 'Cancelled' ? 'text-danger' : booking.status === 'Completed' ? 'text-success' : 'text-secondary'}`}>
+                    {booking.status}
+                  </span>
                 </div>
               ))}
             </div>

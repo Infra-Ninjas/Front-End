@@ -6,7 +6,6 @@ import {
   faMapMarkerAlt,
   faUser,
   faCalendarAlt,
-  faIdCard,
   faSpinner,
   faCamera,
 } from "@fortawesome/free-solid-svg-icons";
@@ -173,11 +172,25 @@ const MyProfile = () => {
             <div>
               {isEDIT ? (
                 <>
-                  <input type="text" value={userData.name} onChange={(e) => handleInputChange(e, "name")} required className="form-control fs-5 fw-semibold mb-2" />
-                  <input type="file" accept="image/*" className="form-control" onChange={(e) => handleImageChange(e.target.files[0])} />
+                  <input
+                    type="text"
+                    value={userData.name}
+                    onChange={(e) => handleInputChange(e, "name")}
+                    required
+                    className="form-control fs-5 fw-semibold mb-2"
+                    placeholder="Enter name"
+                  />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="form-control"
+                    onChange={(e) => handleImageChange(e.target.files[0])}
+                  />
                 </>
               ) : (
-                <h2 className="fw-bold" style={{ color: "#00838F" }}>{userData.name}</h2>
+                <h2 className="fw-bold" style={{ color: "#00838F" }}>
+                  {userData.name || "Not Provided"}
+                </h2>
               )}
             </div>
           </div>
@@ -188,15 +201,18 @@ const MyProfile = () => {
             <p className="text-secondary mb-0">{userData.email}</p>
           </div>
           <div className="mb-3 d-flex align-items-center">
-            <FontAwesomeIcon icon={faIdCard} className="me-2" style={{ color: "#00838F" }} />
-            <p className="text-secondary mb-0">{userData._id}</p>
-          </div>
-          <div className="mb-3 d-flex align-items-center">
             <FontAwesomeIcon icon={faPhone} className="me-2" style={{ color: "#00838F" }} />
             {isEDIT ? (
-              <input type="text" value={userData.phone} onChange={(e) => handleInputChange(e, "phone")} required className="form-control" />
+              <input
+                type="text"
+                value={userData.phone}
+                onChange={(e) => handleInputChange(e, "phone")}
+                required
+                className="form-control"
+                placeholder="123-456-7890"
+              />
             ) : (
-              <p className="text-secondary mb-0">{userData.phone}</p>
+              <p className="text-secondary mb-0">{userData.phone || "Not Provided"}</p>
             )}
           </div>
 
@@ -206,13 +222,25 @@ const MyProfile = () => {
             <div>
               {isEDIT ? (
                 <>
-                  <input type="text" value={userData.address.line1} onChange={(e) => handleInputChange(e, "address", "line1")} required className="form-control mb-2" />
-                  <input type="text" value={userData.address.line2} onChange={(e) => handleInputChange(e, "address", "line2")} required className="form-control" />
+                  <input
+                    type="text"
+                    value={userData.address.line1}
+                    onChange={(e) => handleInputChange(e, "address", "line1")}
+                    required
+                    className="form-control mb-2"
+                  />
+                  <input
+                    type="text"
+                    value={userData.address.line2}
+                    onChange={(e) => handleInputChange(e, "address", "line2")}
+                    required
+                    className="form-control"
+                  />
                 </>
               ) : (
                 <>
-                  <p className="text-secondary mb-1">{userData.address.line1}</p>
-                  <p className="text-secondary">{userData.address.line2}</p>
+                  <p className="text-secondary mb-1">{userData.address.line1 || "Not Provided"}</p>
+                  <p className="text-secondary">{userData.address.line2 || "Not Provided"}</p>
                 </>
               )}
             </div>
@@ -222,41 +250,68 @@ const MyProfile = () => {
           <div className="mb-3 d-flex align-items-center">
             <FontAwesomeIcon icon={faUser} className="me-2" style={{ color: "#00838F" }} />
             {isEDIT ? (
-              <select value={userData.gender} onChange={(e) => handleInputChange(e, "gender")} required className="form-select" style={{ maxWidth: "200px" }}>
+              <select
+                value={userData.gender}
+                onChange={(e) => handleInputChange(e, "gender")}
+                required
+                className="form-select"
+                style={{ maxWidth: "200px" }}
+              >
                 <option value="">Select</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
               </select>
             ) : (
-              <p className="text-secondary mb-0">{userData.gender}</p>
+              <p className="text-secondary mb-0">{userData.gender || "Not Provided"}</p>
             )}
           </div>
           <div className="mb-3 d-flex align-items-center">
             <FontAwesomeIcon icon={faCalendarAlt} className="me-2" style={{ color: "#00838F" }} />
             {isEDIT ? (
-              <input type="date" value={userData.dob} onChange={(e) => handleInputChange(e, "dob")} required className="form-control" />
+              <input
+                type="date"
+                value={userData.dob}
+                onChange={(e) => handleInputChange(e, "dob")}
+                required
+                className="form-control"
+              />
             ) : (
-              <p className="text-secondary mb-0">{userData.dob}</p>
+              <p className="text-secondary mb-0">{userData.dob || "Not Provided"}</p>
             )}
           </div>
 
           <div className="d-flex justify-content-end gap-3 mt-3">
             {isEDIT && (
-              <button className="btn btn-outline-secondary rounded-pill" onClick={() => {
-                setUserData(originalData);
-                setPreviewImage(originalData.image || defaultAvatar);
-                setNewImage(null);
-                setIsEDIT(false);
-              }} disabled={saving}>Cancel</button>
+              <button
+                className="btn btn-outline-secondary rounded-pill"
+                onClick={() => {
+                  setUserData(originalData);
+                  setPreviewImage(originalData.image || defaultAvatar);
+                  setNewImage(null);
+                  setIsEDIT(false);
+                }}
+                disabled={saving}
+              >
+                Cancel
+              </button>
             )}
-            <button className="btn btn-outline-info rounded-pill" onClick={() => {
-              if (isEDIT) handleSave();
-              else {
-                setOriginalData({ ...userData });
-                setIsEDIT(true);
-              }
-            }} disabled={saving}>
-              {saving ? (<><FontAwesomeIcon icon={faSpinner} spin className="me-2" />Saving...</>) : isEDIT ? "Save" : "Edit"}
+            <button
+              className="btn btn-outline-info rounded-pill"
+              onClick={() => {
+                if (isEDIT) handleSave();
+                else {
+                  setOriginalData({ ...userData });
+                  setIsEDIT(true);
+                }
+              }}
+              disabled={saving}
+            >
+              {saving ? (
+                <>
+                  <FontAwesomeIcon icon={faSpinner} spin className="me-2" />
+                  Saving...
+                </>
+              ) : isEDIT ? "Save" : "Edit"}
             </button>
           </div>
         </div>

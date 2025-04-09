@@ -7,7 +7,7 @@ import axios from "axios";
 import AdminLayout from "./AdminLayout";
 
 const DoctorsList = () => {
-  const { aToken, changeAvailability } = useAdminContext();
+  const { aToken } = useAdminContext();
   const [doctors, setDoctors] = useState([]);
   const adminserviceurl = import.meta.env.VITE_ADMINSERVICE_URL;
 
@@ -63,27 +63,11 @@ const DoctorsList = () => {
                       {item.name}
                     </h5>
                     <p
-                      className="card-subtitle text-muted mb-2"
+                      className="card-subtitle text-dark fw-bold mb-2"
                       style={{ fontSize: '0.85rem' }}
                     >
                       {item.speciality}
                     </p>
-                    <div className="mt-auto">
-                      <div className="form-check d-inline-block">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          checked={item.available}
-                          onChange={() => changeAvailability(item._id)}
-                        />
-                        <label
-                          className="form-check-label ms-2"
-                          style={{ fontSize: '0.9rem' }}
-                        >
-                          Available
-                        </label>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
