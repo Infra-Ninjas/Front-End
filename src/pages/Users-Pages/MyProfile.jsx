@@ -12,10 +12,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useUserContext } from "../../contexts/Users-Context/UserContextProvider";
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+import { toast, Toaster } from "sonner";
 import UserLayout from "./UsersLayout";
-import "react-toastify/dist/ReactToastify.css";
-import defaultAvatar from "../../assets/assets_frontend/image.png";
+// import defaultAvatar from "../../assets/default-avatar.png";
 
 const MyProfile = () => {
   const { uToken } = useUserContext();
@@ -49,7 +48,7 @@ const MyProfile = () => {
               line1: user.address?.line1 || "",
               line2: user.address?.line2 || "",
             },
-            image: !user.image || user.image === "Not Set" ? defaultAvatar : user.image,
+            image: !user.image || user.image === "Not Set" ? "" : user.image,
           };
           setUserData(cleanedUser);
           setOriginalData(cleanedUser);
@@ -136,7 +135,7 @@ const MyProfile = () => {
 
   return (
     <UserLayout>
-      <ToastContainer />
+      <Toaster position="top-right" richColors />
       <h2 className="mb-4 fw-bold text-center">My Profile</h2>
 
       <div style={{ maxWidth: "900px", margin: "0 auto" }}>
@@ -244,7 +243,7 @@ const MyProfile = () => {
             {isEDIT && (
               <button className="btn btn-outline-secondary rounded-pill" onClick={() => {
                 setUserData(originalData);
-                setPreviewImage(originalData.image || defaultAvatar);
+                setPreviewImage(originalData.image || "");
                 setNewImage(null);
                 setIsEDIT(false);
               }} disabled={saving}>Cancel</button>

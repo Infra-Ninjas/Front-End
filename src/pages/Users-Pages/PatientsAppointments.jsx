@@ -4,8 +4,7 @@ import { useDoctorContext } from '../../contexts/Doctors-Context/DoctorContextPr
 import { useUserContext } from "../../contexts/Users-Context/UserContextProvider";
 import axios from 'axios';
 import UserLayout from "./UsersLayout";
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast, Toaster } from 'sonner';
 
 const PatientsAppointments = () => {
   const { docId } = useParams();
@@ -104,8 +103,8 @@ const PatientsAppointments = () => {
   const handleConfirmBooking = async () => {
     try {
       if (!uToken) return navigate('/login');
-      if (!slotTime) return toast.warn('Please select a time slot first!');
-      if (!selectedDate) return toast.warn('Please select a day first!');
+      if (!slotTime) return toast.warning('Please select a time slot first!');
+      if (!selectedDate) return toast.warning('Please select a day first!');
 
       const userId = userData?._id || localStorage.getItem("uId");
       if (!userId) return toast.error("User ID not found. Please log in again.");
@@ -146,7 +145,8 @@ const PatientsAppointments = () => {
 
   return (
     <UserLayout>
-      <ToastContainer />
+      <Toaster richColors position="top-right" />
+
       <div className="container my-5">
         <h2 className="text-center mb-5 fw-bold" style={{ color: '#007991' }}>
           Book an Appointment

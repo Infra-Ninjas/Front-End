@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { assets } from "../../assets/assets_admin/assets";
 import { useAdminContext } from "../../contexts/Admin-Context/AdminContextProvider";
-import { toast } from "react-toastify";
+import { toast, Toaster } from "sonner";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import AdminNavbar from "../../components/Admins-Components/AdminNavbar";
@@ -30,12 +30,8 @@ const AddDoctor = () => {
     event.preventDefault();
 
     try {
-      if (!docImg) {
-        return toast.error("Please upload doctor picture");
-      }
-      if (!aToken) {
-        return toast.error("Admin not authenticated. Please log in.");
-      }
+      if (!docImg) return toast.error("Please upload doctor picture");
+      if (!aToken) return toast.error("Admin not authenticated. Please log in.");
 
       const currentTimestamp = Date.now();
       const formData = new FormData();
@@ -75,6 +71,7 @@ const AddDoctor = () => {
 
   return (
     <>
+      <Toaster position="top-right" richColors />
       <AdminNavbar />
       <SideBar />
 
@@ -113,25 +110,14 @@ const AddDoctor = () => {
 
               <div className="col-md-9">
                 <div className="row g-3">
+                  {/* Fields remain unchanged */}
                   <div className="col-md-6">
                     <label className="form-label">Doctor Name</label>
-                    <input
-                      onChange={(e) => setName(e.target.value)}
-                      value={name}
-                      type="text"
-                      className="form-control"
-                      placeholder="Name"
-                      required
-                    />
+                    <input onChange={(e) => setName(e.target.value)} value={name} type="text" className="form-control" placeholder="Name" required />
                   </div>
                   <div className="col-md-6">
                     <label className="form-label">Speciality</label>
-                    <select
-                      onChange={(e) => setSpeciality(e.target.value)}
-                      value={speciality}
-                      className="form-select"
-                      required
-                    >
+                    <select onChange={(e) => setSpeciality(e.target.value)} value={speciality} className="form-select" required>
                       <option value="General physician">General physician</option>
                       <option value="Gynecologist">Gynecologist</option>
                       <option value="Dermatologist">Dermatologist</option>
@@ -142,90 +128,35 @@ const AddDoctor = () => {
                   </div>
                   <div className="col-md-6">
                     <label className="form-label">Doctor Email</label>
-                    <input
-                      onChange={(e) => setEmail(e.target.value)}
-                      value={email}
-                      type="email"
-                      className="form-control"
-                      placeholder="Your email"
-                      required
-                    />
+                    <input onChange={(e) => setEmail(e.target.value)} value={email} type="email" className="form-control" placeholder="Your email" required />
                   </div>
                   <div className="col-md-6">
                     <label className="form-label">Education</label>
-                    <input
-                      onChange={(e) => setDegree(e.target.value)}
-                      value={degree}
-                      type="text"
-                      className="form-control"
-                      placeholder="Education"
-                      required
-                      autoComplete="off"
-                    />
+                    <input onChange={(e) => setDegree(e.target.value)} value={degree} type="text" className="form-control" placeholder="Education" required autoComplete="off" />
                   </div>
                   <div className="col-md-6">
                     <label className="form-label">Doctor Password</label>
-                    <input
-                      onChange={(e) => setPassword(e.target.value)}
-                      value={password}
-                      type="password"
-                      className="form-control"
-                      placeholder="Password"
-                      required
-                    />
+                    <input onChange={(e) => setPassword(e.target.value)} value={password} type="password" className="form-control" placeholder="Password" required />
                   </div>
                   <div className="col-md-6">
                     <label className="form-label">Street</label>
-                    <input
-                      onChange={(e) => setStreet(e.target.value)}
-                      value={street}
-                      type="text"
-                      className="form-control"
-                      placeholder="Street"
-                      required
-                    />
+                    <input onChange={(e) => setStreet(e.target.value)} value={street} type="text" className="form-control" placeholder="Street" required />
                   </div>
                   <div className="col-md-6">
                     <label className="form-label">City</label>
-                    <input
-                      onChange={(e) => setCity(e.target.value)}
-                      value={city}
-                      type="text"
-                      className="form-control"
-                      placeholder="City"
-                      required
-                    />
+                    <input onChange={(e) => setCity(e.target.value)} value={city} type="text" className="form-control" placeholder="City" required />
                   </div>
                   <div className="col-md-6">
                     <label className="form-label">State</label>
-                    <input
-                      onChange={(e) => setStateVal(e.target.value)}
-                      value={stateVal}
-                      type="text"
-                      className="form-control"
-                      placeholder="State"
-                      required
-                    />
+                    <input onChange={(e) => setStateVal(e.target.value)} value={stateVal} type="text" className="form-control" placeholder="State" required />
                   </div>
                   <div className="col-md-6">
                     <label className="form-label">Zip</label>
-                    <input
-                      onChange={(e) => setZip(e.target.value)}
-                      value={zip}
-                      type="text"
-                      className="form-control"
-                      placeholder="Zip"
-                      required
-                    />
+                    <input onChange={(e) => setZip(e.target.value)} value={zip} type="text" className="form-control" placeholder="Zip" required />
                   </div>
                   <div className="col-md-6">
                     <label className="form-label">Experience</label>
-                    <select
-                      onChange={(e) => setExperience(e.target.value)}
-                      value={experience}
-                      className="form-select"
-                      required
-                    >
+                    <select onChange={(e) => setExperience(e.target.value)} value={experience} className="form-select" required>
                       <option value="1 Year">1 Year</option>
                       <option value="2 Year">2 Years</option>
                       <option value="3 Year">3 Years</option>
@@ -240,46 +171,29 @@ const AddDoctor = () => {
                   </div>
                   <div className="col-md-6">
                     <label className="form-label">Fees</label>
-                    <input
-                      onChange={(e) => setFees(e.target.value)}
-                      value={fees}
-                      type="number"
-                      className="form-control"
-                      placeholder="Your fees"
-                      required
-                    />
+                    <input onChange={(e) => setFees(e.target.value)} value={fees} type="number" className="form-control" placeholder="Your fees" required />
                   </div>
                   <div className="col-12">
                     <label className="form-label">About Doctor</label>
-                    <textarea
-                      onChange={(e) => setAbout(e.target.value)}
-                      value={about}
-                      className="form-control"
-                      placeholder="Write about doctor"
-                      rows={5}
-                      required
-                    />
+                    <textarea onChange={(e) => setAbout(e.target.value)} value={about} className="form-control" placeholder="Write about doctor" rows={5} required />
                   </div>
                 </div>
               </div>
             </div>
 
             <div className="mt-4 text-center">
-              <button
-                type="submit"
-                className="btn text-white px-5 py-2 fw-bold"
-                style={{
-                  background: "linear-gradient(to right, rgb(83, 212, 245), rgb(67, 248, 230))",
-                  borderRadius: "8px",
-                  border: "none",
-                }}
-              >
+              <button type="submit" className="btn text-white px-5 py-2 fw-bold" style={{
+                background: "linear-gradient(to right, rgb(83, 212, 245), rgb(67, 248, 230))",
+                borderRadius: "8px",
+                border: "none",
+              }}>
                 Add doctor
               </button>
             </div>
           </form>
         </div>
       </div>
+
       <style>{`
         @media (max-width: 991px) {
           .admin-content {

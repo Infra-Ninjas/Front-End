@@ -3,8 +3,7 @@ import DoctorLayout from "./DoctorsLayout";
 import { assets } from "../../assets/assets_frontend/assets";
 import { useDoctorContext } from "../../contexts/Doctors-Context/DoctorContextProvider";
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast, Toaster } from "sonner";
 
 const DoctorProfile = () => {
   const { dToken, doctorData } = useDoctorContext();
@@ -142,7 +141,7 @@ const DoctorProfile = () => {
 
   return (
     <DoctorLayout>
-      <ToastContainer />
+      <Toaster position="top-right" richColors />
       <div className="py-4" style={{ minHeight: "100vh", marginLeft: "250px" }}>
         <div className="container py-3">
           <div className="card shadow-lg p-4 mx-auto" style={{ maxWidth: "700px" }}>
@@ -234,9 +233,7 @@ const DoctorProfile = () => {
                 <>
                   <button
                     className="btn btn-secondary me-3"
-                    onClick={() => {
-                      setIsEdit(false);
-                    }}
+                    onClick={() => setIsEdit(false)}
                   >
                     Cancel
                   </button>

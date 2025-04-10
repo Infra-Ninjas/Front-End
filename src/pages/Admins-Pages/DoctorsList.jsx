@@ -7,7 +7,7 @@ import axios from "axios";
 import AdminLayout from "./AdminLayout";
 
 const DoctorsList = () => {
-  const { aToken, changeAvailability } = useAdminContext();
+  const { aToken } = useAdminContext();
   const [doctors, setDoctors] = useState([]);
   const adminserviceurl = import.meta.env.VITE_ADMINSERVICE_URL;
 
@@ -16,7 +16,11 @@ const DoctorsList = () => {
       const { data } = await axios.get(`${adminserviceurl}/api/doctors/all-doctors`, {
         headers: { Authorization: `Bearer ${aToken}` },
       });
-      setDoctors(data.data || []);
+
+      // Sort doctors by date in descending order (latest first)
+      const sortedDoctors = (data.data || []).sort((a, b) => b.date - a.date);
+
+      setDoctors(sortedDoctors);
     } catch (error) {
       console.error("Error fetching doctors:", error);
     }
@@ -59,27 +63,11 @@ const DoctorsList = () => {
                       {item.name}
                     </h5>
                     <p
-                      className="card-subtitle text-muted mb-2"
+                      className="card-subtitle text-dark fw-bold mb-2"
                       style={{ fontSize: '0.85rem' }}
                     >
                       {item.speciality}
                     </p>
-                    <div className="mt-auto">
-                      <div className="form-check d-inline-block">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          checked={item.available}
-                          onChange={() => changeAvailability(item._id)}
-                        />
-                        <label
-                          className="form-check-label ms-2"
-                          style={{ fontSize: '0.9rem' }}
-                        >
-                          Available
-                        </label>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -94,7 +82,6 @@ const DoctorsList = () => {
           margin-left: 220px;
           padding: 40px 20px;
           min-height: 100vh;
-          /* Removed background-color: #f9f9f9; so there's no gray layer */
           display: flex;
           justify-content: center;
         }

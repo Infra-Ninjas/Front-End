@@ -28,9 +28,9 @@ const MyAppointments = () => {
       if (response.data?.success) {
         const sortedAppointments = [...response.data.appointments].sort((a, b) => {
           if (a.isCompleted !== b.isCompleted) {
-            return a.isCompleted ? 1 : -1; // show incomplete (not completed) first
+            return a.isCompleted ? 1 : -1;
           }
-          return new Date(b.createdAt) - new Date(a.createdAt); // latest first
+          return new Date(b.createdAt) - new Date(a.createdAt);
         });
 
         setAppointments(sortedAppointments);
@@ -41,81 +41,6 @@ const MyAppointments = () => {
     } catch (error) {
       toast.error("Something went wrong while fetching appointments.");
       console.error("Error fetching appointments:", error.response || error.message);
-    }
-  };
-
-  const cancelAppointment = (appointmentId) => {
-    toast(
-      ({ closeToast }) => (
-        <div>
-          <p>Are you sure you want to cancel this appointment?</p>
-          <div
-            style={{
-              marginTop: "10px",
-              display: "flex",
-              justifyContent: "flex-end",
-            }}
-          >
-            <button
-              onClick={() => {
-                closeToast();
-                handleCancelAppointment(appointmentId);
-              }}
-              style={{
-                marginRight: "10px",
-                border: "none",
-                background: "none",
-                color: "#f44336",
-                fontWeight: "bold",
-                cursor: "pointer",
-              }}
-            >
-              Yes
-            </button>
-            <button
-              onClick={closeToast}
-              style={{
-                border: "none",
-                background: "none",
-                color: "#00838F",
-                fontWeight: "bold",
-                cursor: "pointer",
-              }}
-            >
-              No
-            </button>
-          </div>
-        </div>
-      ),
-      { autoClose: false }
-    );
-  };
-
-  const handleCancelAppointment = async (appointmentId) => {
-    try {
-      const response = await axios.post(
-        `${userServiceUrl}/api/user/cancel-appointment`,
-        {
-          userId: uId,
-          appointmentId: appointmentId,
-        },
-        {
-          headers: { Authorization: `Bearer ${uToken}` },
-        }
-      );
-
-      if (response.data?.success) {
-        toast.success("Appointment cancelled successfully");
-        setAppointments((prev) =>
-          prev.filter((apt) => apt._id !== appointmentId)
-        );
-      } else {
-        toast.error("Failed to cancel appointment");
-        console.error("Cancel error:", response.data);
-      }
-    } catch (error) {
-      toast.error("⚠️ Something went wrong. Please try again.");
-      console.error("Error cancelling appointment:", error.response || error.message);
     }
   };
 
@@ -143,6 +68,7 @@ const MyAppointments = () => {
                 slotDate,
                 slotTime,
                 isCompleted,
+                cancelled,
               } = apt;
               const docName = doc?.name || "Doctor Name";
               const docSpecialty = doc?.speciality || "Specialty";
@@ -182,51 +108,7 @@ const MyAppointments = () => {
                     </div>
 
                     <div className="d-flex flex-column gap-3 mt-3 mt-md-0 align-items-center">
-                      {!isCompleted ? (
-                        <>
-                          <button
-                            className="btn"
-                            style={{
-                              ...baseBtnStyle,
-                              border: "2px solid #00838F",
-                              backgroundColor: "white",
-                              color: "#00838F",
-                            }}
-                            onMouseEnter={(e) => {
-                              e.target.style.backgroundColor = "#00838F";
-                              e.target.style.color = "white";
-                            }}
-                            onMouseLeave={(e) => {
-                              e.target.style.backgroundColor = "white";
-                              e.target.style.color = "#00838F";
-                            }}
-                            onClick={() => toast.info("💳 Payment integration coming soon!")}
-                          >
-                            Pay Online
-                          </button>
-
-                          <button
-                            className="btn"
-                            style={{
-                              ...baseBtnStyle,
-                              border: "2px solid #f44336",
-                              backgroundColor: "white",
-                              color: "#f44336",
-                            }}
-                            onMouseEnter={(e) => {
-                              e.target.style.backgroundColor = "#f44336";
-                              e.target.style.color = "white";
-                            }}
-                            onMouseLeave={(e) => {
-                              e.target.style.backgroundColor = "white";
-                              e.target.style.color = "#f44336";
-                            }}
-                            onClick={() => cancelAppointment(appointmentId)}
-                          >
-                            Cancel Appointment
-                          </button>
-                        </>
-                      ) : (
+                      {isCompleted ? (
                         <button
                           className="btn"
                           style={{
@@ -237,6 +119,30 @@ const MyAppointments = () => {
                           }}
                         >
                           Completed
+                        </button>
+                      ) : cancelled ? (
+                        <button
+                          className="btn"
+                          style={{
+                            ...baseBtnStyle,
+                            border: "2px solid #8B0000",
+                            backgroundColor: "#8B0000",
+                            color: "white",
+                          }}
+                        >
+                          Cancelled
+                        </button>
+                      ) : (
+                        <button
+                          className="btn"
+                          style={{
+                            ...baseBtnStyle,
+                            border: "2px solid #555",
+                            backgroundColor: "#555",
+                            color: "white",
+                          }}
+                        >
+                          Pending
                         </button>
                       )}
                     </div>

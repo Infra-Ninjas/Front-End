@@ -18,7 +18,7 @@ const UserNavbar = () => {
                         src={assets.OurLogo}
                         alt="User Logo"
                         style={{ width: "150px", height: "auto", cursor: "pointer" }}
-                        onClick={() => navigate("/user-dashboard")}
+                        
                     />
                     <span
                         className="text-white fw-semibold d-inline-block"
