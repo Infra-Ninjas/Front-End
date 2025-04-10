@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, Toaster } from "sonner";
 import { useDoctorContext } from "../../contexts/Doctors-Context/DoctorContextProvider.jsx";
 
 const DoctorLogin = () => {
@@ -9,20 +9,18 @@ const DoctorLogin = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  // Use the login function from your DoctorContext
   const { login } = useDoctorContext();
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
     try {
-      // Using VITE_BACKEND_URL for doctor authentication
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/doctor/login`,
         { email, password }
       );
-      // response.data should be { token, role }
       login(response.data, "Welcome Doctor!");
-      navigate("/doctorprofile"); // Redirect to doctor profile page
+      toast.success("Welcome Doctor!");
+      navigate("/doctorprofile");
     } catch (error) {
       toast.error(
         error.response?.data?.message || error.message || "Doctor login failed"
@@ -115,6 +113,7 @@ const DoctorLogin = () => {
 
   return (
     <form onSubmit={onSubmitHandler} style={styles.container}>
+      <Toaster position="top-right" richColors />
       <div style={styles.card}>
         <h2 style={styles.heading}>Doctor Login</h2>
         <p style={styles.description}>Please log in to manage appointments</p>
